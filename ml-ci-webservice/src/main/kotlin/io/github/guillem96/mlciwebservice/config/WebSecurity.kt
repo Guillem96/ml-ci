@@ -27,7 +27,10 @@ class WebSecurity(
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
+
                 .antMatchers("/auth/signIn").permitAll()
+                .antMatchers(HttpMethod.POST, "/users").permitAll()
+
                 .antMatchers(HttpMethod.GET, "**").permitAll()
                 .anyRequest().authenticated()
                 .and()
