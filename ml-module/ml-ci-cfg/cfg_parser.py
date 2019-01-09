@@ -17,10 +17,14 @@ class MlCiCfg(object):
         self.test_rate = kwargs.get('test_rate')
         self.models = kwargs.get('models')
         self.pipeline = kwargs.get('pipeline')
+        self.target = kwargs.get('target')
+        self.data_set = kwargs.get('data_set')
+
+        # TODO: Validate mandatory data
 
     def __str__(self):
-        return 'Test-rate: {}\nPipeline: {}\nModels: {}' \
-                        .format(self.test_rate, self.pipeline, self._models_str())
+        return 'Data-set: {}\nTarget: {}\nTest-rate: {}\nPipeline: {}\nModels: {}' \
+                        .format(self.data_set, self.target, self.test_rate, self.pipeline, self._models_str())
 
     def _models_str(self):
         return '[\n  ' + ',\n  '.join(map(str, self.models)) + '\n]'
@@ -34,6 +38,9 @@ class YamlParser(object):
         config['test_rate'] = cfg_dict.get('test-rate', 0.2)
         config['pipeline'] = cfg_dict.get('pipeline')
         config['models'] = YamlParser._parse_models(cfg_dict)
+        config['target'] = cfg_dict.get('target')
+        config['data_set'] = cfg_dict.get('data-set', 'dataset/dataset.csv')
+
         self.parsed_cfg = MlCiCfg(**config)
 
 
