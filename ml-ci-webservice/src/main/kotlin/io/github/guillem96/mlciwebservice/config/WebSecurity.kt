@@ -1,5 +1,7 @@
 package io.github.guillem96.mlciwebservice.config
 
+import io.github.guillem96.mlciwebservice.config.auth.JwtConfigurer
+import io.github.guillem96.mlciwebservice.config.auth.JwtTokenProvider
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
@@ -12,28 +14,24 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
 
 @Configuration
-class WebSecurity : WebSecurityConfigurerAdapter() {
+class WebSecurity(
+        private val jwtTokenProvider: JwtTokenProvider) : WebSecurityConfigurerAdapter() {
 
     @Bean
     override fun authenticationManagerBean() = super.authenticationManagerBean()
 
     override fun configure(http: HttpSecurity) {
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        http
+                .httpBasic().disable()
+                .csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-
-                .antMatchers(HttpMethod.POST, "/**/*").authenticated()
-                .antMatchers(HttpMethod.PUT, "/**/*").authenticated()
-                .antMatchers(HttpMethod.PATCH, "/**/*").authenticated()
-                .antMatchers(HttpMethod.DELETE, "/**/*").authenticated()
-                .anyRequest().permitAll()
+                .antMatchers("/auth/signIn").permitAll()
+                .antMatchers(HttpMethod.GET, "**").permitAll()
+                .anyRequest().authenticated()
                 .and()
-                .httpBasic().realmName("MlCi")
-                .and()
-                .cors()
-                .and()
-                .csrf().disable()
-                .headers().frameOptions().sameOrigin()
+                .apply(JwtConfigurer(jwtTokenProvider))
     }
 
     @Bean
