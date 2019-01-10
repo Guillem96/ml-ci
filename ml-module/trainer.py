@@ -40,6 +40,12 @@ def get_best_hyperparameters():
 
 
 def training_stage(cfg_file):
+    """Automatically resolve a ML problem
+    
+    Arguments:
+        cfg_file {MlCiCfg} -- Config file
+    """
+
     housing, housing_labels, strat_test_set = housing_utils.get_woriking_sets(cfg_file.data_set)
     housing_num = housing.drop("ocean_proximity", axis=1)
 
