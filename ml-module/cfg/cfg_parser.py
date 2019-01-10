@@ -46,12 +46,13 @@ class YamlParser(object):
 
     @staticmethod
     def _parse_models(cfg_dict):
-        models = cfg_dict.get('models', [])
-        return [ ModelCfg(model, models.get('params'), models.get('fine-tune', False)) 
-                            for model in models.keys() ]
+        models = cfg_dict.get('models', {})
+        models_cfg = []
+        
+        for model in models.keys():
+            model_info = models.get(model)
+            params = model_info.get('params') if model_info else {}
+            fine_tune = model_info.get('fine_tune', False) if model_info else False
+            models_cfg.append(ModelCfg(model, params, fine_tune))
 
-
-
-if __name__ == '__main__':
-    with open('ml-ci.yml', 'r') as f:
-        print(str(YamlParser(f).parsed_cfg))
+        return models_cfg

@@ -9,8 +9,12 @@ from sklearn.preprocessing import LabelBinarizer, StandardScaler
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline, FeatureUnion
 from sklearn.externals import joblib
-from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error
+
+# Models
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.linear_model import *
+
 # Custom classes imports
 from custom_transformers import DataFrameSelector, CombinedAttributesAdder, CustomBinarizer
 import trainer_utils as housing_utils
@@ -37,6 +41,40 @@ def get_best_hyperparameters():
         print(np.sqrt(-mean_score), params)
 
     return grid_search
+
+
+def train_model(train_X, train_y, model_name, **hyperparameters):
+    """Trains the algorithm named {model_name}
+    
+    Arguments:
+        train_X {Dataframe} -- Training data
+        train_y {Dataframe} -- Labels
+        model_name {string} -- Algorithm to be trained name
+    Returns:
+        Sklearn model -- Result of training
+    """
+    print("Training {}...".format(model_name))
+    model = eval(model_name + "(**hyperparameters)", globals(), locals())
+    model.fit(train_X, train_y)
+    
+    print("Done")
+
+    return model
+
+def evaluate_model(model, X_test, y_test):
+    """Evaluate model and prints its results
+    
+    Arguments:
+        model {Sklearn model} -- Trained model to be evaluated
+        X_test {Dataframe} -- Test data
+        y_test {Dataframe} -- Test labels
+    """
+    final_predictions = model.predict(X_test)
+
+    final_mse = mean_squared_error(y_test, final_predictions)
+    final_rmse = np.sqrt(final_mse)
+
+    print(model.__class__.__name__ + "-> "  + "MSE:", final_mse, "RMSE:", final_rmse)
 
 
 def training_stage(cfg_file):
@@ -73,15 +111,12 @@ def training_stage(cfg_file):
 
     # After some test we decided that random forest is the best model for now
     # model = get_best_hyperparameters().best_estimator_
-    model = RandomForestRegressor(n_estimators=100)
-    model.fit(housing_prepared, housing_labels)
+    
+    for cfg_model in cfg_file.models:
+        model = train_model(housing_prepared, housing_labels, 
+                                cfg_model.name, **cfg_model.params)
+        
+        ### Evaluate against test set ###
+        x_tested_prepared = full_pipeline.transform(x_test)
 
-    ### Evaluate against test set ###
-    x_tested_prepared = full_pipeline.transform(x_test)
-
-    final_predictions = model.predict(x_tested_prepared)
-
-    final_mse = mean_squared_error(y_test, final_predictions)
-    final_rmse = np.sqrt(final_mse)
-
-    print("MSE:", final_mse, "RMSE:", final_rmse)
+        evaluate_model(model, x_tested_prepared, y_test)
