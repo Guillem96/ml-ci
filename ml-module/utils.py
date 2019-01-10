@@ -1,4 +1,4 @@
-from utils import delete_dir
+import os
 
 def delete_dir(path):
     for root, dirs, files in os.walk(path, topdown=False):

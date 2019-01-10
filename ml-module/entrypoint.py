@@ -1,7 +1,7 @@
 import os
-from cfg_parser.cfg_parser import YamlParser
+from cfg.cfg_parser import YamlParser
 from trainer import training_stage
-
+from network import Network
 
 def parse_cfg(cfg_file_path):
     """Parse the given ml-ci.yml

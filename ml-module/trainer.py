@@ -46,7 +46,9 @@ def training_stage(cfg_file):
         cfg_file {MlCiCfg} -- Config file
     """
 
-    housing, housing_labels, strat_test_set = housing_utils.get_woriking_sets(cfg_file.data_set)
+    housing, housing_labels, x_test, y_test = \
+                housing_utils.get_woriking_sets(cfg_file.data_set, cfg_file.test_rate, cfg_file.target)
+
     housing_num = housing.drop("ocean_proximity", axis=1)
 
     num_pipeline = Pipeline([ # Execute all fit_transform sequentially
@@ -75,9 +77,6 @@ def training_stage(cfg_file):
     model.fit(housing_prepared, housing_labels)
 
     ### Evaluate against test set ###
-    x_test = strat_test_set.drop("median_house_value", axis=1)
-    y_test = strat_test_set["median_house_value"].copy()
-
     x_tested_prepared = full_pipeline.transform(x_test)
 
     final_predictions = model.predict(x_tested_prepared)

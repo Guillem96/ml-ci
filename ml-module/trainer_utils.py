@@ -2,6 +2,7 @@ import os
 import pandas as pd
 import numpy as np
 
+from sklearn.model_selection import train_test_split
 from sklearn.model_selection import StratifiedShuffleSplit
 
 def load_data(path):
@@ -14,30 +15,27 @@ def load_data(path):
     Returns:
         Panda's DataFrame: Data
     """
-
     csv_path = os.path.join(path)
     return pd.read_csv(csv_path)
 
-def get_woriking_sets(csv_path):
-    """ Makes partitions of housing data for ml algorithms
-    Returns:
-        [(Dataframe, DataFrame, DataFrame)]: [(Training set X, Training set Y, Test set)]
-    """
-    housing = load_data(csv_path)
 
-    housing["income_cat"] = np.ceil(housing["median_income"] / 1.5)
-    housing["income_cat"].where(housing["income_cat"] < 5.0, 5.0, inplace=True) # Which are larger than 5 will get 5.0 value
+def get_woriking_sets(csv_path, test_size, target):
+    """Makes partitions of data for ml algorithms
     
-    split = StratifiedShuffleSplit(n_splits=1, test_size=0.2, random_state=42)
-    for train_index, test_index in split.split(housing, housing["income_cat"]):
-        strat_train_set = housing.loc[train_index]
-        strat_test_set = housing.loc[test_index]
+    Arguments:
+        csv_path {string} -- Dataset file path
+        target {string} -- Target to be predicted
+        test_size {float} -- Test set percentage over the whole data
 
-    # Should remove the income_cat once it has been used
-    strat_test_set.drop("income_cat", axis=1, inplace=True)
-    strat_train_set.drop("income_cat", axis=1, inplace=True)
+    Returns:
+        [(Dataframe, DataFrame, DataFrame, Dataframe)] --[(Training set X, Training set Y, Test set)]
+    """
 
-    housing = strat_train_set.drop("median_house_value", axis=1)
-    housing_labels = strat_train_set["median_house_value"].copy()
+    df = load_data(csv_path)
 
-    return housing, housing_labels, strat_test_set
+    X = df.drop(target, axis=1).copy()
+    y = df[target].copy()
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42)
+
+    return X_train, y_train, X_test, y_test
