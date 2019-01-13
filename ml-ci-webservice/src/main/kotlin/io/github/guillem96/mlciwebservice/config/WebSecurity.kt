@@ -34,13 +34,15 @@ class WebSecurity(
                 .antMatchers(HttpMethod.GET, "**").permitAll()
                 .anyRequest().authenticated()
                 .and()
+                .cors()
+                .and()
                 .apply(JwtConfigurer(jwtTokenProvider))
     }
 
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {
         val corsConfiguration = CorsConfiguration()
-        corsConfiguration.allowedOrigins = listOf("localhost:4200")
+        corsConfiguration.allowedOrigins = listOf("http://localhost:4200")
         corsConfiguration.allowedMethods = listOf("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
         corsConfiguration.allowedHeaders = listOf("*")
         corsConfiguration.allowCredentials = true

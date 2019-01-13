@@ -17,6 +17,7 @@ data class TrackedRepository(
 
         @ManyToOne
         @NotNull
+        @JsonIdentityReference(alwaysAsId = true)
         val user: User,
 
         @OneToMany(cascade = [(CascadeType.ALL)], mappedBy = "trackedRepository")
@@ -41,6 +42,7 @@ data class User(
         val email: String = "",
 
         @OneToMany(cascade = [(CascadeType.ALL)], mappedBy = "user")
+        @JsonIdentityReference(alwaysAsId = true)
         val trackedRepositories: List<TrackedRepository> = emptyList(),
 
         @JsonIgnore
@@ -109,11 +111,10 @@ data class Evaluation(
 
         @Id
         @GeneratedValue
-        val id: Long? = null
-)
+        val id: Long? = null)
 
 enum class ModelStatus {
-        TRAINNING,
+        TRAINING,
         TRAINED,
         PENDENT,
         NONE

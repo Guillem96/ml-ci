@@ -1,5 +1,6 @@
 package io.github.guillem96.mlciwebservice.controller
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import io.github.guillem96.mlciwebservice.User
 import io.github.guillem96.mlciwebservice.UserRepository
 import io.github.guillem96.mlciwebservice.config.auth.JwtTokenProvider
@@ -42,4 +43,6 @@ class AuthController(
 
 // Representing json structures
 data class Credentials(val username: String, val password: String)
-data class AuthResponse(val user: User, val token: String)
+data class AuthResponse(
+        @JsonIgnoreProperties("trackedRepositories")
+        val user: User, val token: String)
