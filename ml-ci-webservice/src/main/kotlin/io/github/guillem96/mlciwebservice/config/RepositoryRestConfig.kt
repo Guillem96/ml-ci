@@ -1,8 +1,6 @@
 package io.github.guillem96.mlciwebservice.config
 
-import io.github.guillem96.mlciwebservice.Record
-import io.github.guillem96.mlciwebservice.RecordRepository
-import io.github.guillem96.mlciwebservice.User
+import io.github.guillem96.mlciwebservice.*
 import javax.annotation.PostConstruct
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.env.Environment
@@ -11,18 +9,44 @@ import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapt
 
 @Configuration
 class RepositoryRestConfig(private val environment: Environment,
-                           private val recordRepository: RecordRepository) : RepositoryRestConfigurerAdapter() {
+                           private val userRepository: UserRepository,
+                           private val trackedRepositoryRepository: TrackedRepositoryRepository,
+                           private val modelRepository: ModelRepository,
+                           private val evaluationRepository: EvaluationRepository) : RepositoryRestConfigurerAdapter() {
 
     @Override
     override fun configureRepositoryRestConfiguration(config: RepositoryRestConfiguration) {
-        config.exposeIdsFor(Record::class.java)
+        config.exposeIdsFor(TrackedRepositoryRepository::class.java)
+        config.exposeIdsFor(Model::class.java)
+        config.exposeIdsFor(Evaluation::class.java)
         config.exposeIdsFor(User::class.java)
     }
 
     @PostConstruct
     fun init() {
+
         if(!environment.activeProfiles.contains("Test")) {
-            recordRepository.save(Record("Record1"))
+            if (!userRepository.existsByUsername("test")) {
+                val user = User(username = "test",
+                        password = User.passwordEncoder.encode("password"),
+                        email = "test@gmail.com")
+                userRepository.save(user)
+
+                val trackedRepository = TrackedRepository(
+                        url = "https://github.com/Guillem96/ml-ci-test",
+                        lastCommit = "5f792244a94136c418644ca60f7359475b7db831",
+                        user = user)
+                trackedRepositoryRepository.save(trackedRepository)
+
+                val model = Model(algorithm = "LinearRegression",
+                        trackedRepository = trackedRepository,
+                        hyperParameters = mapOf("alpha" to 0.1))
+                modelRepository.save(model)
+
+                val evaluation = Evaluation(model = model, results = mapOf("accuracy" to 90.6))
+                evaluationRepository.save(evaluation)
+
+            }
         }
     }
 }

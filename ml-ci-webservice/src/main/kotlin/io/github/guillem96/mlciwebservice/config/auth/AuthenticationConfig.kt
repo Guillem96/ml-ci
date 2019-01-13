@@ -17,12 +17,5 @@ class AuthenticationConfig(
         auth
                 .userDetailsService(basicUserDetailsService)
                 .passwordEncoder(User.passwordEncoder)
-
-        if (!usersRepository.existsByUsername("test")) {
-            val user = User(username = "test",
-                    password = User.passwordEncoder.encode("password"),
-                    email = "test@gmail.com")
-            usersRepository.save(user)
-        }
     }
 }

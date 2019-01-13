@@ -31,9 +31,9 @@ def get_best_hyperparameters():
 
     grid_search.fit(housing_prepared, housing_labels)
 
-    # print(grid_search.best_params_)
+    print(grid_search.best_params_)
 
-    # print(grid_search.best_estimator_)
+    print(grid_search.best_estimator_)
 
     cvres = grid_search.cv_results_
 
