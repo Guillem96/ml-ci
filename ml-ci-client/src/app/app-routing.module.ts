@@ -1,9 +1,12 @@
-import { RepoDetailsComponent } from './repo-details/repo-details.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { AuthGuard } from './shared/guards/auth.guard';
+import { GithubAuthComponent } from './github-auth/github-auth.component';
+import { MlCiComponent } from './ml-ci/ml-ci.component';
 
 const routes: Routes = [
-  { path: '', component: RepoDetailsComponent, pathMatch: 'full' },
+  { path: 'auth', component: GithubAuthComponent, pathMatch: 'full' },
+  { path: '', component: MlCiComponent, canActivate: [AuthGuard], pathMatch: 'full' },
 ];
 
 @NgModule({

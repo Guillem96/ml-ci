@@ -17,18 +17,19 @@ import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { GithubAuthComponent } from './github-auth/github-auth.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NavbarComponent } from './navbar/navbar.component';
-import { SidebarComponent } from './sidebar/sidebar.component';
-import { RepoDetailsComponent } from './repo-details/repo-details.component';
+import { AuthGuard } from './shared/guards/auth.guard';
+import { MlCiComponent } from './ml-ci/ml-ci.component';
+import { MlCiModule } from './ml-ci/ml-ci.module';
+import { AuthInterceptor } from './shared/auth.interceptor';
 
 @NgModule({
   declarations: [
     AppComponent,
     GithubAuthComponent,
     NavbarComponent,
-    SidebarComponent,
-    RepoDetailsComponent
+    MlCiComponent
   ],
   imports: [
     BrowserModule,
@@ -45,11 +46,15 @@ import { RepoDetailsComponent } from './repo-details/repo-details.component';
     AngularHalModule.forRoot(),
 
     // MDBBootstrap
-    MDBBootstrapModule.forRoot()
+    MDBBootstrapModule.forRoot(),
+
+    MlCiModule
   ],
   providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: 'ExternalConfigurationService', useClass: ExternalConfigurationService },
-    AuthService
+    AuthService,
+    AuthGuard
   ],
   bootstrap: [AppComponent]
 })

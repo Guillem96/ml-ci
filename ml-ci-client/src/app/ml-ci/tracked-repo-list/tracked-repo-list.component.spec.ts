@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SidebarComponent } from './sidebar.component';
+import { TrackedRepoListComponent } from './tracked-repo-list.component';
 
-describe('SidebarComponent', () => {
-  let component: SidebarComponent;
-  let fixture: ComponentFixture<SidebarComponent>;
+describe('TrackedRepoListComponent', () => {
+  let component: TrackedRepoListComponent;
+  let fixture: ComponentFixture<TrackedRepoListComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SidebarComponent ]
+      declarations: [ TrackedRepoListComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SidebarComponent);
+    fixture = TestBed.createComponent(TrackedRepoListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -69,12 +69,12 @@ export class AuthService {
         // Store to firebase
         userRef.set(Object.assign({}, data));
         // Register the user to our backend
-        this.userService.signUp(data.username, data.password, data.email).subscribe(
+        this.signUpAndSignIn(data).then(
           user => {
             user.gitHubInfo = gitHubUser;
+            this.userService.storeUser();
             this.user$.next(user);
-          },
-          err => console.log(err)
+          }
         );
       } else {
         // Get the existing password
@@ -89,6 +89,7 @@ export class AuthService {
         this.userService.signIn(data.username, data.password).subscribe(
           user => {
             user.gitHubInfo = gitHubUser;
+            this.userService.storeUser();
             this.user$.next(user);
           },
           err => console.log(err)
@@ -97,7 +98,16 @@ export class AuthService {
         return false;
       }
     });
+  }
 
+  private async signUpAndSignIn(data: any) {
+    try {
+      await this.userService.signUp(data.username, data.password, data.email).toPromise();
+      return await this.userService.signIn(data.username, data.password).toPromise();
+    } catch (err) {
+      console.log(err);
+      return null;
+    }
   }
 
   private generatePassword(): string {
