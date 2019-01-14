@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { TrackedRepository } from 'src/app/shared/models/tracked-repository';
 import { UserService } from 'src/app/shared/services/user.service';
 import { Model } from 'src/app/shared/models/model';
@@ -20,11 +20,11 @@ export class RepoEntryComponent implements OnInit {
 
   ngOnInit() {
     const splitUrl = this.repo.url.split('/');
-    this.repoName = this.userService.authUser.username + '/' + splitUrl[splitUrl.length - 1];
+    this.repoName = this.userService.authUser.gitHubInfo.username + '/' + splitUrl[splitUrl.length - 1];
 
     // Fetch all related models
     this.repo.getRelationArray(Model, 'models').subscribe(res => {
-      this.repo.models = res;
+      this.repo.models = res;     
       this.setStatus(res);
       this.setDate(res);
     });

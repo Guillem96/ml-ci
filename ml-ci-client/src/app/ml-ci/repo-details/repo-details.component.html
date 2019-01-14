@@ -1,3 +1,4 @@
-<p>
-  repo-details works!
-</p>
+<div *ngIf="repo" class="container pt-4">
+  <h2 class="repo-name display-4"><i class="fas fa-book mr-3"></i>{{ repoName }}</h2>
+  <app-model-details *ngFor="let model of repo.models" [model]="model"></app-model-details>
+</div>

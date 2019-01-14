@@ -11,6 +11,7 @@ import { TrackedRepositoryService } from '../shared/services/tracked-repository.
 export class MlCiComponent implements OnInit {
 
   public trackedRepositories: TrackedRepository[] = [];
+  public selectedRepo: TrackedRepository;
 
   constructor(private userService: UserService,
               private trackedRepositoryService: TrackedRepositoryService) { }
@@ -20,6 +21,7 @@ export class MlCiComponent implements OnInit {
       this.userService.authUser.getRelationArray(TrackedRepository, 'trackedRepositories') 
         .subscribe(res => { 
           this.trackedRepositories = res;
+          this.selectedRepo = res[0] || null;
           this.userService.authUser.trackedRepositories = res;
         });
     }

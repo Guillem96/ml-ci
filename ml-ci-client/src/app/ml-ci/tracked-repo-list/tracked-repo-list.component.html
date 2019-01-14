@@ -1,3 +1,4 @@
 <div class="repo-list">
-  <app-repo-entry *ngFor="let repo of trackedRepositories" [repo]="repo"></app-repo-entry>
+  <app-repo-entry *ngFor="let repo of trackedRepositories; let i = index" 
+  (click)="onClickRepo(i)" [repo]="repo"></app-repo-entry>
 </div>

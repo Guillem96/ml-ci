@@ -1,5 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { TrackedRepository } from 'src/app/shared/models/tracked-repository';
+import { Model } from 'src/app/shared/models/model';
 
 @Component({
   selector: 'app-tracked-repo-list',
@@ -9,10 +10,14 @@ import { TrackedRepository } from 'src/app/shared/models/tracked-repository';
 export class TrackedRepoListComponent implements OnInit {
 
   @Input() trackedRepositories: TrackedRepository[];
+  @Output() clickRepo: EventEmitter<TrackedRepository> = new EventEmitter();
 
   constructor() { }
 
   ngOnInit() {
   }
 
+  onClickRepo(index: number) {
+    this.clickRepo.emit(this.trackedRepositories[index]);
+  }
 }
