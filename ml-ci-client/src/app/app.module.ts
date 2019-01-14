@@ -23,6 +23,7 @@ import { AuthGuard } from './shared/guards/auth.guard';
 import { MlCiComponent } from './ml-ci/ml-ci.component';
 import { MlCiModule } from './ml-ci/ml-ci.module';
 import { AuthInterceptor } from './shared/auth.interceptor';
+import { TrackedRepositoryService } from './shared/services/tracked-repository.service';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { AuthInterceptor } from './shared/auth.interceptor';
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: 'ExternalConfigurationService', useClass: ExternalConfigurationService },
     AuthService,
-    AuthGuard
+    AuthGuard,
+    TrackedRepositoryService
   ],
   bootstrap: [AppComponent]
 })

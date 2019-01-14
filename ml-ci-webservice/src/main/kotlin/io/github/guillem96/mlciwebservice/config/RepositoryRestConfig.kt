@@ -24,7 +24,6 @@ class RepositoryRestConfig(private val environment: Environment,
 
     @PostConstruct
     fun init() {
-
         if(!environment.activeProfiles.contains("Test")) {
             if (!userRepository.existsByUsername("test")) {
                 val user = User(username = "test",
@@ -46,6 +45,21 @@ class RepositoryRestConfig(private val environment: Environment,
                 val evaluation = Evaluation(model = model, results = mapOf("accuracy" to 90.6))
                 evaluationRepository.save(evaluation)
 
+                val trackedRepository2 = TrackedRepository(
+                        url = "https://github.com/Guillem96/argon-nx",
+                        lastCommit = "5f792244a94136c418644ca60f7359475b7db831",
+                        user = user)
+                trackedRepositoryRepository.save(trackedRepository2)
+
+
+                modelRepository.save(Model(algorithm = "LinearRegression",
+                        trackedRepository = trackedRepository2,
+                        hyperParameters = mapOf("alpha" to 0.2)))
+
+                modelRepository.save(Model(algorithm = "LogisticRegression",
+                        trackedRepository = trackedRepository2,
+                        status = ModelStatus.ERROR,
+                        hyperParameters = mapOf("alpha" to 0.2)))
             }
         }
     }

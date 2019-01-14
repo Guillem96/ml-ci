@@ -15,7 +15,7 @@
     <ul class="navbar-nav ml-auto nav-flex-icons">
       <li class="nav-item dropdown avatar" mdbDropdown>
         <a class="nav-link dropdown-toggle waves-light" mdbWavesEffect mdbDropdownToggle>
-          <img src="{{ userService.authUser.gitHubInfo.avatar }}" width="30" class="rounded-circle z-depth-0 mr-2" alt="avatar image">
+          <img src="{{ userService.authUser.gitHubInfo?.avatar }}" width="30" class="rounded-circle z-depth-0 mr-2" alt="avatar image">
         </a>
         <div class="dropdown-menu dropdown-menu-right dropdown-secondary">
           <a class="dropdown-item" href="#"><i class="gray mr-3 fas fa-cogs"></i>Settings</a>

@@ -15,7 +15,7 @@ data class TrackedRepository(
 
         val lastCommit: String,
 
-        @ManyToOne
+        @ManyToOne(fetch = FetchType.LAZY)
         @NotNull
         @JsonIdentityReference(alwaysAsId = true)
         val user: User,
@@ -41,7 +41,7 @@ data class User(
 
         val email: String = "",
 
-        @OneToMany(cascade = [(CascadeType.ALL)], mappedBy = "user")
+        @OneToMany(cascade = [(CascadeType.ALL)], mappedBy = "user", fetch = FetchType.LAZY)
         @JsonIdentityReference(alwaysAsId = true)
         val trackedRepositories: List<TrackedRepository> = emptyList(),
 
@@ -116,6 +116,7 @@ data class Evaluation(
 enum class ModelStatus {
         TRAINING,
         TRAINED,
+        ERROR,
         PENDENT,
         NONE
 }

@@ -16,12 +16,29 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
+  private initUser(data: any): User {
+    if (!data)
+      return null;
+    
+    let user = new User();
+    user.id = data.id;
+    user.email = data.email;
+    user.username = data.username;
+    user.gitHubInfo = data.gitHubInfo;
+
+    // Workarround in order to getRelationArray works
+    user._links = {}
+    user._links.trackedRepositories = {}
+    user._links.trackedRepositories.href = `${environment.API}/users/${data.id}/trackedRepositories`;
+    return user;
+  }
+
   public signIn(username: string, password: string): Observable<User> {
     return this.http.post(`${environment.API}/auth/signIn`, {username, password})
       .pipe(
         map((res: any) => {
-          this.token = res.token;
-          this.authUser = Object.assign(<User>{}, res.user);
+          this.token = res.token;          
+          this.authUser = this.initUser(res.user);
           this.storeUser();
           return this.authUser;
         })
@@ -32,7 +49,7 @@ export class UserService {
     return this.http.post(`${environment.API}/users`, {username, password, email})
       .pipe(
         map((res: any) => {
-          this.authUser = Object.assign(<User>{}, res.user);
+          this.authUser = this.initUser(res.user);
           return this.authUser;
         })
     );
@@ -53,10 +70,10 @@ export class UserService {
 
   private restoreUser() {
     this.token = localStorage.getItem("token");
-    this.authUser = Object.assign(<User>{}, JSON.parse(localStorage.getItem("user")));
+    this.authUser = this.initUser(JSON.parse(localStorage.getItem("user")));
   }
 
-  public storeUser() {
+  public storeUser() {    
     localStorage.setItem("token", this.token);
     localStorage.setItem("user", JSON.stringify(this.authUser));
   }
