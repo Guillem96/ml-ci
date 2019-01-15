@@ -10,6 +10,14 @@ export class ModelDetailsComponent implements OnInit {
 
   @Input() model: Model;
   
+  public statusIcon = {
+    pendent: 'far fa-circle',
+    none: 'far fa-circle',
+    error: 'fas fa-times',
+    trained: 'far fa-check-circle',
+    training: 'far fa-clock fa-spin'
+  }
+
   constructor() { }
 
   ngOnInit() {

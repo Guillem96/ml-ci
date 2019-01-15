@@ -15,6 +15,13 @@ export class RepoEntryComponent implements OnInit {
   public repoName: string;    
   public trainedDate: Date;
 
+  public statusIcon = {
+    pendent: 'far fa-circle',
+    error: 'fas fa-times',
+    trained: 'far fa-check-circle',
+    training: 'far fa-clock fa-spin'
+  }
+
   constructor(private userService: UserService) { }
 
   ngOnInit() {

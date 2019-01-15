@@ -3,7 +3,7 @@ import { TrackedRepository } from "./tracked-repository";
 
 export class Model extends Resource {
   public id: number;
-  public name: string;
+  public algorithm: string;
   public status: string;
   public hyperparameters: {name: string, value: any};
   public trackedRepository: TrackedRepository;

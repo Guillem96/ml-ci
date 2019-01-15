@@ -1,7 +1,7 @@
-<mdb-card mdbWavesEffect class="repo-wrapper ml-1 mb-2" [ngClass]="this.repo.status">
+<mdb-card mdbWavesEffect class="repo-wrapper ml-1 mb-2" [ngClass]="repo.status">
   <mdb-card-body class="repo-body">
     <mdb-card-title>
-      <h4 class="ml-4 mt-3 name">{{ repoName }}</h4>
+      <h4 class="ml-4 mt-3 name status-desc"><i class="mr-2" [ngClass]="statusIcon[repo.status]"></i>{{ repoName }}</h4>
     </mdb-card-title>
     <mdb-card-text>
       <ul class="ml-4 mt-3 info">

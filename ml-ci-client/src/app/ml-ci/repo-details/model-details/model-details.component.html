@@ -1,3 +1,18 @@
-<p>
-  {{ model.algorithm }}
-</p>
+<mdb-card class="model-wrapper ml-1 mb-2 mt-3" [ngClass]="model.status.toLowerCase()">
+  <mdb-card-body class="model-body">
+    <mdb-card-title>
+      <h4 class="ml-4 mt-3 title status-desc"><i class="mr-2" [ngClass]="statusIcon[model.status.toLowerCase()]"></i>{{ model.algorithm }}</h4>
+    </mdb-card-title>
+    <mdb-card-text>
+      <ul class="ml-4 mt-3 info">
+
+      </ul>
+    </mdb-card-text>
+  </mdb-card-body>
+  <mdb-card-footer class="text-right card-footer">
+    <ul class="list-inline">
+      <li class="list-inline-item mr-3"><a><i class="far fa-sticky-note"></i> View logs</a></li>
+      <li class="list-inline-item"><a><i class="fas fa-download"></i> Download</a></li>
+    </ul>
+  </mdb-card-footer>
+</mdb-card>
