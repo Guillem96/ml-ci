@@ -1,0 +1,33 @@
+<!-- url: string;
+forks: number;
+private: boolean;
+commits: GitHubCommit[];
+stargazers_count: number;
+description: string; -->
+<div class="container">
+  <div class="banner">
+    <ul class="list-inline">
+      <li class="list-inline-item">    
+        <img src="{{ userService.authUser.gitHubInfo.avatar }}" width="70" class="rounded-circle z-depth-0 mr-2" alt="avatar image">
+      </li>
+      <li class="list-inline-item pt-4">    
+        <h2 class="display-4 user-name mt-3">{{ userService.authUser.gitHubInfo.name }}</h2>
+      </li>
+    </ul>
+  </div>
+  <div class="integrate display-4">Integrate MlCi - GitHub App Integration</div>
+  <table mdbTable hover="true">
+    <tbody>
+      <tr mdbTableCol *ngFor="let el of githubRepos">
+        <td><a href="{{ el.url }}"><i class="fa fa-github fa-lg"></i></a></td>
+        <td>
+          <i *ngIf="el.private" class="fas fa-unlock-alt fa-lg"></i>
+          <i *ngIf="!el.private" class="fas fa-book fa-lg"></i>
+        </td>
+        <td>{{ el.name }}</td>
+        <td>{{ el.stargazers_count }} <i class="fas fa-star"></i></td>
+        <td>{{ el.forks }} <i class="fas fa-code-branch"></i></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

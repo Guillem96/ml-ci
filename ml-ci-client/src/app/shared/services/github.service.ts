@@ -24,7 +24,6 @@ export class GithubService {
     return forkJoin(repo$, commits$)
     .pipe(
       map((res: any[]) => {
-        console.log(res[0])
         res[0].commits = res[1].map(c => {
           return <GitHubCommit>{
             url: c.commit.url,
@@ -39,6 +38,10 @@ export class GithubService {
     ));
   }
 
+  public getRepos(): Observable<GitHubRepository[]> {
+    return this.http.get<GitHubRepository[]>(`${this.GITHUB_API}/user/repos`, this.getAuthHeaders());
+  }
+
   private getAuthHeaders() {
     return {
       headers: new HttpHeaders({
@@ -46,4 +49,6 @@ export class GithubService {
       })
     }
   }
+
+  
 }

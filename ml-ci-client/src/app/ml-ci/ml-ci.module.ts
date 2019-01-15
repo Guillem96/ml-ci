@@ -6,6 +6,7 @@ import { RepoEntryComponent } from './tracked-repo-list/repo-entry/repo-entry.co
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { ModelDetailsComponent } from './repo-details/model-details/model-details.component';
 import { RepoMetadataComponent } from "./repo-details/repo-metadata/repo-metadata.component";
+import { AddRepoComponent } from './add-repo/add-repo.component';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import { RepoMetadataComponent } from "./repo-details/repo-metadata/repo-metadat
     RepoEntryComponent,
     ModelDetailsComponent,
     RepoMetadataComponent,
+    AddRepoComponent,
   ],
   imports: [
     CommonModule,
