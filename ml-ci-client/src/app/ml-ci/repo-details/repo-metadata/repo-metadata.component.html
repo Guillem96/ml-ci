@@ -1,0 +1,19 @@
+<mdb-card *ngIf="githubRepo" class="repo-wrapper ml-1 mb-2 mt-4" [ngClass]="this.repo.status">
+  <mdb-card-body class="repo-body">
+    <mdb-card-title>
+      <h4 class="ml-4 mt-3 title status-desc"><i class="mr-2" [ngClass]="statusIcon[this.repo.status]"></i>{{ githubRepo.commits[0].message }}</h4>
+    </mdb-card-title>
+    <mdb-card-text>
+      <ul class="ml-4 mt-3 info">
+        <li><i class="fas fa-hashtag"></i>  Commit {{ githubRepo.commits[0].sha.substring(0, 7) }}</li>
+        <li class="mt-4"><img src="{{  githubRepo.commits[0].authorAvatar }}" width="25" class="rounded-circle z-depth-0 mr-1" alt="avatar image"> {{ githubRepo.commits[0].author }}</li>
+      </ul>
+    </mdb-card-text>
+  </mdb-card-body>
+  <mdb-card-footer class="card-footer">
+    <ul class="list-inline">
+      <li class="list-inline-item mr-3"><i class="fas fa-star"></i> {{ githubRepo.stargazers_count }}</li>
+      <li class="list-inline-item"><i class="fas fa-code-branch"></i> {{ githubRepo.forks }}</li>
+    </ul>
+  </mdb-card-footer>
+</mdb-card>

@@ -10,7 +10,7 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
-    if (this.authentication.isLoggedIn()) {
+    if (!req.url.includes('api.github') && this.authentication.isLoggedIn()) {
       const authToken = this.authentication.token;
       
       const authReq = req.clone({

@@ -13,7 +13,6 @@ export class RepoEntryComponent implements OnInit {
   @Input() repo: TrackedRepository;
 
   public repoName: string;    
-  public status: string = '';
   public trainedDate: Date;
 
   constructor(private userService: UserService) { }
@@ -33,13 +32,13 @@ export class RepoEntryComponent implements OnInit {
   private setStatus(models: Model[]) {
     const statuses = models.map(m => m.status);
     if (statuses.some(s => s === 'ERROR')) {
-      this.status = 'error';
+      this.repo.status = 'error';
     } else if (statuses.some(s => s === 'NONE' || s == 'PENDENT')) {
-      this.status = 'pendent';
+      this.repo.status = 'pendent';
     } else if (statuses.some(s => s === 'TRAINING')) {
-      this.status = 'training';
+      this.repo.status = 'training';
     } else {
-      this.status = 'trained';
+      this.repo.status = 'trained';
     }
   }
 

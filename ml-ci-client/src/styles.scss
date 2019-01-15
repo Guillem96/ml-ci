@@ -1,1 +1,38 @@
 /* You can add global styles to this file, and also import other style files */
+ul {
+  margin-left: 0;
+  padding-left: 0;
+  list-style-type: none;
+}
+
+.trained {
+  border-color: #1da054 !important;
+
+  .status-desc {
+    color: #1da054 !important;
+  }
+}
+
+.pendent {
+  border-color: #9e9e9e !important;
+
+  .status-desc {
+    color: #9e9e9e !important;
+  }
+}
+
+.error {
+  border-color: #ff6f6f !important;
+
+  .status-desc {
+    color: #ff6f6f !important;
+  }
+}
+
+.training {
+  border-color: #fff177 !important;
+
+  .status-desc {
+    color: #fff177 !important;
+  }
+}
