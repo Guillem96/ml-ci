@@ -1,6 +1,7 @@
 import { GitHubCommit } from "./github.commit";
 
 export interface GitHubRepository {
+  full_name: string;
   name: string;
   url: string;
   forks: number;

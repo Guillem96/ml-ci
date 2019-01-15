@@ -26,7 +26,7 @@ export class RepoMetadataComponent implements OnInit, OnChanges {
 
   ngOnChanges() {
     const urlSplit = this.repo.url.split('/');
-    this.githubService.getRepoInfo(urlSplit[urlSplit.length - 1])
+    this.githubService.getRepoInfo(urlSplit[urlSplit.length - 2] + '/' + urlSplit[urlSplit.length - 1])
       .subscribe(res => this.githubRepo = res);  
   }
 

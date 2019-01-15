@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col-3">
     <div mdbWavesEffect class="add-btn">
-        <a [routerLink]="['add-repo']">Track a repository <i class="ml-2 fas fa-plus"></i></a>
+      <a [routerLink]="['add-repo']">Track a repository <i class="ml-2 fas fa-plus"></i></a>
     </div>
     <app-tracked-repo-list [trackedRepositories]="trackedRepositories" (clickRepo)="selectedRepo = $event"></app-tracked-repo-list>
   </div>

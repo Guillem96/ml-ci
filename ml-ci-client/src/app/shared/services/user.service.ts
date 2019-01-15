@@ -30,6 +30,9 @@ export class UserService {
     user._links = {}
     user._links.trackedRepositories = {}
     user._links.trackedRepositories.href = `${environment.API}/users/${data.id}/trackedRepositories`;
+
+    user._links.self = {};
+    user._links.self.href = `${environment.API}/users/${data.id}`;
     return user;
   }
 

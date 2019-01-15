@@ -17,9 +17,8 @@ export class GithubService {
               private userService: UserService) { }
 
   public getRepoInfo(repoName: string): Observable<GitHubRepository> {
-    const username = this.userService.authUser.gitHubInfo.username;
-    const repo$ = this.http.get<GitHubRepository>(`${this.GITHUB_API}/repos/${username}/${repoName}`, this.getAuthHeaders());
-    const commits$ = this.http.get(`${this.GITHUB_API}/repos/${username}/${repoName}/commits`, this.getAuthHeaders());
+    const repo$ = this.http.get<GitHubRepository>(`${this.GITHUB_API}/repos/${repoName}`, this.getAuthHeaders());
+    const commits$ = this.http.get(`${this.GITHUB_API}/repos/${repoName}/commits`, this.getAuthHeaders());
     
     return forkJoin(repo$, commits$)
     .pipe(

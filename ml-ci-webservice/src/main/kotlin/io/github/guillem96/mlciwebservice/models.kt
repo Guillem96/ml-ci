@@ -16,9 +16,8 @@ data class TrackedRepository(
         val lastCommit: String,
 
         @ManyToOne(fetch = FetchType.LAZY)
-        @NotNull
         @JsonIdentityReference(alwaysAsId = true)
-        val user: User,
+        val user: User? = null,
 
         @OneToMany(cascade = [(CascadeType.ALL)], mappedBy = "trackedRepository")
         val models: List<Model> = emptyList(),
