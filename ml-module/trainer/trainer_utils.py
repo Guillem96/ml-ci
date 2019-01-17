@@ -1,9 +1,6 @@
 import os
 import pandas as pd
-import numpy as np
-
 from sklearn.model_selection import train_test_split
-from sklearn.model_selection import StratifiedShuffleSplit
 
 def load_data(path):
     """Read a csv file as Panda's DataFrame
@@ -19,7 +16,7 @@ def load_data(path):
     return pd.read_csv(csv_path)
 
 
-def get_woriking_sets(csv_path, test_size, target):
+def get_woriking_sets(csv_path, test_size, target, dropna=False):
     """Makes partitions of data for ml algorithms
     
     Arguments:
@@ -32,6 +29,9 @@ def get_woriking_sets(csv_path, test_size, target):
     """
 
     df = load_data(csv_path)
+
+    if dropna:
+        df.dropna(axis=0)
 
     X = df.drop(target, axis=1).copy()
     y = df[target].copy()

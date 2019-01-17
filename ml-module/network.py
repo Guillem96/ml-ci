@@ -1,11 +1,17 @@
 import os
-from utils import delete_dir
-
 from git import Repo
+import requests
+import json
 
+from utils import delete_dir
 
 class Network(object):
     
+    _WEBSERVICE = "http://localhost:8080"
+
+    def __init__(self, trackedRepository):
+        self.trackedRepository = trackedRepository
+
     @staticmethod
     def clone_github_repository(url):
         """Force clone a github repository
@@ -25,3 +31,20 @@ class Network(object):
         # Clone
         Repo.clone_from(url, directory)
         return directory
+
+
+    def create_model(self, model):
+        model_json = {
+            "algorithm": model.name,
+            "hyperparameters": model.params,
+            "status": "PENDENT",
+            "trackedRepository": self.trackedRepository
+        }
+        res = requests.post(self._WEBSERVICE + "/models", json=json.dumps(model_json))
+        print(res.json()
+
+    def update_model_status(self, model, new_status):
+        pass
+    
+    def add_evaluations(self, model, eval):
+        pass

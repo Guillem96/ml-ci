@@ -43,6 +43,7 @@ export class AddRepoComponent implements OnInit {
       let trackedRepository = new TrackedRepository();
       trackedRepository.lastCommit = repo.commits[0].sha;
       trackedRepository.url = `https://github.com/${repo.full_name}`;
+      
       const createdTrackedRepo = await this.trackedRepositoryService.create(trackedRepository).toPromise() as TrackedRepository;
       await createdTrackedRepo.addRelation('user', this.userService.authUser).toPromise();
     } catch (err) {
