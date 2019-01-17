@@ -31,6 +31,8 @@ class WebSecurity(
                 .antMatchers("/auth/signIn").permitAll()
                 .antMatchers(HttpMethod.POST, "/users").permitAll()
 
+                .antMatchers(HttpMethod.POST, "/models").hasRole("MODULE")
+
                 .antMatchers(HttpMethod.GET, "**").permitAll()
                 .anyRequest().authenticated()
                 .and()

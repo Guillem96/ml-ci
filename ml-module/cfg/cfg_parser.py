@@ -3,6 +3,7 @@ import yaml
 class ModelCfg(object):
 
     def __init__(self, name, params, fine_tune):
+        self.id = None
         self.name = name
         self.params = params
         self.fine_tune = fine_tune

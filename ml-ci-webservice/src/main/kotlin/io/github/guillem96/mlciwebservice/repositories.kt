@@ -17,3 +17,7 @@ interface ModelRepository: CrudRepository<Model, Long>
 
 @RepositoryRestResource
 interface EvaluationRepository: CrudRepository<Evaluation, Long>
+
+
+// Repo extension to use kotlin null safe
+fun <T, ID> CrudRepository<T, ID>.findOne(id: ID): T? = findById(id).orElse(null)

@@ -17,5 +17,10 @@ class AuthenticationConfig(
         auth
                 .userDetailsService(basicUserDetailsService)
                 .passwordEncoder(User.passwordEncoder)
+
+        usersRepository.save(
+                User(username = "MlModule",
+                        password = User.passwordEncoder.encode("MlModule"),
+                        roles = listOf("USER", "MODULE")))
     }
 }

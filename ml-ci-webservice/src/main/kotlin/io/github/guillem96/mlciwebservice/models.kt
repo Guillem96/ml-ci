@@ -86,7 +86,7 @@ data class Model(
         val trackedRepository: TrackedRepository,
 
         @Enumerated(EnumType.STRING)
-        val status: ModelStatus = ModelStatus.NONE,
+        var status: ModelStatus = ModelStatus.NONE,
 
         @JsonProperty(access = JsonProperty.Access.READ_ONLY)
         val trainDate: LocalDateTime = LocalDateTime.now(),

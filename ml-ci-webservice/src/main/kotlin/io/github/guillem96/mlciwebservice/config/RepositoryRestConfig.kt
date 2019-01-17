@@ -16,7 +16,7 @@ class RepositoryRestConfig(private val environment: Environment,
 
     @Override
     override fun configureRepositoryRestConfiguration(config: RepositoryRestConfiguration) {
-        config.exposeIdsFor(TrackedRepositoryRepository::class.java)
+        config.exposeIdsFor(TrackedRepository::class.java)
         config.exposeIdsFor(Model::class.java)
         config.exposeIdsFor(Evaluation::class.java)
         config.exposeIdsFor(User::class.java)
