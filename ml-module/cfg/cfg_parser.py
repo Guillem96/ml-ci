@@ -14,6 +14,7 @@ class ModelCfg(object):
 class MlCiCfg(object):
 
     def __init__(self, **kwargs):
+        self.train_type = kwargs.get('train_type')
         self.test_rate = kwargs.get('test_rate')
         self.models = kwargs.get('models')
         self.pipeline = kwargs.get('pipeline')
@@ -30,14 +31,15 @@ class MlCiCfg(object):
         return '[\n  ' + ',\n  '.join(map(str, self.models)) + '\n]'
 
 
-class YamlParser(object):
+class YamlCfgParser(object):
 
     def __init__(self, yaml_stream):
         cfg_dict = yaml.load(yaml_stream)
         config = dict()
+        config['train_type'] = cfg_dict.get('train_type', 'regression')
         config['test_rate'] = cfg_dict.get('test-rate', 0.2)
         config['pipeline'] = cfg_dict.get('pipeline')
-        config['models'] = YamlParser._parse_models(cfg_dict)
+        config['models'] = YamlCfgParser._parse_models(cfg_dict)
         config['target'] = cfg_dict.get('target')
         config['data_set'] = cfg_dict.get('data-set', 'dataset/dataset.csv')
 

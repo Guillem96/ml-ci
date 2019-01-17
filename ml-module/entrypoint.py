@@ -1,6 +1,6 @@
 import os
-from cfg.cfg_parser import YamlParser
-from trainer import training_stage
+from cfg.cfg_parser import YamlCfgParser
+from trainer.trainer import training_stage
 from network import Network
 
 def parse_cfg(cfg_file_path):
@@ -14,7 +14,7 @@ def parse_cfg(cfg_file_path):
     """
     cfg = None
     with open(cfg_file_path, 'r') as f:
-        cfg = YamlParser(f).parsed_cfg
+        cfg = YamlCfgParser(f).parsed_cfg
     return cfg
 
 
