@@ -15,11 +15,11 @@ from sklearn.linear_model import *
 from sklearn.tree import *
 
 # Custom classes imports
-from trainer.trainer_utils import get_woriking_sets
-from trainer.generic_pipelines import full_pipeline
+from ml_ci.trainer.trainer_utils import get_woriking_sets
+from ml_ci.trainer.generic_pipelines import full_pipeline
 
 # Webservice communication
-from network import Network
+from ml_ci.network import Network
 
 
 BEST_MODEL = RandomForestRegressor()

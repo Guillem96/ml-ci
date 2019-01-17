@@ -1,7 +1,7 @@
 import os
 from cfg.cfg_parser import YamlCfgParser
 from trainer.trainer import training_stage
-from network import Network
+from ml_ci.network import Network
 
 def parse_cfg(cfg_file_path):
     """Parse the given ml-ci.yml
@@ -17,8 +17,7 @@ def parse_cfg(cfg_file_path):
         cfg = YamlCfgParser(f).parsed_cfg
     return cfg
 
-
-if __name__ == "__main__":
+def train(id, url):
     output_path = Network.clone_github_repository("https://github.com/Guillem96/ml-ci-test.git")
     
     # Parse the config file
@@ -31,3 +30,4 @@ if __name__ == "__main__":
     else:
         # TODO: Communicate the error to the webservice
         print("No config file provided")
+    

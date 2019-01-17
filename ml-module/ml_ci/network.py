@@ -3,7 +3,7 @@ from git import Repo
 import requests
 import json
 
-from utils import delete_dir
+from ml_ci.utils import delete_dir
 
 class Network(object):
     

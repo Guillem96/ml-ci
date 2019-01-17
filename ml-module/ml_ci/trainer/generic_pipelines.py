@@ -1,4 +1,4 @@
-from trainer.generic_transformers import DataFrameSelector, Binarizer
+from ml_ci.trainer.generic_transformers import DataFrameSelector, Binarizer
 from sklearn.pipeline import Pipeline, FeatureUnion
 from sklearn.preprocessing import StandardScaler
 from sklearn.impute import SimpleImputer
