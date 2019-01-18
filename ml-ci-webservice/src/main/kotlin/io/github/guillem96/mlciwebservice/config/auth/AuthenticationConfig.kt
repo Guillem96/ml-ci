@@ -1,6 +1,6 @@
 package io.github.guillem96.mlciwebservice.config.auth
 
-import io.github.guillem96.mlciwebservice.User
+import io.github.guillem96.mlciwebservice.domain.User
 import io.github.guillem96.mlciwebservice.UserRepository
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder

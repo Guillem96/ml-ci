@@ -1,6 +1,7 @@
 package io.github.guillem96.mlciwebservice.config
 
 import io.github.guillem96.mlciwebservice.*
+import io.github.guillem96.mlciwebservice.domain.*
 import javax.annotation.PostConstruct
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.env.Environment

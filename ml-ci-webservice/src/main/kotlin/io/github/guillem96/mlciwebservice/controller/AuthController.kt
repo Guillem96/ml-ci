@@ -1,7 +1,7 @@
 package io.github.guillem96.mlciwebservice.controller
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import io.github.guillem96.mlciwebservice.User
+import io.github.guillem96.mlciwebservice.domain.User
 import io.github.guillem96.mlciwebservice.UserRepository
 import io.github.guillem96.mlciwebservice.config.auth.JwtTokenProvider
 import org.springframework.data.rest.webmvc.RepositoryRestController

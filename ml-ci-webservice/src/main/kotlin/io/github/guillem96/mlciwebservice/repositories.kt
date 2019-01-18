@@ -1,5 +1,9 @@
 package io.github.guillem96.mlciwebservice
 
+import io.github.guillem96.mlciwebservice.domain.Evaluation
+import io.github.guillem96.mlciwebservice.domain.Model
+import io.github.guillem96.mlciwebservice.domain.TrackedRepository
+import io.github.guillem96.mlciwebservice.domain.User
 import org.springframework.data.repository.CrudRepository
 import org.springframework.data.rest.core.annotation.RepositoryRestResource
 

@@ -1,6 +1,8 @@
 package io.github.guillem96.mlciwebservice.controller
 
 import io.github.guillem96.mlciwebservice.*
+import io.github.guillem96.mlciwebservice.domain.Model
+import io.github.guillem96.mlciwebservice.domain.ModelStatus
 import org.springframework.data.rest.webmvc.RepositoryRestController
 import org.springframework.http.ResponseEntity
 import org.springframework.http.ResponseEntity.*
