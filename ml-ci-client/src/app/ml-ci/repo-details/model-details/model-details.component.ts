@@ -9,13 +9,13 @@ import { Model } from 'src/app/shared/models/model';
 export class ModelDetailsComponent implements OnInit {
 
   @Input() model: Model;
-  
+
   public statusIcon = {
-    pendent: 'far fa-circle',
-    none: 'far fa-circle',
-    error: 'fas fa-times',
-    trained: 'far fa-check-circle',
-    training: 'far fa-clock fa-spin'
+    PENDENT: 'far fa-circle',
+    NONE: 'far fa-circle',
+    ERROR: 'fas fa-times',
+    TRAINED: 'far fa-check-circle',
+    TRAINING: 'far fa-clock fa-spin'
   }
 
   constructor() { }

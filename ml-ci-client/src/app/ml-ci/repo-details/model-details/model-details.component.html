@@ -1,7 +1,7 @@
 <mdb-card class="model-wrapper ml-1 mb-2 mt-3" [ngClass]="model.status.toLowerCase()">
   <mdb-card-body class="model-body">
     <mdb-card-title>
-      <h4 class="ml-4 mt-3 title status-desc"><i class="mr-2" [ngClass]="statusIcon[model.status.toLowerCase()]"></i>{{ model.algorithm }}</h4>
+      <h4 class="ml-4 mt-3 title status-desc"><i class="mr-2" [ngClass]="statusIcon[model.status]"></i>{{ model.algorithm }}</h4>
     </mdb-card-title>
     <mdb-card-text>
       <ul class="ml-4 mt-3 info">

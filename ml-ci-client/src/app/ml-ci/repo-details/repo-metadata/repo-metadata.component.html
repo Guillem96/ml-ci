@@ -1,7 +1,14 @@
-<mdb-card *ngIf="githubRepo" class="repo-wrapper ml-1 mb-2 mt-4" [ngClass]="this.repo.status">
+<mdb-card *ngIf="githubRepo" class="repo-wrapper ml-1 mb-2 mt-4" [ngClass]="repo.status.toLowerCase()">
   <mdb-card-body class="repo-body">
     <mdb-card-title>
-      <h4 class="ml-4 mt-3 title status-desc"><i class="mr-2" [ngClass]="statusIcon[this.repo.status]"></i>{{ githubRepo.commits[0].message }}</h4>
+      <div class="row">
+          <div class="col-9">
+            <h4 class="ml-4 mt-3 title status-desc"><i class="mr-2" [ngClass]="statusIcon[repo.status]"></i>{{ githubRepo.commits[0].message }}</h4>
+          </div>
+          <div class="col-3 pt-1 text-right">
+            <button class="ml-4 train-btn" mdbBtn color="success" outline="true" >Train</button>
+          </div>
+      </div>
     </mdb-card-title>
     <mdb-card-text>
       <ul class="ml-4 mt-3 info">

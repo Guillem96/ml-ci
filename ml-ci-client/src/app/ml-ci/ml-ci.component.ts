@@ -18,8 +18,8 @@ export class MlCiComponent implements OnInit {
 
   ngOnInit() {
     if (this.userService.isLoggedIn()) {
-      this.userService.authUser.getRelationArray(TrackedRepository, 'trackedRepositories') 
-        .subscribe(res => { 
+      this.userService.authUser.getRelationArray(TrackedRepository, 'trackedRepositories')
+        .subscribe(res => {
           this.trackedRepositories = res;
           this.selectedRepo = res[0] || null;
           this.userService.authUser.trackedRepositories = res;

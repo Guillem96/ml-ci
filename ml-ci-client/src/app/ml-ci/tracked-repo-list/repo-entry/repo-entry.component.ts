@@ -12,14 +12,14 @@ export class RepoEntryComponent implements OnInit {
 
   @Input() repo: TrackedRepository;
 
-  public repoName: string;    
-  public trainedDate: Date;
+  public repoName: string;
 
   public statusIcon = {
-    pendent: 'far fa-circle',
-    error: 'fas fa-times',
-    trained: 'far fa-check-circle',
-    training: 'far fa-clock fa-spin'
+    PENDENT: 'far fa-circle',
+    NONE: 'far fa-circle',
+    ERROR: 'fas fa-times',
+    TRAINED: 'far fa-check-circle',
+    TRAINING: 'far fa-clock fa-spin'
   }
 
   constructor(private userService: UserService) { }
@@ -30,29 +30,27 @@ export class RepoEntryComponent implements OnInit {
 
     // Fetch all related models
     this.repo.getRelationArray(Model, 'models').subscribe(res => {
-      this.repo.models = res;     
-      this.setStatus(res);
-      this.setDate(res);
+      this.repo.models = res;
     });
   }
 
-  private setStatus(models: Model[]) {
-    const statuses = models.map(m => m.status);
-    if (statuses.some(s => s === 'ERROR')) {
-      this.repo.status = 'error';
-    } else if (statuses.some(s => s === 'NONE' || s == 'PENDENT')) {
-      this.repo.status = 'pendent';
-    } else if (statuses.some(s => s === 'TRAINING')) {
-      this.repo.status = 'training';
-    } else {
-      this.repo.status = 'trained';
-    }
-  }
+  // private setStatus(models: Model[]) {
+  //   const statuses = models.map(m => m.status);
+  //   if (statuses.some(s => s === 'ERROR')) {
+  //     this.repo.status = 'error';
+  //   } else if (statuses.some(s => s === 'NONE' || s == 'PENDENT')) {
+  //     this.repo.status = 'pendent';
+  //   } else if (statuses.some(s => s === 'TRAINING')) {
+  //     this.repo.status = 'training';
+  //   } else {
+  //     this.repo.status = 'trained';
+  //   }
+  // }
 
-  private setDate(models: Model[]) {
-    const dates = models.filter(m => m.status != "NONE" && m.status != "PENDENT").map(m => new Date(m.trainDate));
-    if (dates.length > 0) {
-      this.trainedDate = new Date(Math.max.apply(null, dates));
-    }
-  }
+  // private setDate(models: Model[]) {
+  //   const dates = models.filter(m => m.status != "NONE" && m.status != "PENDENT").map(m => new Date(m.trainDate));
+  //   if (dates.length > 0) {
+  //     this.trainedDate = new Date(Math.max.apply(null, dates));
+  //   }
+  // }
 }

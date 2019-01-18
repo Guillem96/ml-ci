@@ -13,12 +13,15 @@ export class RepoMetadataComponent implements OnInit, OnChanges {
   @Input() repo: TrackedRepository;
 
   public githubRepo: GitHubRepository;
+
   public statusIcon = {
-    pendent: 'far fa-circle',
-    error: 'fas fa-times',
-    trained: 'far fa-check-circle',
-    training: 'far fa-clock fa-spin'
+    PENDENT: 'far fa-circle',
+    NONE: 'far fa-circle',
+    ERROR: 'fas fa-times',
+    TRAINED: 'far fa-check-circle',
+    TRAINING: 'far fa-clock fa-spin'
   }
+
   constructor(private githubService: GithubService) { }
 
   ngOnInit() {
@@ -27,7 +30,7 @@ export class RepoMetadataComponent implements OnInit, OnChanges {
   ngOnChanges() {
     const urlSplit = this.repo.url.split('/');
     this.githubService.getRepoInfo(urlSplit[urlSplit.length - 2] + '/' + urlSplit[urlSplit.length - 1])
-      .subscribe(res => this.githubRepo = res);  
+      .subscribe(res => this.githubRepo = res);
   }
 
 
