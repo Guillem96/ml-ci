@@ -1,3 +1,4 @@
+import { environment } from './../../environments/environment';
 
 import {Injectable} from '@angular/core';
 import {HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
@@ -10,12 +11,18 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
-    if (!req.url.includes('api.github') && this.authentication.isLoggedIn()) {
+    if (req.url.includes(environment.API) && this.authentication.isLoggedIn()) {
       const authToken = this.authentication.token;
-      
       const authReq = req.clone({
         headers: req.headers.set('Authorization', `Bearer ${authToken}`)
       });
+      return next.handle(authReq);
+    } else if (req.url.includes(environment.ML_MODULE)) {
+      const authReq = req.clone({
+        headers: req.headers.set('Authorization', `Basic ${btoa("user:pass")}`)
+      });
+      console.log(authReq.headers.get("Authorization"));
+
       return next.handle(authReq);
     } else {
       return next.handle(req);

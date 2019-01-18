@@ -6,7 +6,7 @@
             <h4 class="ml-4 mt-3 title status-desc"><i class="mr-2" [ngClass]="statusIcon[repo.status]"></i>{{ githubRepo.commits[0].message }}</h4>
           </div>
           <div class="col-3 pt-1 text-right">
-            <button class="ml-4 train-btn" mdbBtn color="success" outline="true" >Train</button>
+            <button class="ml-4 train-btn" mdbBtn color="success" outline="true" (click)="startTraining()" >Train</button>
           </div>
       </div>
     </mdb-card-title>

@@ -24,6 +24,7 @@ import { MlCiComponent } from './ml-ci/ml-ci.component';
 import { MlCiModule } from './ml-ci/ml-ci.module';
 import { AuthInterceptor } from './shared/auth.interceptor';
 import { TrackedRepositoryService } from './shared/services/tracked-repository.service';
+import { MlModuleService } from './shared/services/ml-module.service';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { TrackedRepositoryService } from './shared/services/tracked-repository.s
     { provide: 'ExternalConfigurationService', useClass: ExternalConfigurationService },
     AuthService,
     AuthGuard,
-    TrackedRepositoryService
+    TrackedRepositoryService,
+    MlModuleService
   ],
   bootstrap: [AppComponent]
 })

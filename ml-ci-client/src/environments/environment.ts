@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   API: 'http://localhost:8080',
+  ML_MODULE: 'http://localhost:5000',
   firebase: {
     apiKey: 'AIzaSyAs2SfcwwHLHWqiXqPO0JfbdF-ZY0FCj00',
     authDomain: 'ci-ml-66452.firebaseapp.com',

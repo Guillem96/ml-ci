@@ -1,7 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { TrackedRepository } from 'src/app/shared/models/tracked-repository';
 import { UserService } from 'src/app/shared/services/user.service';
 import { Model } from 'src/app/shared/models/model';
+import { interval, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-repo-entry',
@@ -22,35 +23,26 @@ export class RepoEntryComponent implements OnInit {
     TRAINING: 'far fa-clock fa-spin'
   }
 
+  private intervalSubscription: Subscription;
+
   constructor(private userService: UserService) { }
 
   ngOnInit() {
     const splitUrl = this.repo.url.split('/');
     this.repoName = this.userService.authUser.gitHubInfo.username + '/' + splitUrl[splitUrl.length - 1];
 
-    // Fetch all related models
-    this.repo.getRelationArray(Model, 'models').subscribe(res => {
-      this.repo.models = res;
-    });
+    this.fetchModels(this.repo);
+
+    this.intervalSubscription = interval(5000).subscribe(() => this.fetchModels(this.repo));
   }
 
-  // private setStatus(models: Model[]) {
-  //   const statuses = models.map(m => m.status);
-  //   if (statuses.some(s => s === 'ERROR')) {
-  //     this.repo.status = 'error';
-  //   } else if (statuses.some(s => s === 'NONE' || s == 'PENDENT')) {
-  //     this.repo.status = 'pendent';
-  //   } else if (statuses.some(s => s === 'TRAINING')) {
-  //     this.repo.status = 'training';
-  //   } else {
-  //     this.repo.status = 'trained';
-  //   }
-  // }
+  ngOnDestroy() {
+    this.intervalSubscription.unsubscribe();
+  }
 
-  // private setDate(models: Model[]) {
-  //   const dates = models.filter(m => m.status != "NONE" && m.status != "PENDENT").map(m => new Date(m.trainDate));
-  //   if (dates.length > 0) {
-  //     this.trainedDate = new Date(Math.max.apply(null, dates));
-  //   }
-  // }
+  private fetchModels(repo: TrackedRepository) {
+    repo.getRelationArray(Model, 'models').subscribe(res => {
+      repo.models = res;
+    });
+  }
 }
