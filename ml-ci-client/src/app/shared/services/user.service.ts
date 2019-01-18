@@ -19,7 +19,7 @@ export class UserService {
   private initUser(data: any): User {
     if (!data)
       return null;
-    
+
     let user = new User();
     user.id = data.id;
     user.email = data.email;
@@ -27,20 +27,20 @@ export class UserService {
     user.gitHubInfo = data.gitHubInfo;
 
     // Workarround in order to getRelationArray works
-    user._links = {}
-    user._links.trackedRepositories = {}
-    user._links.trackedRepositories.href = `${environment.API}/users/${data.id}/trackedRepositories`;
+    user['_links'] = {}
+    user['_links'].trackedRepositories = {}
+    user['_links'].trackedRepositories.href = `${environment.API}/users/${data.id}/trackedRepositories`;
 
-    user._links.self = {};
-    user._links.self.href = `${environment.API}/users/${data.id}`;
+    user['_links'].self = {};
+    user['_links'].self.href = `${environment.API}/users/${data.id}`;
     return user;
   }
 
-  public signIn(username: string, password: string): Observable<User> {
-    return this.http.post(`${environment.API}/auth/signIn`, {username, password})
+  public signIn(username: string, password: string, githubToken: string): Observable<User> {
+    return this.http.post(`${environment.API}/auth/signIn`, {username, password, githubToken})
       .pipe(
         map((res: any) => {
-          this.token = res.token;          
+          this.token = res.token;
           this.authUser = this.initUser(res.user);
           this.storeUser();
           return this.authUser;
@@ -60,7 +60,7 @@ export class UserService {
 
   public isLoggedIn(): boolean {
     this.restoreUser();
-    return !isNullOrUndefined(this.authUser) 
+    return !isNullOrUndefined(this.authUser)
             && !isNullOrUndefined(this.token)
             && this.token !== '';
   }
@@ -76,7 +76,7 @@ export class UserService {
     this.authUser = this.initUser(JSON.parse(localStorage.getItem("user")));
   }
 
-  public storeUser() {    
+  public storeUser() {
     localStorage.setItem("token", this.token);
     localStorage.setItem("user", JSON.stringify(this.authUser));
   }

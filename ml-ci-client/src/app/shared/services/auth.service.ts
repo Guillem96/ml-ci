@@ -69,7 +69,7 @@ export class AuthService {
         // Store to firebase
         userRef.set(Object.assign({}, data));
         // Register the user to our backend
-        this.signUpAndSignIn(data).then(
+        this.signUpAndSignIn(data, gitHubUser.accessToken).then(
           user => {
             user.gitHubInfo = gitHubUser;
             this.userService.storeUser();
@@ -86,7 +86,7 @@ export class AuthService {
         data.password = 'password';
 
         // Get token to interact with our server
-        this.userService.signIn(data.username, data.password).subscribe(
+        this.userService.signIn(data.username, data.password, gitHubUser.accessToken).subscribe(
           user => {
             user.gitHubInfo = gitHubUser;
             this.userService.storeUser();
@@ -100,10 +100,10 @@ export class AuthService {
     });
   }
 
-  private async signUpAndSignIn(data: any) {
+  private async signUpAndSignIn(data: any, githubToken: string) {
     try {
       await this.userService.signUp(data.username, data.password, data.email).toPromise();
-      return await this.userService.signIn(data.username, data.password).toPromise();
+      return await this.userService.signIn(data.username, data.password, githubToken).toPromise();
     } catch (err) {
       console.log(err);
       return null;
