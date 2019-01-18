@@ -1,6 +1,6 @@
 import os
-from cfg.cfg_parser import YamlCfgParser
-from trainer.trainer import training_stage
+from ml_ci.cfg.cfg_parser import YamlCfgParser
+from ml_ci.trainer.trainer import training_stage
 from ml_ci.network import Network
 
 def parse_cfg(cfg_file_path):
