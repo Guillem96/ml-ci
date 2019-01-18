@@ -23,8 +23,27 @@ data class TrackedRepository(
         val models: List<Model> = emptyList(),
 
 
-        @Id @GeneratedValue val
-        id: Long? = null)
+        @Id @GeneratedValue
+        val id: Long? = null) {
+
+    @get:JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @get:Enumerated(EnumType.STRING)
+    val status: ModelStatus
+    get() {
+        val modelStatuses =  models.map { it.status }
+        return when {
+            modelStatuses.contains(ModelStatus.ERROR) -> ModelStatus.ERROR
+            modelStatuses.contains(ModelStatus.TRAINING) -> ModelStatus.TRAINING
+            modelStatuses.all { it == ModelStatus.TRAINED } -> ModelStatus.TRAINED
+            modelStatuses.all { it == ModelStatus.PENDENT} -> ModelStatus.PENDENT
+            else -> ModelStatus.NONE
+        }
+    }
+
+    @get:JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    val trainDate: LocalDateTime?
+    get() = models.map { it.trainDate }.max()
+}
 
 
 @Entity
@@ -48,8 +67,7 @@ data class User(
         @ElementCollection(fetch = FetchType.EAGER)
         val roles: List<String> = listOf("USER"),
 
-        @OneToOne
-        val githubCredentials: GitHubCredentials? = null,
+        var githubToken: String = "",
 
         @Id @GeneratedValue
         val id: Long? = null)
@@ -61,17 +79,6 @@ data class User(
             val passwordEncoder = BCryptPasswordEncoder()
         }
 }
-
-@Entity
-data class GitHubCredentials(
-        @OneToOne
-        val user: User? = null,
-
-        val token: String,
-
-        @Id
-        @GeneratedValue
-        val id: Long? = null)
 
 @Entity
 data class Model(
@@ -111,6 +118,7 @@ data class Evaluation(
         @Id
         @GeneratedValue
         val id: Long? = null)
+
 
 enum class ModelStatus {
         TRAINING,

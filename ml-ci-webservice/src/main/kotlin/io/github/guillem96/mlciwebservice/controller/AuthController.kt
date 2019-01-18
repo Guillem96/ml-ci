@@ -30,6 +30,11 @@ class AuthController(
                     UsernamePasswordAuthenticationToken(data.username, data.password))
 
             val user = userRepository.findByUsername(data.username) ?: return ResponseEntity.notFound().build()
+
+            // Update github access token every sign in
+            user.githubToken = data.githubToken
+            userRepository.save(user)
+
             val token: String = jwtTokenProvider.createToken(data.username, user.roles)
 
             return ok(AuthResponse(user, token))
@@ -40,8 +45,7 @@ class AuthController(
 }
 
 // Representing json structures
-data class Credentials(val username: String, val password: String)
-
+data class Credentials(val username: String, val password: String, val githubToken: String = "")
 
 data class AuthResponse(
         @JsonIgnoreProperties("trackedRepositories")

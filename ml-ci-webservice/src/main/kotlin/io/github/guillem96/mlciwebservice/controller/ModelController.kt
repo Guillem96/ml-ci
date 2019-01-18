@@ -2,7 +2,6 @@ package io.github.guillem96.mlciwebservice.controller
 
 import io.github.guillem96.mlciwebservice.*
 import org.springframework.data.rest.webmvc.RepositoryRestController
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.http.ResponseEntity.*
 import org.springframework.web.bind.annotation.*
