@@ -1,28 +1,28 @@
-from flask import Flask, request
-from flask_basicauth import BasicAuth
-from ml_ci.middleware.after_response import AfterResponse
-
+import os
 import json
 
+from flask import Flask, request
+from flask_httpauth import HTTPBasicAuth
+from flask_cors import CORS, cross_origin
+
+from ml_ci.middleware.after_response import AfterResponse
+
 from ml_ci.entrypoint import train
-
-import os
-
 
 
 class MlCiApp(object):
 
     def _setup_auth(self):
-        self.app.config['BASIC_AUTH_USERNAME'] = 'user'
-        self.app.config['BASIC_AUTH_PASSWORD'] = 'pass'
-        self.app.config['BASIC_AUTH_FORCE'] = True
-
-        BasicAuth(self.app)
+        self.auth = HTTPBasicAuth()
+        self.users = {
+            "user": "pass"
+        }
 
     def _setup_after_response_callback(self):
         self.should_train = False
         self.repo_data = None 
         AfterResponse(self.app)
+
 
     def _validate_train_data(self):
         repo_url = self.repo_data.get("githubUrl")
@@ -37,9 +37,13 @@ class MlCiApp(object):
         self.app.config.from_mapping(SECRET_KEY='dev')
 
         self._setup_auth()
-
         self._setup_after_response_callback()
 
+        @self.auth.get_password
+        def get_pw(username):
+            if username in self.users:
+                return self.users.get(username)
+            return None
 
         @self.app.after_response
         def train_after_res():
@@ -51,13 +55,14 @@ class MlCiApp(object):
 
 
         @self.app.route('/train', methods=['POST'])
+        @self.auth.login_required
         def train_repo_models():
             try:
                 self.should_train = False
                 self.repo_data = json.loads(request.data)
                 if self._validate_train_data():
                     self.should_train = True
-                    return 'Training started', 200
+                    return 'Training started'
                 else:
                     return 'Parameters missing', 400
 
@@ -66,6 +71,7 @@ class MlCiApp(object):
                 self.should_train = False
                 return "Invalid JSON body", 400
 
+        CORS(self.app)
 
 def create_app():
     return MlCiApp().app
