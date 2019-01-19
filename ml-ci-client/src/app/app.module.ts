@@ -31,7 +31,7 @@ import { MlModuleService } from './shared/services/ml-module.service';
     AppComponent,
     GithubAuthComponent,
     NavbarComponent,
-    MlCiComponent
+    MlCiComponent,
   ],
   imports: [
     BrowserModule,

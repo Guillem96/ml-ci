@@ -52,6 +52,8 @@ class MlCiApp(object):
                 repo_url = self.repo_data.get("githubUrl")
                 repo_id = self.repo_data.get("trackedRepositoryId")
                 access_token = self.repo_data.get("githubToken")
+                self.repo_data = None
+                self.should_train = False
                 train(repo_id, repo_url)
 
 
@@ -63,7 +65,7 @@ class MlCiApp(object):
                 self.repo_data = json.loads(request.data)
                 if self._validate_train_data():
                     self.should_train = True
-                    return 'Training started'
+                    return json.dumps({"msg": 'Training started'})
                 else:
                     return 'Parameters missing', 400
 

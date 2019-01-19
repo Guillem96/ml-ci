@@ -76,6 +76,7 @@ def training_stage(cfg_file, webservice):
 
     # Create models at webservice
     webservice.authenticate()
+    webservice.increment_build()
     create_models(webservice, cfg_file.models)
 
     # Train test split

@@ -30,7 +30,6 @@ def train(repo_id, url):
         # Start training stage
         cfg.data_set = os.path.join(output_path, cfg.data_set)
         training_stage(cfg, webservice)
-        webservice.increment_build()
     else:
         # TODO: Communicate the error to the webservice
         print("No config file provided")

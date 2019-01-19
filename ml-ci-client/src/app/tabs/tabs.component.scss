@@ -1,0 +1,24 @@
+.tabs-header {
+  .body {
+    background: #2e2e2e !important;
+    margin: 0;
+    padding: 0;
+    border-radius: inherit;
+
+    ul {
+      margin: .3em;
+      text-align: center;
+
+      li {
+        width: 10em;
+      }
+    }
+  }
+
+  .tab-title-wrapper {
+    width: 80%;
+    border-radius: .5em;
+    cursor: pointer;
+    background: #ffffff38;
+  }
+}

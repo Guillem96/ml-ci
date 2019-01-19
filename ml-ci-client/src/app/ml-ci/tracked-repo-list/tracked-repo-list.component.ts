@@ -10,7 +10,7 @@ import { Model } from 'src/app/shared/models/model';
 export class TrackedRepoListComponent implements OnInit {
 
   @Input() trackedRepositories: TrackedRepository[];
-  @Output() clickRepo: EventEmitter<TrackedRepository> = new EventEmitter();
+  @Output() clickRepo: EventEmitter<number> = new EventEmitter();
 
   constructor() { }
 
@@ -18,6 +18,6 @@ export class TrackedRepoListComponent implements OnInit {
   }
 
   onClickRepo(index: number) {
-    this.clickRepo.emit(this.trackedRepositories[index]);
+    this.clickRepo.emit(index);
   }
 }

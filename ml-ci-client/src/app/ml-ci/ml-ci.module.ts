@@ -5,8 +5,10 @@ import { TrackedRepoListComponent } from './tracked-repo-list/tracked-repo-list.
 import { RepoEntryComponent } from './tracked-repo-list/repo-entry/repo-entry.component';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { ModelDetailsComponent } from './repo-details/model-details/model-details.component';
-import { RepoMetadataComponent } from "./repo-details/repo-metadata/repo-metadata.component";
+import { RepoMetadataComponent } from './repo-details/repo-metadata/repo-metadata.component';
 import { AddRepoComponent } from './add-repo/add-repo.component';
+import { TabsComponent } from '../tabs/tabs.component';
+import { TabComponent } from '../tabs/tab/tab.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +18,8 @@ import { AddRepoComponent } from './add-repo/add-repo.component';
     ModelDetailsComponent,
     RepoMetadataComponent,
     AddRepoComponent,
+    TabsComponent,
+    TabComponent
   ],
   imports: [
     CommonModule,

@@ -4,7 +4,7 @@ security.jwt.token:
   expire-length: 7200000
 
 # CORS
-allowed-origins: http://localhost:8080
+allowed-origins: http://localhost:4200
 
 # MlModule config
 ml-module:

@@ -1,12 +1,18 @@
 <div *ngIf="repo" class="container pt-4">
   <h2 class="repo-name display-4"><i class="fas fa-book mr-3"></i>{{ repoName }}</h2>
 
-  <app-repo-metadata [repo]="repo"></app-repo-metadata>
-  
+  <app-repo-metadata (startTrain)="startTrain()" [repo]="repo"></app-repo-metadata>
+
   <h3 class="models-title display-4 mt-4"><i class="fas fa-brain mr-3"></i>Models</h3>
-  <div class="row">
-    <div *ngFor="let model of repo.models" class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
-      <app-model-details  [model]="model"></app-model-details>
-    </div>
-  </div>
+
+  <app-tabs class="mt-3">
+    <app-tab title="Last train">
+      <div class="row">
+        <div *ngFor="let model of currentRepos" class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
+          <app-model-details  [model]="model"></app-model-details>
+        </div>
+      </div>
+    </app-tab>
+    <app-tab title="History">Tab 2 Content</app-tab>
+  </app-tabs>
 </div>

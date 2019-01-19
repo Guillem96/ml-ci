@@ -32,6 +32,7 @@ data class TrackedRepository(
         get() {
             val modelStatuses =  models.map { it.status }
             return when {
+                modelStatuses.isEmpty() -> ModelStatus.NONE
                 modelStatuses.contains(ModelStatus.ERROR) -> ModelStatus.ERROR
                 modelStatuses.contains(ModelStatus.TRAINING) -> ModelStatus.TRAINING
                 modelStatuses.all { it == ModelStatus.TRAINED } -> ModelStatus.TRAINED

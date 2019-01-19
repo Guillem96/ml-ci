@@ -1,5 +1,5 @@
 import { MlModuleService } from './../../../shared/services/ml-module.service';
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, Output, EventEmitter } from '@angular/core';
 import { TrackedRepository } from './../../../shared/models/tracked-repository';
 import { GithubService } from './../../../shared/services/github.service';
 import { GitHubRepository } from 'src/app/shared/models/github.repo';
@@ -12,6 +12,7 @@ import { GitHubRepository } from 'src/app/shared/models/github.repo';
 export class RepoMetadataComponent implements OnInit, OnChanges {
 
   @Input() repo: TrackedRepository;
+  @Output() startTrain = new EventEmitter<void>();
 
   public githubRepo: GitHubRepository;
 
@@ -24,7 +25,7 @@ export class RepoMetadataComponent implements OnInit, OnChanges {
   }
 
   constructor(private githubService: GithubService,
-              public mlModule: MlModuleService) { }
+              private mlModule: MlModuleService) { }
 
   ngOnInit() {
   }
@@ -36,6 +37,11 @@ export class RepoMetadataComponent implements OnInit, OnChanges {
   }
 
   public startTraining() {
-    this.mlModule.startTraining(this.repo).subscribe(console.log);
+    this.mlModule.startTraining(this.repo).subscribe(
+      () => {
+        console.log('Start training');
+        this.startTrain.emit();
+      }
+    );
   }
 }
