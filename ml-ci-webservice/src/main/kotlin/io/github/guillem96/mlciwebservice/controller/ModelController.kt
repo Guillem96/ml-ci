@@ -40,6 +40,19 @@ class ModelsController(
 
         return notFound().build()
     }
+
+    @PostMapping("{id}/evaluations/")
+    fun updateEvaluations(@PathVariable("id") modelId: Long,
+                          @RequestBody evaluations: Map<String, Double> ): ResponseEntity<Any> {
+        modelRepository.findOne(modelId)?.let {
+            it.evaluations.clear()
+            it.evaluations.putAll(evaluations)
+            modelRepository.save(it)
+            return ok(it.evaluations)
+        }
+
+        return notFound().build()
+    }
 }
 
 data class ModelWithRepo(

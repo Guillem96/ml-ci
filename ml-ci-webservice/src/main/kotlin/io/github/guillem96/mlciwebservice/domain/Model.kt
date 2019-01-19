@@ -19,6 +19,9 @@ data class Model(
         @NotNull
         val trackedRepository: TrackedRepository,
 
+        @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+        var buildNum: Int = 0,
+
         @Enumerated(EnumType.STRING)
         var status: ModelStatus = ModelStatus.NONE,
 
@@ -26,7 +29,7 @@ data class Model(
         val trainDate: LocalDateTime = LocalDateTime.now(),
 
         @ElementCollection(targetClass=Pair::class)
-        val evaluations: Map<String, Double> = emptyMap(),
+        val evaluations: MutableMap<String, Double> = HashMap(),
 
         @Id
         @GeneratedValue
