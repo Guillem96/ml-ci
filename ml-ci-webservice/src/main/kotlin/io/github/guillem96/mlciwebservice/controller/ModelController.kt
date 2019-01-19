@@ -21,6 +21,7 @@ class ModelsController(
             val model = Model(algorithm = data.algorithm,
                     hyperParameters = data.hyperParameters,
                     status = data.status,
+                    buildNum = it.buildNum,
                     trackedRepository = it)
             modelRepository.save(model)
             return ok(model.id!!)

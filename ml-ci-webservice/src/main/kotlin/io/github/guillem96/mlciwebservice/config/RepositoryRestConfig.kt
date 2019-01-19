@@ -35,11 +35,11 @@ class RepositoryRestConfig(private val environment: Environment,
                         lastCommit = "5f792244a94136c418644ca60f7359475b7db831",
                         user = user)
                 trackedRepositoryRepository.save(trackedRepository)
-
+                /*
                 val model = Model(algorithm = "LinearRegression",
                         trackedRepository = trackedRepository,
                         hyperParameters = mapOf("alpha" to 0.1),
-                        evaluations = mapOf("accuracy" to 90.6))
+                        evaluations = mutableMapOf("accuracy" to 90.6))
                 modelRepository.save(model)
 
 
@@ -57,7 +57,7 @@ class RepositoryRestConfig(private val environment: Environment,
                 modelRepository.save(Model(algorithm = "LogisticRegression",
                         trackedRepository = trackedRepository2,
                         status = ModelStatus.ERROR,
-                        hyperParameters = mapOf("alpha" to 0.2)))
+                        hyperParameters = mapOf("alpha" to 0.2)))*/
             }
         }
     }
