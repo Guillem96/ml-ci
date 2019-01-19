@@ -1,6 +1,5 @@
 package io.github.guillem96.mlciwebservice
 
-import io.github.guillem96.mlciwebservice.domain.Evaluation
 import io.github.guillem96.mlciwebservice.domain.Model
 import io.github.guillem96.mlciwebservice.domain.TrackedRepository
 import io.github.guillem96.mlciwebservice.domain.User
@@ -18,9 +17,6 @@ interface UserRepository: CrudRepository<User, Long> {
 
 @RepositoryRestResource
 interface ModelRepository: CrudRepository<Model, Long>
-
-@RepositoryRestResource
-interface EvaluationRepository: CrudRepository<Evaluation, Long>
 
 
 // Repo extension to use kotlin null safe

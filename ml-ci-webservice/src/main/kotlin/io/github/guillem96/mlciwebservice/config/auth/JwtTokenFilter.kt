@@ -18,15 +18,13 @@ class JwtTokenFilter(private val jwtTokenProvider: JwtTokenProvider) : GenericFi
     @Throws(IOException::class, ServletException::class)
     override fun doFilter(req: ServletRequest, res: ServletResponse, filterChain: FilterChain) {
         try {
-            val token = jwtTokenProvider.resolveToken(req as HttpServletRequest)
-            token?.let {
+            jwtTokenProvider.resolveToken(req as HttpServletRequest)?.let {
                 if (jwtTokenProvider.validateToken(it)) {
-                    val auth = jwtTokenProvider.getAuthentication(token)
+                    val auth = jwtTokenProvider.getAuthentication(it)
                     SecurityContextHolder.getContext().authentication = auth
                 }
             }
             filterChain.doFilter(req, res)
-
         } catch (e: InvalidJwtAuthenticationException) {
             (res as HttpServletResponse).status = HttpStatus.UNAUTHORIZED.value()
             res.getWriter().write(HttpStatus.UNAUTHORIZED.reasonPhrase)

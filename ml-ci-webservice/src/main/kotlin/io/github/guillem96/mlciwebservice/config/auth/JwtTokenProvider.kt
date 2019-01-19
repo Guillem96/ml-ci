@@ -3,28 +3,28 @@ package io.github.guillem96.mlciwebservice.config.auth
 import io.github.guillem96.mlciwebservice.InvalidJwtAuthenticationException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
+import org.springframework.core.env.Environment
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Component
 
-import javax.annotation.PostConstruct
 import javax.servlet.http.HttpServletRequest
 import java.util.Base64
 import java.util.Date
 
 @Component
-class JwtTokenProvider(private val userDetailsService: BasicUserDetailsService) {
+class JwtTokenProvider(
+        private val environment: Environment,
+        private val userDetailsService: BasicUserDetailsService) {
 
-//    @Value("${security.jwt.token.secret-key:secret}")
-    private var secretKey = "secret"
+    private val secretKey: String by lazy {
+        Base64.getEncoder().encodeToString(
+                environment.getRequiredProperty("security.jwt.token.secret-key").toByteArray())
+    }
 
-//    @Value("${security.jwt.token.expire-length:3600000}")
-    private val validityInMilliseconds = 3600000 // 1h
-
-    @PostConstruct
-    protected fun init() {
-        secretKey = Base64.getEncoder().encodeToString(secretKey.toByteArray())
+    private val validityInMilliseconds: Int by lazy {
+        environment.getRequiredProperty("security.jwt.token.expire-length").toInt()
     }
 
     fun createToken(username: String, roles: List<String>): String {

@@ -6,20 +6,18 @@ import javax.annotation.PostConstruct
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.env.Environment
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration
-import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapter
+import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer
 
 @Configuration
 class RepositoryRestConfig(private val environment: Environment,
                            private val userRepository: UserRepository,
                            private val trackedRepositoryRepository: TrackedRepositoryRepository,
-                           private val modelRepository: ModelRepository,
-                           private val evaluationRepository: EvaluationRepository) : RepositoryRestConfigurerAdapter() {
+                           private val modelRepository: ModelRepository) : RepositoryRestConfigurer {
 
     @Override
     override fun configureRepositoryRestConfiguration(config: RepositoryRestConfiguration) {
         config.exposeIdsFor(TrackedRepository::class.java)
         config.exposeIdsFor(Model::class.java)
-        config.exposeIdsFor(Evaluation::class.java)
         config.exposeIdsFor(User::class.java)
     }
 
@@ -40,11 +38,10 @@ class RepositoryRestConfig(private val environment: Environment,
 
                 val model = Model(algorithm = "LinearRegression",
                         trackedRepository = trackedRepository,
-                        hyperParameters = mapOf("alpha" to 0.1))
+                        hyperParameters = mapOf("alpha" to 0.1),
+                        evaluations = mapOf("accuracy" to 90.6))
                 modelRepository.save(model)
 
-                val evaluation = Evaluation(model = model, results = mapOf("accuracy" to 90.6))
-                evaluationRepository.save(evaluation)
 
                 val trackedRepository2 = TrackedRepository(
                         url = "https://github.com/Guillem96/argon-nx",

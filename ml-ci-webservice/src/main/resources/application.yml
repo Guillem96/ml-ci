@@ -1,0 +1,12 @@
+# Token configuration
+security.jwt.token:
+  secret-key: development
+  expire-length: 7200000
+
+# CORS
+allowed-origins: http://localhost:8080
+
+# MlModule config
+ml-module:
+  user: MlModule
+  pass: MlModule

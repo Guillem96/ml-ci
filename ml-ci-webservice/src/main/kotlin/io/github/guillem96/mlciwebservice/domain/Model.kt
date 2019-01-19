@@ -25,22 +25,8 @@ data class Model(
         @JsonProperty(access = JsonProperty.Access.READ_ONLY)
         val trainDate: LocalDateTime = LocalDateTime.now(),
 
-        @OneToOne(mappedBy = "model", cascade = [CascadeType.ALL])
-        val evaluation: Evaluation? = null,
-
-        @Id
-        @GeneratedValue
-        val id: Long? = null)
-
-
-@Entity
-data class Evaluation(
         @ElementCollection(targetClass=Pair::class)
-        val results: Map<String, Double> = emptyMap(),
-
-        @OneToOne
-        @JoinColumn(name = "model_id")
-        val model: Model,
+        val evaluations: Map<String, Double> = emptyMap(),
 
         @Id
         @GeneratedValue

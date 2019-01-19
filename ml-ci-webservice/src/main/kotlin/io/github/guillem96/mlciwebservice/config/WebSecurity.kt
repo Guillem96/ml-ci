@@ -2,6 +2,7 @@ package io.github.guillem96.mlciwebservice.config
 
 import io.github.guillem96.mlciwebservice.config.auth.JwtConfigurer
 import io.github.guillem96.mlciwebservice.config.auth.JwtTokenProvider
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
@@ -12,10 +13,12 @@ import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
-
 @Configuration
 class WebSecurity(
         private val jwtTokenProvider: JwtTokenProvider) : WebSecurityConfigurerAdapter() {
+
+    @Value("\${allowed-origins}")
+    private lateinit var allowedOrigins: List<String>
 
     @Bean
     override fun authenticationManagerBean() = super.authenticationManagerBean()
@@ -28,10 +31,11 @@ class WebSecurity(
                 .and()
                 .authorizeRequests()
 
-                .antMatchers("/auth/signIn").permitAll()
+                .antMatchers(HttpMethod.POST,"/auth/signIn").permitAll()
                 .antMatchers(HttpMethod.POST, "/users").permitAll()
 
                 .antMatchers(HttpMethod.POST, "/models").hasRole("MODULE")
+                .antMatchers(HttpMethod.POST, "/trackedRepositories/incrementBuild").hasRole("MODULE")
 
                 .antMatchers(HttpMethod.GET, "**").permitAll()
                 .anyRequest().authenticated()
@@ -44,7 +48,7 @@ class WebSecurity(
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {
         val corsConfiguration = CorsConfiguration()
-        corsConfiguration.allowedOrigins = listOf("http://localhost:4200")
+        corsConfiguration.allowedOrigins = allowedOrigins
         corsConfiguration.allowedMethods = listOf("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
         corsConfiguration.allowedHeaders = listOf("*")
         corsConfiguration.allowCredentials = true

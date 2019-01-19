@@ -20,6 +20,8 @@ data class TrackedRepository(
         @OneToMany(cascade = [(CascadeType.ALL)], mappedBy = "trackedRepository")
         val models: List<Model> = emptyList(),
 
+        @get:JsonProperty(access = JsonProperty.Access.READ_ONLY)
+        var buildNum: Int = 0,
 
         @Id @GeneratedValue
         val id: Long? = null) {
