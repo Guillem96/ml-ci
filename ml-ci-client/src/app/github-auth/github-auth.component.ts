@@ -10,16 +10,24 @@ import { UserService } from '../shared/services/user.service';
 })
 export class GithubAuthComponent implements OnInit {
 
+  public loading: boolean;
+
   constructor(private authService: AuthService,
               private userService: UserService,
               private router: Router) { }
 
   ngOnInit() {
+    this.loading = true;
     if (this.userService.isLoggedIn()) {
+      this.loading = false;
       this.router.navigate(['']);
     } else {
-      this.authService.loginWithGithub();
-      this.authService.user$.subscribe(() => this.router.navigate(['']));
+      const that = this;
+      this.authService.loginWithGithub().then(() => that.loading = false);
+      this.authService.user$.subscribe(() => {
+        this.loading = false;
+        this.router.navigate(['']);
+      });
     }
   }
 

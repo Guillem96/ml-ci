@@ -13,7 +13,7 @@ export class MlCiComponent implements OnInit, OnDestroy {
 
   public trackedRepositories: TrackedRepository[] = [];
   public selectedRepo: TrackedRepository;
-  private selectedRepoIdx = 0;
+  public loading = true;
 
   private subscription: Subscription;
 
@@ -39,11 +39,11 @@ export class MlCiComponent implements OnInit, OnDestroy {
         this.selectedRepo = res[0];
       }
       this.userService.authUser.trackedRepositories = res;
+      this.loading = false;
     });
   }
 
   public selectRepo(index: number) {
-    this.selectedRepoIdx = index;
     this.selectedRepo = this.trackedRepositories[index];
   }
 }

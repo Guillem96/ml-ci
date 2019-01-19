@@ -1,4 +1,6 @@
-<div class="container">
+<app-loading *ngIf="loading; else content"></app-loading>
+
+<ng-template #content class="container">
   <div class="row align-items-end justify-content-center">
     <div class="col-4 left-container"><i class="icon fa fa-github"></i></div>
     <div class="col-4 center-container"><i class="fa fa-heart"></i></div>
@@ -8,4 +10,4 @@
   <button class="btn btn-elegant" (click)="githubAuth()">
     Login with <i class="fa-lg fa fa-github-alt ml-3"></i>
   </button>
-</div>
+</ng-template>

@@ -1,3 +1,4 @@
+import { SharedModule } from './../shared/shared.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RepoDetailsComponent } from './repo-details/repo-details.component';
@@ -7,9 +8,6 @@ import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { ModelDetailsComponent } from './repo-details/model-details/model-details.component';
 import { RepoMetadataComponent } from './repo-details/repo-metadata/repo-metadata.component';
 import { AddRepoComponent } from './add-repo/add-repo.component';
-import { TabsComponent } from '../tabs/tabs.component';
-import { TabComponent } from '../tabs/tab/tab.component';
-
 @NgModule({
   declarations: [
     RepoDetailsComponent,
@@ -18,11 +16,10 @@ import { TabComponent } from '../tabs/tab/tab.component';
     ModelDetailsComponent,
     RepoMetadataComponent,
     AddRepoComponent,
-    TabsComponent,
-    TabComponent
   ],
   imports: [
     CommonModule,
+    SharedModule,
     MDBBootstrapModule.forRoot()
   ],
   exports: [

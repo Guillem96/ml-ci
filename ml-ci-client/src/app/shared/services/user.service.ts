@@ -72,8 +72,8 @@ export class UserService {
   }
 
   private restoreUser() {
-    this.token = localStorage.getItem("token");
-    this.authUser = this.initUser(JSON.parse(localStorage.getItem("user")));
+    this.token = localStorage.getItem('token');
+    this.authUser = this.initUser(JSON.parse(localStorage.getItem('user')));
   }
 
   public storeUser() {

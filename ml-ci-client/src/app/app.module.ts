@@ -25,6 +25,7 @@ import { MlCiModule } from './ml-ci/ml-ci.module';
 import { AuthInterceptor } from './shared/auth.interceptor';
 import { TrackedRepositoryService } from './shared/services/tracked-repository.service';
 import { MlModuleService } from './shared/services/ml-module.service';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { MlModuleService } from './shared/services/ml-module.service';
     // MDBBootstrap
     MDBBootstrapModule.forRoot(),
 
-    MlCiModule
+    MlCiModule,
+    SharedModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

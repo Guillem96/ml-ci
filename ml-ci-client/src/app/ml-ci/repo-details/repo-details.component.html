@@ -1,11 +1,13 @@
-<div *ngIf="repo" class="container pt-4">
+<app-loading *ngIf="loading"></app-loading>
+
+<div *ngIf="repo && !loading" class="container pt-4">
   <h2 class="repo-name display-4"><i class="fas fa-book mr-3"></i>{{ repoName }}</h2>
 
-  <app-repo-metadata (startTrain)="startTrain()" [repo]="repo"></app-repo-metadata>
+  <app-repo-metadata [githubRepo]="githubRepo" [repo]="repo"></app-repo-metadata>
 
   <h3 class="models-title display-4 mt-4"><i class="fas fa-brain mr-3"></i>Models</h3>
 
-  <app-tabs class="mt-3">
+  <app-tabs class="mt-4">
     <app-tab title="Last train">
       <div class="row">
         <div *ngFor="let model of currentRepos" class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
