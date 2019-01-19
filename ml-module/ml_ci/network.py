@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import os
 from git import Repo
 import requests
@@ -9,8 +11,9 @@ class Network(object):
     
     _WEBSERVICE = "http://localhost:8080"
 
-    def __init__(self, trackedRepository=2):
-        self.trackedRepository = trackedRepository
+    def __init__(self, tracked_repository):
+        self.tracked_repository = tracked_repository
+        self.token = None
 
     @staticmethod
     def clone_github_repository(url):
@@ -32,15 +35,14 @@ class Network(object):
         Repo.clone_from(url, directory)
         return directory
 
-    @staticmethod
-    def post(path, body, token=None):
+    def post(self, path, body={}):
         headers = {
             'Content-type': 'application/json', 
             'Accept': 'application/json'
         }
 
-        if token:
-            headers["Authorization"] = "Bearer " + token
+        if self.token:
+            headers["Authorization"] = "Bearer " + self.token
 
         res = requests.post(Network._WEBSERVICE + path, 
                                 json=body,
@@ -49,7 +51,7 @@ class Network(object):
 
 
     def authenticate(self):
-        res = Network.post("/auth/signIn", {"username": "MlModule", "password": "MlModule"})
+        res = self.post("/auth/signIn", {"username": "MlModule", "password": "MlModule"})
         self.token = res["token"]
 
 
@@ -58,13 +60,16 @@ class Network(object):
             "algorithm": model.name,
             "hyperParameters": model.params,
             "status": "PENDENT",
-            "trackedRepository": self.trackedRepository
+            "trackedRepository": self.tracked_repository
         }
-        res = Network.post("/models/withTrackedRepository", model_json, self.token)
+        res = self.post("/models/withTrackedRepository", model_json)
         model.id = int(res)
 
     def update_model_status(self, model, new_status):
-        Network.post("/models/{}/status/{}".format(model.id, new_status), {}, self.token)
+        self.post("/models/{}/status/{}".format(model.id, new_status))
     
-    def add_evaluations(self, model, eval):
-        pass
+    def add_evaluations(self, model, evaluations):
+        self.post("/models/{}/evaluations".format(model.id), evaluations)
+
+    def increment_build(self):
+        print(self.post("/trackedRepositories/{}/incrementBuild".format(self.tracked_repository)))

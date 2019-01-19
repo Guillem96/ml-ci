@@ -22,9 +22,6 @@ from ml_ci.trainer.generic_pipelines import full_pipeline
 from ml_ci.network import Network
 
 
-BEST_MODEL = RandomForestRegressor()
-webservice = Network()
-
 def train_model(train_X, train_y, model_name, **hyperparameters):
     """Trains the algorithm named {model_name}
     
@@ -62,15 +59,15 @@ def evaluate_model(model, X_test, y_test, is_regression):
         print(model.__class__.__name__ + " -> "  + "Accuracy:", accuracy_score(y_test, y_pred))
 
 
-def create_models(models):
+def create_models(webservice, models):
     print("Creating models...")
     for m in models:
-        print("Creating model: " + m.name)
+        print("- Creating model: " + m.name)
         webservice.create_model(m)
     print("Done")
 
 
-def training_stage(cfg_file):
+def training_stage(cfg_file, webservice):
     """Automatically resolve a ML problem
     
     Arguments:
@@ -79,7 +76,7 @@ def training_stage(cfg_file):
 
     # Create models at webservice
     webservice.authenticate()
-    create_models(cfg_file.models)
+    create_models(webservice, cfg_file.models)
 
     # Train test split
     X, y, x_test, y_test = \
@@ -113,7 +110,6 @@ def training_stage(cfg_file):
             
             # Update status of model to training
             webservice.update_model_status(cfg_model, "TRAINED")
-        except e:
-            print(e)
+        except:
             # Update model status to error
             webservice.update_model_status(cfg_model, "ERROR")

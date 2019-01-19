@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import traceback
 from werkzeug.wsgi import ClosingIterator
 
