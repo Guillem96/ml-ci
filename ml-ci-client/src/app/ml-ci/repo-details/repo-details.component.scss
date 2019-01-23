@@ -10,3 +10,37 @@
 .container {
   max-width: 100%;
 }
+
+.training-title {
+  color: gray;
+  border-bottom: 1px solid gray;
+  font-weight: 200;
+}
+
+.code {
+  border-radius: 1em;
+  padding-left: 2em;
+  padding-bottom: 2em;
+  padding-top: 2em;
+  border: 1px solid gray;
+  background: #2e2e2e;
+  font-family: 'Courier New', Courier, monospace;
+  color: white;
+
+  b {
+    color: #a5549a;
+    font-weight: 500 !important;
+  }
+
+  .var {
+    color: #75aecf;
+  }
+
+  .method {
+    color: #f1e67d;
+  }
+
+  .str {
+    color: #dd7a52;
+  }
+}

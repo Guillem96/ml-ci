@@ -4,6 +4,11 @@ import { CommonModule } from '@angular/common';
 import { LoadingComponent } from './loading/loading.component';
 import { TabsComponent } from './tabs/tabs.component';
 import { TabComponent } from './tabs/tab/tab.component';
+import { AuthService } from './services/auth.service';
+import { AuthGuard } from './guards/auth.guard';
+import { TrackedRepositoryService } from './services/tracked-repository.service';
+import { MlModuleService } from './services/ml-module.service';
+import { ModelService } from './services/model.service';
 
 @NgModule({
   declarations: [
@@ -19,6 +24,13 @@ import { TabComponent } from './tabs/tab/tab.component';
   imports: [
     CommonModule,
     MDBBootstrapModule.forRoot()
+  ],
+  providers: [
+    AuthService,
+    AuthGuard,
+    TrackedRepositoryService,
+    MlModuleService,
+    ModelService
   ]
 })
 export class SharedModule { }

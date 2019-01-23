@@ -27,10 +27,14 @@ data class TrackedRepository(
         val id: Long? = null) {
 
     @get:JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    val lastTrain: List<Model>
+        get() = models.filter { it.buildNum == buildNum }
+
+    @get:JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @get:Enumerated(EnumType.STRING)
     val status: ModelStatus
         get() {
-            val modelStatuses =  models.map { it.status }
+            val modelStatuses =  lastTrain.map { it.status }
             return when {
                 modelStatuses.isEmpty() -> ModelStatus.NONE
                 modelStatuses.contains(ModelStatus.ERROR) -> ModelStatus.ERROR
@@ -43,5 +47,5 @@ data class TrackedRepository(
 
     @get:JsonProperty(access = JsonProperty.Access.READ_ONLY)
     val trainDate: LocalDateTime?
-        get() = models.map { it.trainDate }.max()
+        get() = lastTrain.map { it.trainDate }.max()
 }

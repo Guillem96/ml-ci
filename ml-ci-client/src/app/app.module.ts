@@ -1,4 +1,3 @@
-import { AuthService } from './shared/services/auth.service';
 import { environment } from './../environments/environment.prod';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -19,12 +18,9 @@ import { AppComponent } from './app.component';
 import { GithubAuthComponent } from './github-auth/github-auth.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NavbarComponent } from './navbar/navbar.component';
-import { AuthGuard } from './shared/guards/auth.guard';
 import { MlCiComponent } from './ml-ci/ml-ci.component';
 import { MlCiModule } from './ml-ci/ml-ci.module';
 import { AuthInterceptor } from './shared/auth.interceptor';
-import { TrackedRepositoryService } from './shared/services/tracked-repository.service';
-import { MlModuleService } from './shared/services/ml-module.service';
 import { SharedModule } from './shared/shared.module';
 
 @NgModule({
@@ -57,10 +53,6 @@ import { SharedModule } from './shared/shared.module';
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: 'ExternalConfigurationService', useClass: ExternalConfigurationService },
-    AuthService,
-    AuthGuard,
-    TrackedRepositoryService,
-    MlModuleService
   ],
   bootstrap: [AppComponent]
 })

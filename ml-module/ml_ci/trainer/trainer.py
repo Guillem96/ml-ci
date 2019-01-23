@@ -66,7 +66,6 @@ def create_models(webservice, models):
         webservice.create_model(m)
     print("Done")
 
-
 def training_stage(cfg_file, webservice):
     """Automatically resolve a ML problem
     
@@ -105,12 +104,18 @@ def training_stage(cfg_file, webservice):
                                     cfg_model.name, **cfg_model.params)
             
             ### Evaluate against test set ###
+            print("Evaluating {}...".format(model.__class__.__name__))
             x_tested_prepared = full_pipeline.transform(x_test)
-
             evaluate_model(model, x_tested_prepared, y_test, cfg_file.train_type)
-            
+            print("Done")
+
             # Update status of model to training
             webservice.update_model_status(cfg_model, "TRAINED")
-        except:
+
+            print("Uploading {}...".format(model.__class__.__name__))
+            webservice.upload_model(model, cfg_model.id)
+            print("Done")
+        except Exception as e:
+            raise e
             # Update model status to error
             webservice.update_model_status(cfg_model, "ERROR")

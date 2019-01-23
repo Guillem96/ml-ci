@@ -6,7 +6,18 @@ security.jwt.token:
 # CORS
 allowed-origins: http://localhost:4200
 
+models-path: C:/Users/Guillem/Desktop/ml-ci/trained-models
+
 # MlModule config
 ml-module:
   user: MlModule
   pass: MlModule
+
+# File upload config
+spring:
+  servlet:
+    multipart:
+      max-file-size: 512MB
+      max-request-size: 512MB
+
+  http.multipart.enabled: false

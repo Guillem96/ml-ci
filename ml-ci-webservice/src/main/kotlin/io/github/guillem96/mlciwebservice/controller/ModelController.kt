@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*
 
 @RepositoryRestController
 @RequestMapping("/models")
-class ModelsController(
+class ModelController(
         private val modelRepository: ModelRepository,
         private val trackedRepositoryRepo: TrackedRepositoryRepository
 ) {

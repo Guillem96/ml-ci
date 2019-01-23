@@ -5,14 +5,17 @@
     </mdb-card-title>
     <mdb-card-text>
       <ul class="ml-4 mt-3 info">
-
+        <li *ngIf="model.trainDate"><i class="far fa-calendar-alt"></i> Trained: {{ model.trainDate | date:'yyyy/MM/dd HH:mm' }}</li>
+        <li *ngIf="!model.trainDate"><i class="far fa-calendar-alt"></i> Trained: -</li>
       </ul>
     </mdb-card-text>
   </mdb-card-body>
   <mdb-card-footer class="text-right card-footer">
     <ul class="list-inline">
       <li class="list-inline-item mr-3"><a><i class="far fa-sticky-note"></i> View logs</a></li>
-      <li class="list-inline-item"><a><i class="fas fa-download"></i> Download</a></li>
+      <li *ngIf="!downloading" class="list-inline-item"><a (click)="downloadModel()"><i class="fas fa-download"></i> Download</a></li>
+      <li *ngIf="downloading" class="list-inline-item"><a><i class="fas fa-spin fa-clock"></i> Downloading...</a></li>
     </ul>
   </mdb-card-footer>
 </mdb-card>
+

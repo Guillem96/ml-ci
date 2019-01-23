@@ -10,11 +10,42 @@
   <app-tabs class="mt-4">
     <app-tab title="Last train">
       <div class="row">
-        <div *ngFor="let model of currentRepos" class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
-          <app-model-details  [model]="model"></app-model-details>
+        <div *ngFor="let model of repo.lastTrain" class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
+          <app-model-details (download)="afterDownloadModal.show()" [trackedRepo]="repo" [model]="model"></app-model-details>
         </div>
       </div>
     </app-tab>
-    <app-tab title="History">Tab 2 Content</app-tab>
+    <app-tab title="History pt-2">
+      <div class="mb-4" *ngFor="let modelTrain of modelsByTraining | keyvalue">
+        <h3 class="training-title">Training #{{ modelTrain.key }}</h3>
+        <div class="row">
+          <div *ngFor="let model of modelTrain.value" class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
+            <app-model-details (download)="afterDownloadModal.show()" [trackedRepo]="repo" [model]="model"></app-model-details>
+          </div>
+        </div>
+      </div>
+    </app-tab>
   </app-tabs>
 </div>
+
+<div mdbModal #afterDownloadModal="mdbModal" [config]="{ignoreBackdropClick: true}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myBasicModalLabel" aria-hidden="true">
+    <div class="modal-lg modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title w-100" id="myModalLabel"><i class="fas fa-brain"></i> Use model</h4>
+        </div>
+        <div class="modal-body">
+          <div class="code">
+            <b>import</b> pickle<br>
+            <br>
+
+            <span class="var">model</span> = pickle.<span class="method">load</span>(<span class="method">open</span>(<span class="str">"path_to_model"</span>, <span class="str">"rb"</span>))
+            <span class="var">model</span>.<span class="method">predict</span>(instance_to_predict)
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" size="sm" mdbBtn color="elegant" class="waves-light" aria-label="Close" (click)="afterDownloadModal.hide()" mdbWavesEffect>Ok!</button>
+        </div>
+      </div>
+    </div>
+  </div>

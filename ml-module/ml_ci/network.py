@@ -4,6 +4,7 @@ import os
 from git import Repo
 import requests
 import json
+import pickle
 
 from ml_ci.utils import delete_dir
 
@@ -73,3 +74,23 @@ class Network(object):
 
     def increment_build(self):
         print(self.post("/trackedRepositories/{}/incrementBuild".format(self.tracked_repository)))
+
+    def upload_model(self, model, model_id):
+        name = "{}_{}_{}" \
+          .format(model.__class__.__name__, model_id, self.tracked_repository)
+        
+        with open(name, "wb") as f:
+            pickle.dump(model, f)
+
+        with open(name, "rb") as f:
+          files = {'file': f }
+          
+          headers = {}
+          headers["Authorization"] = "Bearer " + self.token
+
+          res = requests.post(Network._WEBSERVICE + "/static/models", 
+                                headers=headers,
+                                files=files)
+
+          print(res)
+        
