@@ -16,7 +16,7 @@ export class ModelDetailsComponent implements OnInit {
     ERROR: 'fas fa-times',
     TRAINED: 'far fa-check-circle',
     TRAINING: 'far fa-clock fa-spin'
-  };
+  }
 
   constructor() { }
 

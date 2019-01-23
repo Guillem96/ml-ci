@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { TrackedRepository } from 'src/app/shared/models/tracked-repository';
 import { UserService } from 'src/app/shared/services/user.service';
 import { Model } from 'src/app/shared/models/model';
@@ -9,7 +9,7 @@ import { interval, Subscription } from 'rxjs';
   templateUrl: './repo-entry.component.html',
   styleUrls: ['./repo-entry.component.scss']
 })
-export class RepoEntryComponent implements OnInit, OnDestroy {
+export class RepoEntryComponent implements OnInit {
 
   @Input() repo: TrackedRepository;
 
@@ -21,7 +21,7 @@ export class RepoEntryComponent implements OnInit, OnDestroy {
     ERROR: 'fas fa-times',
     TRAINED: 'far fa-check-circle',
     TRAINING: 'far fa-clock fa-spin'
-  };
+  }
 
   private intervalSubscription: Subscription;
 

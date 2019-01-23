@@ -10,20 +10,11 @@
   <app-tabs class="mt-4">
     <app-tab title="Last train">
       <div class="row">
-        <div *ngFor="let model of repo.lastTrain" class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
+        <div *ngFor="let model of currentRepos" class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
           <app-model-details  [model]="model"></app-model-details>
         </div>
       </div>
     </app-tab>
-    <app-tab title="History pt-2">
-      <div class="mb-4" *ngFor="let modelTrain of modelsByTraining | keyvalue">
-        <h3 class="training-title">Training #{{ modelTrain.key }}</h3>
-        <div class="row">
-          <div *ngFor="let model of modelTrain.value" class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
-            <app-model-details [model]="model"></app-model-details>
-          </div>
-        </div>
-      </div>
-    </app-tab>
+    <app-tab title="History">Tab 2 Content</app-tab>
   </app-tabs>
 </div>

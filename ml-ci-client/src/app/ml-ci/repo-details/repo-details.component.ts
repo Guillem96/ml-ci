@@ -20,8 +20,6 @@ export class RepoDetailsComponent implements OnInit, OnDestroy, OnChanges {
   public loading = true;
   public loadingMetadata = true;
 
-  public modelsByTraining: Map<number, Model[]> = new Map();
-
   private subscription: Subscription;
 
   constructor(private userService: UserService,
@@ -55,17 +53,6 @@ export class RepoDetailsComponent implements OnInit, OnDestroy, OnChanges {
         this.repo = res[0];
         this.repo.models = res[1];
         this.githubRepo = res[2];
-
-        // Group models by build number
-        this.modelsByTraining.clear();
-        this.repo.models.forEach(m => {
-          if (this.modelsByTraining.has(m.buildNum)) {
-            this.modelsByTraining.get(m.buildNum).push(m);
-          } else {
-            this.modelsByTraining.set(m.buildNum, [m]);
-          }
-        });
-
         this.loading = false;
       }
     );

@@ -9,7 +9,6 @@ export class TrackedRepository extends Resource {
   public lastCommit: string;
   public user: User;
   public models: Model[];
-  public lastTrain: Model[];
   public status: string;
   public trainDate: Date;
 }
