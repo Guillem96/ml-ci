@@ -5,7 +5,8 @@
     </mdb-card-title>
     <mdb-card-text>
       <ul class="ml-4 mt-3 info">
-
+        <li *ngIf="model.trainDate"><i class="far fa-calendar-alt"></i> Trained: {{ model.trainDate | date:'yyyy/MM/dd HH:mm' }}</li>
+        <li *ngIf="!model.trainDate"><i class="far fa-calendar-alt"></i> Trained: -</li>
       </ul>
     </mdb-card-text>
   </mdb-card-body>
