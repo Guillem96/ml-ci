@@ -83,14 +83,7 @@ class Network(object):
             pickle.dump(model, f)
 
         with open(name, "rb") as f:
-          files = {'file': f }
-          
-          headers = {}
-          headers["Authorization"] = "Bearer " + self.token
-
-          res = requests.post(Network._WEBSERVICE + "/static/models", 
-                                headers=headers,
-                                files=files)
-
-          print(res)
+          requests.post(Network._WEBSERVICE + "/static/models", 
+                                headers={ "Authorization": "Bearer " + self.token },
+                                files={ "file": f })
         
