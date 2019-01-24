@@ -1,4 +1,4 @@
-import { MlModuleService } from './../../../shared/services/ml-module.service';
+import { TrackedRepositoryService } from 'src/app/shared/services/tracked-repository.service';
 import { Component, OnInit, Input } from '@angular/core';
 import { TrackedRepository } from './../../../shared/models/tracked-repository';
 import { GithubService } from './../../../shared/services/github.service';
@@ -23,13 +23,13 @@ export class RepoMetadataComponent implements OnInit {
   };
 
   constructor(private githubService: GithubService,
-              private mlModule: MlModuleService) { }
+              private trackedRepoService: TrackedRepositoryService) { }
 
   ngOnInit() {
   }
 
   public startTraining() {
-    this.mlModule.startTraining(this.repo).subscribe(
+    this.trackedRepoService.startTraining(this.repo).subscribe(
       () => {
         console.log('Start training');
       }

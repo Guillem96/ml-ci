@@ -7,7 +7,6 @@ import { TabComponent } from './tabs/tab/tab.component';
 import { AuthService } from './services/auth.service';
 import { AuthGuard } from './guards/auth.guard';
 import { TrackedRepositoryService } from './services/tracked-repository.service';
-import { MlModuleService } from './services/ml-module.service';
 import { ModelService } from './services/model.service';
 
 @NgModule({
@@ -29,7 +28,6 @@ import { ModelService } from './services/model.service';
     AuthService,
     AuthGuard,
     TrackedRepositoryService,
-    MlModuleService,
     ModelService
   ]
 })
