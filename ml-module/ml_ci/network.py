@@ -10,7 +10,7 @@ from ml_ci.utils import delete_dir
 
 class Network(object):
     
-    _WEBSERVICE = "http://localhost:8080"
+    _WEBSERVICE = os.environ["COORDINATOR_URL"]
 
     def __init__(self, tracked_repository):
         self.tracked_repository = tracked_repository
@@ -52,7 +52,7 @@ class Network(object):
 
 
     def authenticate(self):
-        res = self.post("/auth/signIn", {"username": "MlModule", "password": "MlModule"})
+        res = self.post("/auth/signIn", {"username": os.environ["ML_MODULE_USER"], "password": os.environ["ML_MODULE_PASSWORD"]})
         self.token = res["token"]
 
 
@@ -73,17 +73,24 @@ class Network(object):
         self.post("/models/{}/evaluations".format(model.id), evaluations)
 
     def increment_build(self):
-        print(self.post("/trackedRepositories/{}/incrementBuild".format(self.tracked_repository)))
+        self.post("/trackedRepositories/{}/incrementBuild".format(self.tracked_repository))
 
     def upload_model(self, model, model_id):
+        dst_dit = "trained_models"
+        
+        if not os.path.exists(dst_dit):
+            os.makedirs(dst_dit)
+            
         name = "{}_{}_{}" \
           .format(model.__class__.__name__, model_id, self.tracked_repository)
         
-        with open(name, "wb") as f:
+        with open(os.path.join(dst_dit, name), "wb") as f:
             pickle.dump(model, f)
 
-        with open(name, "rb") as f:
-          requests.post(Network._WEBSERVICE + "/static/models", 
+        with open(os.path.join(dst_dit, name), "rb") as f:
+          res = requests.post(Network._WEBSERVICE + "/static/models", 
                                 headers={ "Authorization": "Bearer " + self.token },
-                                files={ "file": f })
+                                files={'file': f })
+        
+        os.remove(os.path.join(dst_dit, name))
         

@@ -29,5 +29,12 @@ share/python-wheels/
 *.egg
 MANIFEST
 
-# Cloned repositories
+# Filesystem used directories
 cloned/
+trained_models/
+
+# Secret environment variables
+environment.sh
+
+# Testing purposes
+producer.py
