@@ -73,7 +73,7 @@ class Network(object):
         self.post("/models/{}/evaluations".format(model.id), evaluations)
 
     def increment_build(self):
-        print(self.post("/trackedRepositories/{}/incrementBuild".format(self.tracked_repository)))
+        self.post("/trackedRepositories/{}/incrementBuild".format(self.tracked_repository))
 
     def upload_model(self, model, model_id):
         dst_dit = "trained_models"

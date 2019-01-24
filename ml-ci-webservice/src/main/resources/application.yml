@@ -6,7 +6,11 @@ security.jwt.token:
 # CORS
 allowed-origins: http://localhost:4200
 
+# Directory to store static files
 models-path: C:/Users/Guillem/Desktop/ml-ci/trained-models
+
+# RabbitMQ connection URL
+rabbit-mq-url: amqp://wkkreopq:2Jtl4DVl9KRixiYFLS3C2Gu9kOcBts-H@gopher.rmq.cloudamqp.com/wkkreopq
 
 # MlModule config
 ml-module:
