@@ -1,80 +1,57 @@
 #!/usr/bin/env python
 import os
 import json
+import pika
 
-from flask import Flask, request
-from flask_httpauth import HTTPBasicAuth
-from flask_cors import CORS, cross_origin
-
-from ml_ci.middleware.after_response import AfterResponse
+from flask import Flask
+from flask_cors import CORS
 
 from ml_ci.entrypoint import train
 
 
-class MlCiApp(object):
+def train_callback(ch, method, properties, body):
+    repo_id = None
+    repo_url = None
+    access_token = None
+    try:
+        # Parse the message
+        repo_data = json.loads(body)
+        repo_url = repo_data["githubUrl"]
+        repo_id = repo_data["trackedRepositoryId"]
+        access_token = repo_data["githubToken"]
+    except:
+        # TODO: Notify error to coordinator
+        print("Error parsing the message from the queue")
+        ch.basic_ack(delivery_tag = method.delivery_tag)
+    else:
+        # Process the message (Means train all models in config file) 
+        train(repo_id, repo_url)
+        # Send the ack to notify that the message has been processed correctly
+        ch.basic_ack(delivery_tag = method.delivery_tag)
+        
+def setup_amqp_connection():
+    """Creates channel, queue and start consume at the queue
+    """
+    print(" * [Cloud AMQP] Starting cloud amqp connection...")
 
-    def _setup_auth(self):
-        self.auth = HTTPBasicAuth()
-        self.users = {
-            "user": "pass"
-        }
+    params = pika.URLParameters(os.environ["AMQP_URL"])
+    connection = pika.BlockingConnection(params)
+    
+    channel = connection.channel()
+    channel.queue_declare(queue='train_repos')           # Declare the queue
+    
+    print(" * [Cloud AMQP] Waiting for messages on train_repos queue.")
 
-    def _setup_after_response_callback(self):
-        self.should_train = False
-        self.repo_data = None 
-        AfterResponse(self.app)
+    channel.basic_qos(prefetch_count=1)                         # Only accept one message
+    channel.basic_consume(train_callback, queue='train_repos')  # Setup training callback
+    channel.start_consuming()
 
-
-    def _validate_train_data(self):
-        repo_url = self.repo_data.get("githubUrl")
-        repo_id = self.repo_data.get("trackedRepositoryId")
-        access_token = self.repo_data.get("githubToken")
-
-        return repo_url and repo_id and access_token
-
-    def __init__(self):
-        # create and configure the app
-        self.app = Flask(__name__, instance_relative_config=True)
-        self.app.config.from_mapping(SECRET_KEY='dev')
-
-        self._setup_auth()
-        self._setup_after_response_callback()
-
-        @self.auth.get_password
-        def get_pw(username):
-            if username in self.users:
-                return self.users.get(username)
-            return None
-
-        @self.app.after_response
-        def train_after_res():
-            if self.should_train and self.repo_data:
-                repo_url = self.repo_data.get("githubUrl")
-                repo_id = self.repo_data.get("trackedRepositoryId")
-                access_token = self.repo_data.get("githubToken")
-                self.repo_data = None
-                self.should_train = False
-                train(repo_id, repo_url)
-
-
-        @self.app.route('/train', methods=['POST'])
-        @self.auth.login_required
-        def train_repo_models():
-            try:
-                self.should_train = False
-                self.repo_data = json.loads(request.data)
-                if self._validate_train_data():
-                    self.should_train = True
-                    return json.dumps({"msg": 'Training started'})
-                else:
-                    return 'Parameters missing', 400
-
-            except:
-                self.repo_data = None
-                self.should_train = False
-                return "Invalid JSON body", 400
-
-        CORS(self.app)
+def setup_flask():
+    app = Flask(__name__, instance_relative_config=True)
+    app.config.from_mapping(SECRET_KEY='dev')
+    CORS(app)
+    return app
 
 def create_app():
-    return MlCiApp().app
+    setup_amqp_connection()
+    return setup_flask()

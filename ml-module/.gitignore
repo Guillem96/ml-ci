@@ -31,3 +31,9 @@ MANIFEST
 
 # Cloned repositories
 cloned/
+
+# Secret environment variables
+environment.sh
+
+# Testing purposes
+producer.py
