@@ -28,6 +28,7 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+venv/
 
 # Filesystem used directories
 cloned/
@@ -35,6 +36,7 @@ trained_models/
 
 # Secret environment variables
 environment.sh
+docker.env
 
 # Testing purposes
 producer.py

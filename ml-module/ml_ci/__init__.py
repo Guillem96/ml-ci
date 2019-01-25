@@ -47,7 +47,7 @@ def setup_amqp_connection():
     channel.start_consuming()
 
 def setup_flask():
-    app = Flask(__name__, instance_relative_config=True)
+    app = Flask(__name__, instance_relative_config=True, host='0.0.0.0')
     app.config.from_mapping(SECRET_KEY='dev')
     CORS(app)
     return app
