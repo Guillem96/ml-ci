@@ -12,6 +12,6 @@ WORKDIR /app
 
 RUN pip install -r requirements.txt
 
-COPY . /app
+COPY ml_ci ml_ci
 
 ENTRYPOINT [ "flask", "run" ]
