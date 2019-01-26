@@ -34,10 +34,10 @@ class WebSecurity(
                 .antMatchers(HttpMethod.POST, "/users").permitAll()
 
                 .antMatchers(HttpMethod.GET, "/static/models/**").authenticated()
-                .antMatchers(HttpMethod.POST, "/static/models").permitAll()
+                .antMatchers(HttpMethod.POST, "/static/models*/**").hasRole("MODULE")
 
-                .antMatchers(HttpMethod.POST, "/models").hasRole("MODULE")
-                .antMatchers(HttpMethod.POST, "/trackedRepositories/incrementBuild").hasRole("MODULE")
+                .antMatchers(HttpMethod.POST, "/models*/**").hasRole("MODULE")
+                .antMatchers(HttpMethod.POST, "/trackedRepositories/**/incrementBuild").hasRole("MODULE")
 
                 .antMatchers(HttpMethod.GET, "**").permitAll()
                 .anyRequest().authenticated()

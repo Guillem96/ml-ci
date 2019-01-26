@@ -27,7 +27,7 @@ data class User(
 
         @JsonIgnore
         @ElementCollection(fetch = FetchType.EAGER)
-        val roles: List<String> = listOf("USER"),
+        val roles: List<String> = listOf("ROLE_USER"),
 
         var githubToken: String = "",
 

@@ -23,6 +23,6 @@ class AuthenticationConfig(
         usersRepository.save(
                 User(username = environment.getRequiredProperty("ml-module.user"),
                         password = User.passwordEncoder.encode(environment.getRequiredProperty("ml-module.pass")),
-                        roles = listOf("USER", "MODULE")))
+                        roles = listOf("ROLE_USER", "ROLE_MODULE")))
     }
 }
