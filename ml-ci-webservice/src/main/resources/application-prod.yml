@@ -4,10 +4,10 @@ security.jwt.token:
   expire-length: 7200000
 
 # CORS
-allowed-origins: http://localhost:4200
+allowed-origins: http://127.0.0.1
 
 # Directory to store static files
-models-path: C:/Users/Guillem/Desktop/ml-ci/trained-models
+models-path: trained-models
 
 # RabbitMQ connection URL
 rabbit-mq-url: amqp://wkkreopq:2Jtl4DVl9KRixiYFLS3C2Gu9kOcBts-H@gopher.rmq.cloudamqp.com/wkkreopq

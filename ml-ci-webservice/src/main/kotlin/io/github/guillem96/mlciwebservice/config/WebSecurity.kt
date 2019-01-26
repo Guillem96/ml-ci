@@ -2,7 +2,7 @@ package io.github.guillem96.mlciwebservice.config
 
 import io.github.guillem96.mlciwebservice.config.auth.JwtConfigurer
 import io.github.guillem96.mlciwebservice.config.auth.JwtTokenProvider
-import org.springframework.beans.factory.annotation.Value
+import org.springframework.core.env.Environment
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
@@ -15,10 +15,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
 @Configuration
 class WebSecurity(
-        private val jwtTokenProvider: JwtTokenProvider) : WebSecurityConfigurerAdapter() {
+        private val jwtTokenProvider: JwtTokenProvider,
+        private val environment: Environment) : WebSecurityConfigurerAdapter() {
 
-    @Value("\${allowed-origins}")
-    private lateinit var allowedOrigins: List<String>
 
     @Bean
     override fun authenticationManagerBean() = super.authenticationManagerBean()
@@ -51,7 +50,7 @@ class WebSecurity(
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {
         val corsConfiguration = CorsConfiguration()
-        corsConfiguration.allowedOrigins = allowedOrigins
+        corsConfiguration.allowedOrigins = listOf(environment.getRequiredProperty("allowed-origins"))
         corsConfiguration.allowedMethods = listOf("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
         corsConfiguration.allowedHeaders = listOf("*")
         corsConfiguration.allowCredentials = true
