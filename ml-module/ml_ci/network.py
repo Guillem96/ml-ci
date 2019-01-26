@@ -6,7 +6,7 @@ import requests
 import json
 import pickle
 
-from ml_ci.utils import delete_dir
+from utils import delete_dir
 
 class Network(object):
     
@@ -76,21 +76,20 @@ class Network(object):
         self.post("/trackedRepositories/{}/incrementBuild".format(self.tracked_repository))
 
     def upload_model(self, model, model_id):
-        dst_dit = "trained_models"
+        dst_dir = "trained_models"
         
-        if not os.path.exists(dst_dit):
-            os.makedirs(dst_dit)
+        if not os.path.exists(dst_dir):
+            os.makedirs(dst_dir)
             
         name = "{}_{}_{}" \
           .format(model.__class__.__name__, model_id, self.tracked_repository)
         
-        with open(os.path.join(dst_dit, name), "wb") as f:
+        with open(os.path.join(dst_dir, name), "wb") as f:
             pickle.dump(model, f)
 
-        with open(os.path.join(dst_dit, name), "rb") as f:
-          res = requests.post(Network._WEBSERVICE + "/static/models", 
+        with open(os.path.join(dst_dir, name), "rb") as f:
+            res = requests.post(Network._WEBSERVICE + "/static/models", 
                                 headers={ "Authorization": "Bearer " + self.token },
                                 files={'file': f })
-        
-        os.remove(os.path.join(dst_dit, name))
+        os.remove(os.path.join(dst_dir, name))
         

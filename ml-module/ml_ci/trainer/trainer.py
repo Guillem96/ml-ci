@@ -15,11 +15,11 @@ from sklearn.linear_model import *
 from sklearn.tree import *
 
 # Custom classes imports
-from ml_ci.trainer.trainer_utils import get_woriking_sets
-from ml_ci.trainer.generic_pipelines import full_pipeline
+from trainer.trainer_utils import get_woriking_sets
+from trainer.generic_pipelines import full_pipeline
 
 # Webservice communication
-from ml_ci.network import Network
+from network import Network
 
 
 def train_model(train_X, train_y, model_name, **hyperparameters):
@@ -109,12 +109,13 @@ def training_stage(cfg_file, webservice):
             evaluate_model(model, x_tested_prepared, y_test, cfg_file.train_type)
             print("Done")
 
-            # Update status of model to training
-            webservice.update_model_status(cfg_model, "TRAINED")
-
             print("Uploading {}...".format(model.__class__.__name__))
             webservice.upload_model(model, cfg_model.id)
             print("Done")
+
+            # Update status of model to training
+            webservice.update_model_status(cfg_model, "TRAINED")
+
         except Exception as e:
             raise e
             # Update model status to error

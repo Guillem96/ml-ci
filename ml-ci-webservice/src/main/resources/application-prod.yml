@@ -7,7 +7,7 @@ security.jwt.token:
 allowed-origins: http://127.0.0.1
 
 # Directory to store static files
-models-path: trained-models
+models-path: /home/app/trained-models
 
 # RabbitMQ connection URL
 rabbit-mq-url: amqp://wkkreopq:2Jtl4DVl9KRixiYFLS3C2Gu9kOcBts-H@gopher.rmq.cloudamqp.com/wkkreopq

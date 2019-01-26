@@ -1,6 +1,5 @@
 package io.github.guillem96.mlciwebservice.service
 
-
 import java.io.IOException
 import java.net.MalformedURLException
 import java.nio.file.Files

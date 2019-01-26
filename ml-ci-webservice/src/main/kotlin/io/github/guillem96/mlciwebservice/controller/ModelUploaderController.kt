@@ -14,11 +14,10 @@ import org.springframework.web.bind.annotation.*
 @Controller
 @RequestMapping("/static/models")
 class ModelUploaderController(private val storageService: StorageService) {
-
+    
     @GetMapping("/{filename:.+}")
     @ResponseBody
     fun serveFile(@PathVariable filename: String): ResponseEntity<Any> {
-
         val file = storageService.loadAsResource(filename)
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
                 "attachment; filename=\"" + file.filename + "\"").body<Any>(file)

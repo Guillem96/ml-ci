@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Bean
 @SpringBootApplication
 class MlCiWebserviceApplication {
     @Bean
-    fun init(storageService: StorageService)= CommandLineRunner {
+    fun init(storageService: StorageService) = CommandLineRunner {
         args ->
             storageService.deleteAll()
             storageService.init()
