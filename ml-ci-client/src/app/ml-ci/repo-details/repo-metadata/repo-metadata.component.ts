@@ -22,6 +22,14 @@ export class RepoMetadataComponent implements OnInit {
     TRAINING: 'far fa-clock fa-spin'
   };
 
+  public statusColor = {
+    PENDENT: 'light',
+    NONE: 'light',
+    ERROR: 'danger',
+    TRAINED: 'success',
+    TRAINING: 'warning'
+  }
+
   constructor(private githubService: GithubService,
               private trackedRepoService: TrackedRepositoryService) { }
 
@@ -31,6 +39,7 @@ export class RepoMetadataComponent implements OnInit {
   public startTraining() {
     this.trackedRepoService.startTraining(this.repo).subscribe(
       () => {
+        this.repo.status = 'TRAINING';
         console.log('Start training');
       }
     );

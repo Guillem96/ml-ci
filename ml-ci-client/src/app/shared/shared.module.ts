@@ -8,17 +8,20 @@ import { AuthService } from './services/auth.service';
 import { AuthGuard } from './guards/auth.guard';
 import { TrackedRepositoryService } from './services/tracked-repository.service';
 import { ModelService } from './services/model.service';
+import { EmptyComponent } from './empty/empty.component';
 
 @NgModule({
   declarations: [
     LoadingComponent,
     TabsComponent,
-    TabComponent
+    TabComponent,
+    EmptyComponent,
   ],
   exports: [
     LoadingComponent,
     TabsComponent,
-    TabComponent
+    TabComponent,
+    EmptyComponent
   ],
   imports: [
     CommonModule,

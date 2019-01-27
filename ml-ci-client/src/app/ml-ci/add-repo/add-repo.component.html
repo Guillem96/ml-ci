@@ -10,6 +10,7 @@
     </ul>
   </div>
   <div class="integrate display-4">Integrate MlCi - GitHub App Integration</div>
+  <app-empty *ngIf="!githubRepos || githubRepos.length === 0"></app-empty>
   <table mdbTable hover="true">
     <tbody>
       <tr mdbTableCol *ngFor="let el of githubRepos; let i = index" (click)="confirmModal(i, basicModal)">

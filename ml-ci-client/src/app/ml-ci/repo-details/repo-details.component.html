@@ -5,17 +5,20 @@
 
   <app-repo-metadata [githubRepo]="githubRepo" [repo]="repo"></app-repo-metadata>
 
-  <h3 class="models-title display-4 mt-4"><i class="fas fa-brain mr-3"></i>Models</h3>
+  <h3 class="models-title display-4 mt-4 mb-4"><i class="fas fa-brain mr-3"></i>Models</h3>
 
   <app-tabs class="mt-4">
     <app-tab title="Last train">
+      <app-empty *ngIf="!repo.lastTrain || repo.lastTrain.length === 0"></app-empty>  
       <div class="row">
         <div *ngFor="let model of repo.lastTrain" class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
           <app-model-details (download)="afterDownloadModal.show()" [trackedRepo]="repo" [model]="model"></app-model-details>
         </div>
       </div>
     </app-tab>
-    <app-tab title="History pt-2">
+    <app-tab title="History" class="pt-2">
+      <app-empty *ngIf="modelsByTraining.size === 0"></app-empty>
+
       <div class="mb-4" *ngFor="let modelTrain of modelsByTraining | keyvalue">
         <h3 class="training-title">Training #{{ modelTrain.key }}</h3>
         <div class="row">
