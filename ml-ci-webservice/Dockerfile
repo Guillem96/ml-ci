@@ -1,9 +1,6 @@
 FROM openjdk:8-jre-alpine
 WORKDIR /home/app
 
-
-RUN mkdir -p /home/app/trained-models
-RUN chmod 775 /home/app/trained-models
 ADD ./target/*.jar ./app.jar
 
 EXPOSE 8080

@@ -24,8 +24,6 @@ services:
     container_name: ml-module
     env_file:
      - ./ml-module/docker.env
-    ports:
-      - "5000:5000"
     depends_on:
       - ml-ci-webservice
     links:
