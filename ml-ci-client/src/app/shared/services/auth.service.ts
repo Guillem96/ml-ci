@@ -1,7 +1,6 @@
 import { GitHubUser } from './../models/github.user';
 import { Injectable } from '@angular/core';
-import { of as observableOf, Observable, of, BehaviorSubject, Subject } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
 import * as firebase from 'firebase/app';
@@ -45,6 +44,7 @@ export class AuthService {
   }
 
   public logout() {
+    this.userService.logout();
     this.afAuth.auth.signOut();
   }
 
@@ -77,10 +77,6 @@ export class AuthService {
       // Get the existing password
       data.password = doc.data().password;
       console.log('LOGGING EXISTING USER');
-
-      // Comment for production
-      data.username = 'test';
-      data.password = 'password';
 
       // Get token to interact with our server
       const user = await this.userService.signIn(data.username, data.password, gitHubUser.accessToken).toPromise();

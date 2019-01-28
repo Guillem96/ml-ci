@@ -45,6 +45,10 @@ export class RepoDetailsComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private fetchRepoData() {
+    if (!this.repo) {
+      this.loading = false;
+      return;
+    }
     const urlSplit = this.repo.url.split('/');
     forkJoin(
       this.trackedRepositoryService.get(this.repo.id),
@@ -74,13 +78,5 @@ export class RepoDetailsComponent implements OnInit, OnDestroy, OnChanges {
   get repoName() {
     const splitUrl = this.repo.url.split('/');
     return this.userService.authUser.gitHubInfo.username + '/' + splitUrl[splitUrl.length - 1];
-  }
-
-  get currentRepos() {
-    if (this.repo.models) {
-      return this.repo.models.filter(m => m.buildNum === this.repo.buildNum);
-    } else {
-      return [];
-    }
   }
 }
