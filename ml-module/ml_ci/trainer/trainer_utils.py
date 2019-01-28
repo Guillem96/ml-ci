@@ -17,22 +17,27 @@ def load_data(path):
     return pd.read_csv(csv_path)
 
 
-def get_woriking_sets(csv_path, test_size, target, dropna=False):
+def get_woriking_sets(cfg_file, dropna=False):
     """Makes partitions of data for ml algorithms
     
     Arguments:
-        csv_path {string} -- Dataset file path
-        target {string} -- Target to be predicted
-        test_size {float} -- Test set percentage over the whole data
+        cfg_file - Configuration file from user
 
     Returns:
         [(Dataframe, DataFrame, DataFrame, Dataframe)] --[(Training set X, Training set Y, Test set)]
     """
+    csv_path = cfg_file.data_set
+    test_size = cfg_file.test_rate
+    target = cfg_file.target
 
     df = load_data(csv_path)
 
+    # Drop columns specified at config file
+    print("Droping columns: {}".format(cfg_file.drop_columns))
+    df.drop(cfg_file.drop_columns, axis=1, inplace=True)
+
     if dropna:
-        df.dropna(axis=0)
+        df.dropna(axis=0, inplace=True)
 
     X = df.drop(target, axis=1).copy()
     y = df[target].copy()

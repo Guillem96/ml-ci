@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from sklearn.base import BaseEstimator, TransformerMixin
-from sklearn.preprocessing import LabelBinarizer
+from sklearn.preprocessing import OneHotEncoder
 
 class DataFrameSelector(BaseEstimator, TransformerMixin):
     def __init__(self, types):
@@ -18,4 +18,4 @@ class Binarizer(BaseEstimator, TransformerMixin):
         return self
         
     def transform(self, X):
-        return LabelBinarizer().fit_transform(X)
+        return OneHotEncoder().fit_transform(X)

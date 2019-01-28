@@ -5,14 +5,14 @@ import pandas as pd
 import numpy as np
 
 # Sklearn imports
-from sklearn.model_selection import StratifiedShuffleSplit, GridSearchCV
-from sklearn.externals import joblib
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_error, accuracy_score
 
 # Models
 from sklearn.ensemble import *
 from sklearn.linear_model import *
 from sklearn.tree import *
+from sklearn.svm import *
+from sklearn.neighbors import *
 
 # Custom classes imports
 from trainer.trainer_utils import get_woriking_sets
@@ -56,7 +56,7 @@ def evaluate_model(model, X_test, y_test, is_regression):
 
         print(model.__class__.__name__ + "-> "  + "MSE:", final_mse, "RMSE:", final_rmse)
     else:
-        print(model.__class__.__name__ + " -> "  + "Accuracy:", accuracy_score(y_test, y_pred))
+        print(model.__class__.__name__ + " -> "  + "Accuracy:", accuracy_score(y_test, final_predictions))
 
 
 def create_models(webservice, models):
@@ -80,7 +80,7 @@ def training_stage(cfg_file, webservice):
 
     # Train test split
     X, y, x_test, y_test = \
-                get_woriking_sets(cfg_file.data_set, cfg_file.test_rate, cfg_file.target)
+                get_woriking_sets(cfg_file, True)
 
     pipeline = None
     # If custom pipeline is not defined use the generic one
@@ -92,9 +92,6 @@ def training_stage(cfg_file, webservice):
 
     X_prepared = pipeline.fit_transform(X)
 
-    # After some test we decided that random forest is the best model for now
-    # model = get_best_hyperparameters().best_estimator_
-    
     for cfg_model in cfg_file.models:
         # Update status of model to training
         webservice.update_model_status(cfg_model, "TRAINING")
@@ -106,7 +103,7 @@ def training_stage(cfg_file, webservice):
             ### Evaluate against test set ###
             print("Evaluating {}...".format(model.__class__.__name__))
             x_tested_prepared = full_pipeline.transform(x_test)
-            evaluate_model(model, x_tested_prepared, y_test, cfg_file.train_type)
+            evaluate_model(model, x_tested_prepared, y_test, cfg_file.train_type == "regression")
             print("Done")
 
             print("Uploading {}...".format(model.__class__.__name__))

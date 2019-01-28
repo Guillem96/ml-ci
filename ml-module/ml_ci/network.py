@@ -48,12 +48,12 @@ class Network(object):
         res = requests.post(Network._WEBSERVICE + path, 
                                 json=body,
                                 headers=headers)
-        return res.json()
+        return res
 
 
     def authenticate(self):
         res = self.post("/auth/signIn", {"username": os.environ["ML_MODULE_USER"], "password": os.environ["ML_MODULE_PASSWORD"]})
-        self.token = res["token"]
+        self.token = res.json()["token"]
 
 
     def create_model(self, model):
@@ -64,7 +64,7 @@ class Network(object):
             "trackedRepository": self.tracked_repository
         }
         res = self.post("/models/withTrackedRepository", model_json)
-        model.id = int(res)
+        model.id = int(res.json())
 
     def update_model_status(self, model, new_status):
         self.post("/models/{}/status/{}".format(model.id, new_status))

@@ -22,6 +22,7 @@ class MlCiCfg(object):
         self.pipeline = kwargs.get('pipeline')
         self.target = kwargs.get('target')
         self.data_set = kwargs.get('data_set')
+        self.drop_columns = kwargs.get('drop')
 
         # TODO: Validate mandatory data
 
@@ -38,6 +39,7 @@ class YamlCfgParser(object):
     def __init__(self, yaml_stream):
         cfg_dict = yaml.load(yaml_stream)
         config = dict()
+        config['drop'] = cfg_dict.get('drop', [])
         config['train_type'] = cfg_dict.get('train_type', 'regression')
         config['test_rate'] = cfg_dict.get('test-rate', 0.2)
         config['pipeline'] = cfg_dict.get('pipeline')
