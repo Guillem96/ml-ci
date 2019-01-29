@@ -36,12 +36,13 @@ def get_woriking_sets(cfg_file, dropna=False):
     print("Droping columns: {}".format(cfg_file.drop_columns))
     df.drop(cfg_file.drop_columns, axis=1, inplace=True)
 
+    # Drop NaNs
     if dropna:
         df.dropna(axis=0, inplace=True)
 
+    # Train test split
     X = df.drop(target, axis=1).copy()
     y = df[target].copy()
-
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42)
 
     return X_train, y_train, X_test, y_test

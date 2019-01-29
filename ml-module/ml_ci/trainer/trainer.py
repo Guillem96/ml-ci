@@ -113,7 +113,6 @@ def training_stage(cfg_file, webservice):
             # Update status of model to training
             webservice.update_model_status(cfg_model, "TRAINED")
 
-        except Exception as e:
-            raise e
+        except Exception:
             # Update model status to error
             webservice.update_model_status(cfg_model, "ERROR")

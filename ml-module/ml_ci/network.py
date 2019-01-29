@@ -9,10 +9,17 @@ import pickle
 from utils import delete_dir
 
 class Network(object):
-    
+    """Class responisble of sending http requests to coordinator module
+    """
+
     _WEBSERVICE = os.environ["COORDINATOR_URL"]
 
     def __init__(self, tracked_repository):
+        """Force clone a github repository
+        
+        Arguments:
+            tracked_repository {integer} -- ID of the tracked repository which is being trained
+        """
         self.tracked_repository = tracked_repository
         self.token = None
 
@@ -36,15 +43,28 @@ class Network(object):
         Repo.clone_from(url, directory)
         return directory
 
-    def post(self, path, body={}):
+    def _post(self, path, body={}):
+        """Performs a post to the specified path
+        
+        Arguments:
+            path {string}   -- Coordinator endpoint
+            body {dict}     -- Request body
+        
+        Returns:
+            Response -- requests module Response object
+        """
+
+        # Communication using json
         headers = {
             'Content-type': 'application/json', 
             'Accept': 'application/json'
         }
 
+        # If the authentication has already been done send the token too
         if self.token:
             headers["Authorization"] = "Bearer " + self.token
 
+        # Perform the post
         res = requests.post(Network._WEBSERVICE + path, 
                                 json=body,
                                 headers=headers)
@@ -52,30 +72,58 @@ class Network(object):
 
 
     def authenticate(self):
-        res = self.post("/auth/signIn", {"username": os.environ["ML_MODULE_USER"], "password": os.environ["ML_MODULE_PASSWORD"]})
+        """Authenticate as ROLE_MODULE
+        """
+        credentials = dict(username=os.environ["ML_MODULE_USER"], password=os.environ["ML_MODULE_PASSWORD"])
+        res = self._post("/auth/signIn", credentials)
         self.token = res.json()["token"]
 
 
     def create_model(self, model):
+        """Creates a model
+
+        Arguments:
+            model {ModelCfg} -- Model configuration
+        """
         model_json = {
             "algorithm": model.name,
             "hyperParameters": model.params,
             "status": "PENDENT",
             "trackedRepository": self.tracked_repository
         }
-        res = self.post("/models/withTrackedRepository", model_json)
+        res = self._post("/models/withTrackedRepository", model_json)
         model.id = int(res.json())
 
     def update_model_status(self, model, new_status):
-        self.post("/models/{}/status/{}".format(model.id, new_status))
+        """Update model status
+        
+        Arguments:
+            model {ModelCfg} -- Model configuration
+            status { PENDENT | TRAINING | ERROR | TRAINED } -- New status
+        """
+        self._post("/models/{}/status/{}".format(model.id, new_status))
     
     def add_evaluations(self, model, evaluations):
-        self.post("/models/{}/evaluations".format(model.id), evaluations)
+        """Add evaluations to model
+        
+        Arguments:
+            model {ModelCfg} -- Model configuration
+            evaluations {dict} -- Evaluations dictionary
+        """
+        self._post("/models/{}/evaluations".format(model.id), evaluations)
 
     def increment_build(self):
-        self.post("/trackedRepositories/{}/incrementBuild".format(self.tracked_repository))
+        """Increment training batch
+        """
+        self._post("/trackedRepositories/{}/incrementBuild".format(self.tracked_repository))
 
     def upload_model(self, model, model_id):
+        """Upload serialized trained model to webservice
+
+        Arguments:
+            model {Sklearn model} -- Trained model
+            model_id {integer} -- Model ID referencing webservice instance
+        """
         dst_dir = "trained_models"
         
         if not os.path.exists(dst_dir):
@@ -88,7 +136,7 @@ class Network(object):
             pickle.dump(model, f)
 
         with open(os.path.join(dst_dir, name), "rb") as f:
-            res = requests.post(Network._WEBSERVICE + "/static/models", 
+            requests.post(Network._WEBSERVICE + "/static/models", 
                                 headers={ "Authorization": "Bearer " + self.token },
                                 files={'file': f })
         os.remove(os.path.join(dst_dir, name))

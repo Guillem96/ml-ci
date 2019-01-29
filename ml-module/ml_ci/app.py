@@ -7,6 +7,8 @@ from entrypoint import train
 from network import Network
 
 def train_callback(ch, method, properties, body):
+    """Callback to handle queue message
+    """
     repo_id = None
     repo_url = None
     access_token = None
@@ -19,6 +21,7 @@ def train_callback(ch, method, properties, body):
     except:
         # TODO: Notify error to coordinator
         print("Error parsing the message from the queue")
+        # Send an ack in case message cannot be handled properly
         ch.basic_ack(delivery_tag = method.delivery_tag)
     else:
         # Process the message (Means train all models in config file) 
@@ -36,15 +39,16 @@ def setup_amqp_connection():
     connection = pika.BlockingConnection(params)
     
     channel = connection.channel()
-    channel.queue_declare(queue='train_repos')           # Declare the queue
-    
+
+    # Declare a queue
+    channel.queue_declare(queue='train_repos')           
+
     print(" * [Cloud AMQP] Waiting for messages on train_repos queue.")
 
     channel.basic_qos(prefetch_count=1)                         # Only accept one message
     channel.basic_consume(train_callback, queue='train_repos')  # Setup training callback
     channel.start_consuming()
 
-# app = Flask(__name__, instance_relative_config=True)
-# app.config.from_mapping(SECRET_KEY='dev')
-# CORS(app)
-setup_amqp_connection()
+
+if __name__ == "__main__":
+    setup_amqp_connection()
