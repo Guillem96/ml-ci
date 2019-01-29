@@ -11,9 +11,8 @@ import org.springframework.context.annotation.Bean
 class MlCiWebserviceApplication {
     @Bean
     fun init(storageService: StorageService) = CommandLineRunner {
-        args ->
-            storageService.deleteAll()
-            storageService.init()
+        storageService.deleteAll()
+        storageService.init()
     }
 }
 

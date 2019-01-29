@@ -19,5 +19,5 @@ interface UserRepository: CrudRepository<User, Long> {
 interface ModelRepository: CrudRepository<Model, Long>
 
 
-// Repo extension to use kotlin null safe
+// CrudRepository extension to use kotlin null safe advantage
 fun <T, ID> CrudRepository<T, ID>.findOne(id: ID): T? = findById(id).orElse(null)

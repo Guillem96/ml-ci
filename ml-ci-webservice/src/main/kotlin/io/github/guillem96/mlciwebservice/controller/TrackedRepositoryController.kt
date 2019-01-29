@@ -19,6 +19,9 @@ class TrackedRepositoryController(
         private val rabbitTemplate: RabbitTemplate,
         private val queue: Queue){
 
+    /**
+     * Increment number of trainings
+     */
     @PostMapping("/{id}/incrementBuild")
     fun incrementBuildNumber(@PathVariable id: Long): ResponseEntity<Int> {
         trackedRepositoryRepository.findOne(id)?.let {
@@ -29,6 +32,9 @@ class TrackedRepositoryController(
         return notFound().build()
     }
 
+    /**
+     * Publish a training task to rabbit mq queue
+     */
     @PostMapping("/{id}/train")
     fun trainRepository(@PathVariable id: Long): ResponseEntity<Unit> {
         trackedRepositoryRepository.findOne(id)?.let {

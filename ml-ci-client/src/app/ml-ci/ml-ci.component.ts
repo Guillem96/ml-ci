@@ -33,7 +33,7 @@ export class MlCiComponent implements OnInit, OnDestroy {
 
   private fetchTrackedRepos(first: boolean = false) {
     this.userService.authUser.getRelationArray(TrackedRepository, 'trackedRepositories')
-    .subscribe(res => {
+    .subscribe((res: TrackedRepository[]) => {
       this.trackedRepositories = res;
       if (first) {
         this.selectedRepo = res[0];

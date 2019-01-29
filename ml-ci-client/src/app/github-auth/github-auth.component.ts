@@ -18,6 +18,7 @@ export class GithubAuthComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
+    
     if (this.userService.isLoggedIn()) {
       this.loading = false;
       this.router.navigate(['']);

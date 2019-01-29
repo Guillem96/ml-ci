@@ -19,8 +19,11 @@ class RestValidationConfig : RepositoryRestConfigurer {
 
     override fun configureValidatingRepositoryEventListener(
             validatingListener: ValidatingRepositoryEventListener?) {
-        validatingListener!!.addValidator("beforeCreate", validator())
-        validatingListener.addValidator("beforeSave", validator())
-        super.configureValidatingRepositoryEventListener(validatingListener)
+
+        validatingListener?.let {
+            it.addValidator("beforeCreate", validator())
+            it.addValidator("beforeSave", validator())
+            super.configureValidatingRepositoryEventListener(validatingListener)
+        }
     }
 }

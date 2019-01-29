@@ -35,30 +35,30 @@ export class ModelDetailsComponent implements OnInit {
     this.download.emit();
 
     this.modelService.downloadModel(this.model, this.trackedRepo.id).subscribe(
-      res => {
+      (res: any) => {
         this.downloadFile(res, 'octet/stream');
       }
     );
   }
 
   /**
-     * Method is use to download file.
-     * @param data - Array Buffer data
-     * @param type - type of the document.
-     */
-    private downloadFile(data: any, type: string) {
-      const a = document.createElement('a');
-      document.body.appendChild(a);
-      a.style.display = 'none';
+   * Method is use to download file.
+   * @param data - Array Buffer data
+   * @param type - type of the document.
+   */
+  private downloadFile(data: any, type: string) {
+    const a = document.createElement('a');
+    document.body.appendChild(a);
+    a.style.display = 'none';
 
-      const blob = new Blob([data], { type: type});
-      const url = window.URL.createObjectURL(blob);
+    const blob = new Blob([data], { type: type});
+    const url = window.URL.createObjectURL(blob);
 
-      a.href = url;
-      a.download = `${this.model.algorithm}_${this.model.id}_${this.trackedRepo.id}`;
-      a.click();
+    a.href = url;
+    a.download = `${this.model.algorithm}_${this.model.id}_${this.trackedRepo.id}`;
+    a.click();
 
-      window.URL.revokeObjectURL(url);
-      this.downloading = false;
+    window.URL.revokeObjectURL(url);
+    this.downloading = false;
   }
 }

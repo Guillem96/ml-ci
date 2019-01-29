@@ -17,12 +17,10 @@ export class AuthInterceptor implements HttpInterceptor {
         headers: req.headers.set('Authorization', `Bearer ${authToken}`)
       });
       return next.handle(authReq);
-    } else if (req.url.includes(environment.ML_MODULE)) {
+    } else if (req.url.includes('https://api.github.com') && this.authentication.isLoggedIn()) {
       const authReq = req.clone({
-        headers: req.headers.set('Authorization', `Basic ${btoa("user:pass")}`)
+        headers: req.headers.set('Authorization', `token ${this.authentication.authUser.gitHubInfo.accessToken}`)
       });
-      console.log(authReq.headers.get("Authorization"));
-
       return next.handle(authReq);
     } else {
       return next.handle(req);

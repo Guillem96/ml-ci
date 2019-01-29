@@ -30,8 +30,7 @@ export class RepoMetadataComponent implements OnInit {
     TRAINING: 'warning'
   }
 
-  constructor(private githubService: GithubService,
-              private trackedRepoService: TrackedRepositoryService) { }
+  constructor(private trackedRepoService: TrackedRepositoryService) { }
 
   ngOnInit() {
   }

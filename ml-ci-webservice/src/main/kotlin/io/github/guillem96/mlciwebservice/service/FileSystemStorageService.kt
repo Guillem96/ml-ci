@@ -1,12 +1,13 @@
 package io.github.guillem96.mlciwebservice.service
 
+import io.github.guillem96.mlciwebservice.StorageException
+import io.github.guillem96.mlciwebservice.StorageFileNotFoundException
 import java.io.IOException
 import java.net.MalformedURLException
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
-import java.util.stream.Stream
 
 import org.springframework.core.env.Environment
 import org.springframework.core.io.Resource
@@ -25,45 +26,40 @@ class FileSystemStorageService(val environment: Environment) : StorageService {
     override fun store(file: MultipartFile) {
         val filename = file.originalFilename
         try {
+            // Check if file is null
             filename ?: throw StorageException("Failed to store null file")
 
-            if (file.isEmpty) {
-                throw StorageException("Failed to store empty file " + filename)
-            }
+            when {
+                file.isEmpty -> throw StorageException("Failed to store empty file $filename")
 
-            if (filename.contains("..")) {
-                // This is a security check
-                throw StorageException(
-                        "Cannot store file with relative path outside current directory " + filename)
-            }
+                // This is a security check, no allow relative paths
+                filename.contains("..") -> throw StorageException(
+                        "Cannot store file with relative path outside current directory $filename")
 
-            file.inputStream.use { inputStream ->
-                Files.copy(inputStream, this.rootLocation.resolve(filename),
-                        StandardCopyOption.REPLACE_EXISTING)
+                else -> {
+                    file.inputStream.use { inputStream ->
+                        Files.copy(inputStream, this.rootLocation.resolve(filename),
+                                StandardCopyOption.REPLACE_EXISTING)
+                    }
+                }
             }
         } catch (e: IOException) {
-            throw StorageException("Failed to store file " + filename)
+            throw StorageException("Failed to store file $filename")
         }
-
     }
 
-    override fun load(filename: String): Path {
-        return rootLocation.resolve(filename)
-    }
+    override fun load(filename: String): Path = rootLocation.resolve(filename)
 
     override fun loadAsResource(filename: String): Resource {
         try {
             val file = load(filename)
             val resource = UrlResource(file.toUri())
-            return if (resource.exists() || resource.isReadable) {
-                resource
-            } else {
-                throw StorageFileNotFoundException(
-                        "Could not read file: " + filename)
+            if (resource.exists() || resource.isReadable)
+                return resource
 
-            }
+            throw StorageFileNotFoundException("Could not read file: $filename")
         } catch (e: MalformedURLException) {
-            throw StorageFileNotFoundException("Could not read file: " + filename)
+            throw StorageFileNotFoundException("Could not read file: $filename")
         }
 
     }

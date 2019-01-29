@@ -9,30 +9,30 @@ import javax.validation.constraints.NotBlank
 @Entity
 data class TrackedRepository(
         @NotBlank
-        val url: String,
+        val url: String,                                            // Access URI to repository
 
         val lastCommit: String,
 
         @ManyToOne(fetch = FetchType.LAZY)
         @JsonIdentityReference(alwaysAsId = true)
-        val user: User? = null,
+        val user: User? = null,                                     // User owning the repository
 
         @OneToMany(cascade = [(CascadeType.ALL)], mappedBy = "trackedRepository")
-        val models: List<Model> = emptyList(),
+        val models: List<Model> = emptyList(),                      // All trained models related to repository
 
         @get:JsonProperty(access = JsonProperty.Access.READ_ONLY)
-        var buildNum: Int = 0,
+        var buildNum: Int = 0,                                      // Trained nth times
 
         @Id @GeneratedValue
         val id: Long? = null) {
 
     @get:JsonProperty(access = JsonProperty.Access.READ_ONLY)
     val lastTrain: List<Model>
-        get() = models.filter { it.buildNum == buildNum }
+        get() = models.filter { it.buildNum == buildNum }           // Models of current `buildNum`
 
     @get:JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @get:Enumerated(EnumType.STRING)
-    val status: ModelStatus
+    val status: ModelStatus                                         // Repository status based on its models
         get() {
             val modelStatuses =  lastTrain.map { it.status }
             return when {
@@ -46,6 +46,6 @@ data class TrackedRepository(
         }
 
     @get:JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    val trainDate: LocalDateTime?
+    val trainDate: LocalDateTime?                                   // Largest train date from trained models
         get() = lastTrain.map { it.trainDate }.max()
 }

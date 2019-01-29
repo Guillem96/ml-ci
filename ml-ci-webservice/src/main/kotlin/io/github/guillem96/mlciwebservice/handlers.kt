@@ -9,7 +9,6 @@ import javax.transaction.Transactional
 @Component
 @RepositoryEventHandler
 class UserEventHandler {
-
     @HandleBeforeCreate
     @Transactional
     fun handleUserPostCreate(user: User) {

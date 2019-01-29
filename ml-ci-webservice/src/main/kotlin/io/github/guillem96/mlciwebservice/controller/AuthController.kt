@@ -24,29 +24,32 @@ class AuthController(
     fun signIn(@RequestBody data: Credentials): ResponseEntity<AuthResponse> {
 
         if (data.username.isEmpty() or data.password.isEmpty())
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build()
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build()
+
         try {
             authenticationManager.authenticate(
                     UsernamePasswordAuthenticationToken(data.username, data.password))
 
+            // Find user or return 404
             val user = userRepository.findByUsername(data.username) ?: return ResponseEntity.notFound().build()
 
             // Update github access token every sign in
             user.githubToken = data.githubToken
             userRepository.save(user)
 
+            // Generate and return token
             val token: String = jwtTokenProvider.createToken(data.username, user.roles)
-
             return ok(AuthResponse(user, token))
         }catch (e: Exception) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build()
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
         }
     }
 }
 
-// Representing json structures
+// Sign in request body
 data class Credentials(val username: String, val password: String, val githubToken: String = "")
 
+// Sign in response body
 data class AuthResponse(
         @JsonIgnoreProperties("trackedRepositories")
         val user: User,

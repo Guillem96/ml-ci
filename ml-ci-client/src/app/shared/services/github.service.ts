@@ -17,14 +17,14 @@ export class GithubService {
               private userService: UserService) { }
 
   public getRepoInfo(repoName: string): Observable<GitHubRepository> {
-    const repo$ = this.http.get<GitHubRepository>(`${this.GITHUB_API}/repos/${repoName}`, this.getAuthHeaders());
-    const commits$ = this.http.get(`${this.GITHUB_API}/repos/${repoName}/commits`, this.getAuthHeaders());
+    const repo$ = this.http.get<GitHubRepository>(`${this.GITHUB_API}/repos/${repoName}`);
+    const commits$ = this.http.get(`${this.GITHUB_API}/repos/${repoName}/commits`);
     
     return forkJoin(repo$, commits$)
     .pipe(
       map((res: any[]) => {
-        res[0].commits = res[1].map(c => {
-          return <GitHubCommit>{
+        res[0].commits = res[1].map((c: any) => {
+          return <GitHubCommit> {
             url: c.commit.url,
             sha: c.sha,
             author: c.commit.author.name,
@@ -33,21 +33,11 @@ export class GithubService {
           }
         });
         return res[0] as GitHubRepository;
-      }
-    ));
+      })
+    );
   }
 
   public getRepos(): Observable<GitHubRepository[]> {
-    return this.http.get<GitHubRepository[]>(`${this.GITHUB_API}/user/repos`, this.getAuthHeaders());
+    return this.http.get<GitHubRepository[]>(`${this.GITHUB_API}/user/repos`);
   }
-
-  private getAuthHeaders() {
-    return {
-      headers: new HttpHeaders({
-        Authorization: 'token ' + this.userService.authUser.gitHubInfo.accessToken
-      })
-    }
-  }
-
-  
 }

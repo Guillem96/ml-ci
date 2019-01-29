@@ -10,26 +10,26 @@ import javax.validation.constraints.NotNull
 @Entity
 data class Model(
         @NotBlank
-        val algorithm: String,
+        val algorithm: String,                                  // Name of trained algorithm
 
         @ElementCollection(targetClass=Pair::class)
-        val hyperParameters: Map<String, Any> = emptyMap(),
+        val hyperParameters: Map<String, Any> = emptyMap(),     // Algorithm training parameters
 
         @ManyToOne
         @NotNull
-        val trackedRepository: TrackedRepository,
+        val trackedRepository: TrackedRepository,               // Repository containing the current model metadata
 
         @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-        var buildNum: Int = 0,
+        var buildNum: Int = 0,                                  // Trained nth times
 
         @Enumerated(EnumType.STRING)
-        var status: ModelStatus = ModelStatus.NONE,
+        var status: ModelStatus = ModelStatus.NONE,             // Training status
 
         @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-        val trainDate: LocalDateTime = LocalDateTime.now(),
+        val trainDate: LocalDateTime = LocalDateTime.now(),     // Last train date
 
         @ElementCollection(targetClass=Pair::class)
-        val evaluations: MutableMap<String, Double> = HashMap(),
+        val evaluations: MutableMap<String, Double> = HashMap(),// Results of training
 
         @Id
         @GeneratedValue

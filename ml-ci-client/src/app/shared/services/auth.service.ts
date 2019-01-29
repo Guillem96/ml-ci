@@ -5,6 +5,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
 import * as firebase from 'firebase/app';
 import { UserService } from './user.service';
+import { User } from '../models/user';
 
 @Injectable({
   providedIn: 'root'
@@ -86,7 +87,7 @@ export class AuthService {
     }
   }
 
-  private async signUpAndSignIn(data: any, githubToken: string) {
+  private async signUpAndSignIn(data: any, githubToken: string): Promise<User> {
     try {
       await this.userService.signUp(data.username, data.password, data.email).toPromise();
       return await this.userService.signIn(data.username, data.password, githubToken).toPromise();

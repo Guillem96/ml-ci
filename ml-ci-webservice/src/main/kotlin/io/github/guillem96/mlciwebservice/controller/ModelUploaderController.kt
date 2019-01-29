@@ -1,8 +1,6 @@
 package io.github.guillem96.mlciwebservice.controller
 
-import io.github.guillem96.mlciwebservice.service.StorageException
 import org.springframework.http.ResponseEntity
-import io.github.guillem96.mlciwebservice.service.StorageFileNotFoundException
 import org.springframework.web.multipart.MultipartFile
 import org.springframework.http.HttpHeaders
 import io.github.guillem96.mlciwebservice.service.StorageService
@@ -14,7 +12,10 @@ import org.springframework.web.bind.annotation.*
 @Controller
 @RequestMapping("/static/models")
 class ModelUploaderController(private val storageService: StorageService) {
-    
+
+    /**
+     * Get and return an static file
+     */
     @GetMapping("/{filename:.+}")
     @ResponseBody
     fun serveFile(@PathVariable filename: String): ResponseEntity<Any> {
@@ -23,19 +24,12 @@ class ModelUploaderController(private val storageService: StorageService) {
                 "attachment; filename=\"" + file.filename + "\"").body<Any>(file)
     }
 
+    /**
+     * Upload a new static file
+     * */
     @PostMapping("")
     @ResponseStatus(HttpStatus.OK)
     fun handleFileUpload(@RequestParam("file") file: MultipartFile) {
         storageService.store(file)
-    }
-
-    @ExceptionHandler(StorageFileNotFoundException::class)
-    fun handleStorageFileNotFound(exc: StorageFileNotFoundException): ResponseEntity<*> {
-        return ResponseEntity.notFound().build<Any>()
-    }
-
-    @ExceptionHandler(StorageException::class)
-    fun handleStorageError(exc: StorageException): ResponseEntity<*> {
-        return ResponseEntity.badRequest().build<Any>()
     }
 }
