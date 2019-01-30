@@ -37,7 +37,9 @@ class WebSecurity(
                 .antMatchers(HttpMethod.POST, "/static/models*/**").hasRole("MODULE")
 
                 .antMatchers(HttpMethod.POST, "/models*/**").hasRole("MODULE")
+
                 .antMatchers(HttpMethod.POST, "/trackedRepositories/**/incrementBuild").hasRole("MODULE")
+                .antMatchers(HttpMethod.POST, "/trackedRepositories/**/log").hasRole("MODULE")
 
                 .antMatchers(HttpMethod.GET, "**").permitAll()
                 .anyRequest().authenticated()

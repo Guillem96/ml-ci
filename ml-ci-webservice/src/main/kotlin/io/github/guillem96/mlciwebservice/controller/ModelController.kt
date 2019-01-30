@@ -3,6 +3,8 @@ package io.github.guillem96.mlciwebservice.controller
 import io.github.guillem96.mlciwebservice.*
 import io.github.guillem96.mlciwebservice.domain.Model
 import io.github.guillem96.mlciwebservice.domain.ModelStatus
+import org.springframework.data.rest.webmvc.PersistentEntityResource
+import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler
 import org.springframework.data.rest.webmvc.RepositoryRestController
 import org.springframework.http.ResponseEntity
 import org.springframework.http.ResponseEntity.*
@@ -17,10 +19,11 @@ class ModelController(
 
     /**
      * Creates a model linked with a tracked repository in a single shot
-     * Returns the id associated with the new model
+     * Returns the new model
      */
     @PostMapping("/withTrackedRepository")
-    fun createModel(@RequestBody data: ModelWithRepo): ResponseEntity<Long> {
+    fun createModel(@RequestBody data: ModelWithRepo,
+                    resourceAssembler: PersistentEntityResourceAssembler): ResponseEntity<PersistentEntityResource> {
         // Get repository or return 404
         trackedRepositoryRepo.findOne(data.trackedRepository)?.let {
             val model = Model(algorithm = data.algorithm,
@@ -29,9 +32,8 @@ class ModelController(
                     buildNum = it.buildNum, // Build number is the same as the current buildNum of the trackedRepository
                     trackedRepository = it)
             modelRepository.save(model)
-            return ok(model.id!!)
+            return ok(resourceAssembler.toResource(model))
         }
-
         return notFound().build()
     }
 
@@ -41,11 +43,12 @@ class ModelController(
      */
     @PostMapping("{id}/status/{status}")
     fun updateModelStatus(@PathVariable("id") modelId: Long,
-                          @PathVariable("status") status: ModelStatus): ResponseEntity<ModelStatus> {
+                          @PathVariable status: ModelStatus,
+                          resourceAssembler: PersistentEntityResourceAssembler): ResponseEntity<PersistentEntityResource> {
         modelRepository.findOne(modelId)?.let {
             it.status = status
             modelRepository.save(it)
-            return ok(status)
+            return ok(resourceAssembler.toResource(it))
         }
 
         return notFound().build()
@@ -56,14 +59,13 @@ class ModelController(
      * */
     @PostMapping("{id}/evaluations/")
     fun updateEvaluations(@PathVariable("id") modelId: Long,
-                          @RequestBody evaluations: Map<String, Double>): ResponseEntity<Any> {
+                          @RequestBody evaluations: Map<String, Double>,
+                          resourceAssembler: PersistentEntityResourceAssembler): ResponseEntity<PersistentEntityResource> {
         modelRepository.findOne(modelId)?.let {
-            it.evaluations.clear()
             it.evaluations.putAll(evaluations)
             modelRepository.save(it)
-            return ok(it.evaluations)
+            return ok(resourceAssembler.toResource(it))
         }
-
         return notFound().build()
     }
 }

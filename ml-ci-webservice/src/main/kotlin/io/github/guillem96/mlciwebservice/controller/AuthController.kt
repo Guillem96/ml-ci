@@ -1,9 +1,9 @@
 package io.github.guillem96.mlciwebservice.controller
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import io.github.guillem96.mlciwebservice.domain.User
 import io.github.guillem96.mlciwebservice.UserRepository
 import io.github.guillem96.mlciwebservice.config.auth.JwtTokenProvider
+import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler
 import org.springframework.data.rest.webmvc.RepositoryRestController
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -21,7 +21,8 @@ class AuthController(
 ) {
 
     @PostMapping("/signIn")
-    fun signIn(@RequestBody data: Credentials): ResponseEntity<AuthResponse> {
+    fun signIn(@RequestBody data: Credentials,
+               resourceAssembler: PersistentEntityResourceAssembler): ResponseEntity<AuthResponse> {
 
         if (data.username.isEmpty() or data.password.isEmpty())
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build()
@@ -50,7 +51,4 @@ class AuthController(
 data class Credentials(val username: String, val password: String, val githubToken: String = "")
 
 // Sign in response body
-data class AuthResponse(
-        @JsonIgnoreProperties("trackedRepositories")
-        val user: User,
-        val token: String)
+data class AuthResponse(val user: User, val token: String)

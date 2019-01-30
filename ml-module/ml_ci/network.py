@@ -92,7 +92,7 @@ class Network(object):
             "trackedRepository": self.tracked_repository
         }
         res = self._post("/models/withTrackedRepository", model_json)
-        model.id = int(res.json())
+        model.id = int(res.json()["id"])
 
     def update_model_status(self, model, new_status):
         """Update model status

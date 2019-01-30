@@ -12,6 +12,7 @@ import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer
 class RepositoryRestConfig(private val environment: Environment,
                            private val userRepository: UserRepository,
                            private val trackedRepositoryRepository: TrackedRepositoryRepository,
+                           private val logRepository: LogRepository,
                            private val modelRepository: ModelRepository) : RepositoryRestConfigurer {
 
     @Override
@@ -24,7 +25,7 @@ class RepositoryRestConfig(private val environment: Environment,
     @PostConstruct
     fun init() {
         if(!environment.activeProfiles.contains("Test")) {
-            /* if (!userRepository.existsByUsername("test")) {
+            if (!userRepository.existsByUsername("test")) {
                 val user = User(username = "test",
                         password = User.passwordEncoder.encode("password"),
                         email = "test@gmail.com")
@@ -35,7 +36,16 @@ class RepositoryRestConfig(private val environment: Environment,
                         lastCommit = "5f792244a94136c418644ca60f7359475b7db831",
                         user = user)
                 trackedRepositoryRepository.save(trackedRepository)
-            }*/
+
+                val log: Log = Log(
+                        message = "Testing",
+                        logLevel = LogLevel.INFO,
+                        trackedRepository = trackedRepository,
+                        buildNum = 0)
+
+                logRepository.save(log)
+
+            }
         }
     }
 }
