@@ -6,13 +6,13 @@ import requests
 import json
 import pickle
 
-from utils import delete_dir
+from ml_ci.utils import delete_dir
 
 class Network(object):
     """Class responisble of sending http requests to coordinator module
     """
 
-    _WEBSERVICE = os.environ["COORDINATOR_URL"]
+    # _WEBSERVICE = os.environ["COORDINATOR_URL"]
 
     def __init__(self, tracked_repository):
         """Force clone a github repository

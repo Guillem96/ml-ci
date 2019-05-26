@@ -81,4 +81,4 @@ class CnnApproach(RunnableApproach):
         """
         X = np.array(data['X']) / 255.
         preds = model.predict(X)
-        return [ int(np.argmax(p)) for p in preds ]  # Return the prediction
+        return [ str(np.argmax(p)) for p in preds ]  # Return the prediction

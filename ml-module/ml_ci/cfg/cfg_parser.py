@@ -48,26 +48,24 @@ class YamlCfgParser(object):
             self._check_required_fields(required_fields, d, 'Dataset')
             current_dataset = dict()
             current_dataset['custom'] = d.get('custom', False)
+            current_dataset['path'] = d['path']
 
             if 'dtype' not in d:
                 # FileDatasource
                 current_dataset['label'] = d.get('label')
                 current_dataset['first-line-heading'] = d.get('first-line-heading', True)
                 current_dataset['id'] = d['id']
-                current_dataset['path'] = d['path']
-                current_dataset['factory'] = partial(opt.data.Dataset.read_file, 
-                                                     d['path'],
-                                                     d.get('label'), 
-                                                     current_dataset['first-line-heading'])
+                current_dataset['factory'] = partial(opt.data.Dataset.read_file,
+                                                     label=d.get('label'), 
+                                                     first_line_heading=current_dataset['first-line-heading'])
             else:
                 # Directory or custom datasource
                 current_dataset['parsing-pattern'] = d.get('parsing-pattern')
                 current_dataset['dtype'] = d['dtype']
                 current_dataset['id'] = d['id']
                 current_dataset['factory'] = partial(opt.data.Dataset.from_dir, 
-                                                     d['path'], 
-                                                     d.get('parsing-pattern'), 
-                                                     d['dtype'])
+                                                     path_pattern=d.get('parsing-pattern'), 
+                                                     datatype=d['dtype'])
             result.append(current_dataset)
         return result
 

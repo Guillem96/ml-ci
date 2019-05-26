@@ -1,8 +1,8 @@
 import sys
 import shutil
 from pathlib import Path
-from importlib.util import spec_from_file_location, module_from_spec
 from inspect import getabsfile
+
 import optapp as opt
 
 class ProjectGenerator(object):
@@ -41,7 +41,10 @@ class ProjectGenerator(object):
                 self._add_custom_datasource(project, d)
                 sys.path.append(project.path)
 
-            ds = d['factory']()
+            if not Path(d['path']).is_absolute():
+                d['path'] = str(self.src_files.joinpath(d['path']))
+
+            ds = d['factory'](path=d['path'])
             ds.save()
 
         # Generate the subdatasets
@@ -86,6 +89,8 @@ class ProjectRunner(object):
         
         r.as_dataframe().to_csv(results_path, index=False) 
 
+        return results_path
+
     def run_and_evaluate(self):
         opt.set_project_path(self.project.path)
         
@@ -95,6 +100,7 @@ class ProjectRunner(object):
             # TODO: Communicate web service that an approach is running
             self._run_approach(a)
             self._evaluate_approach(a)
+            # TODO: Upload evaluations
             # TODO: Communicate web service that an approach has finished
 
         sys.path.remove(self.project.path)
