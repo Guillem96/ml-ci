@@ -33,6 +33,7 @@ venv/
 # Filesystem used directories
 cloned/
 trained_models/
+optapp-projects/
 
 # Secret environment variables
 environment.sh
