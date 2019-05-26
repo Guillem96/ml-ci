@@ -1,17 +1,17 @@
 package io.github.guillem96.mlciwebservice.controller
 
-import org.springframework.http.ResponseEntity
-import org.springframework.web.multipart.MultipartFile
-import org.springframework.http.HttpHeaders
 import io.github.guillem96.mlciwebservice.service.StorageService
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.multipart.MultipartFile
 
 
 @Controller
-@RequestMapping("/static/models")
-class ModelUploaderController(private val storageService: StorageService) {
+@RequestMapping("/static/evaluations")
+class EvaluationUploaderController(private val storageService: StorageService) {
 
     /**
      * Get and return an static file

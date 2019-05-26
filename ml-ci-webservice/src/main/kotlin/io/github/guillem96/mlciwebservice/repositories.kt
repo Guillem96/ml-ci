@@ -1,12 +1,12 @@
-package io.github.guillem96.mlciwebservice
+ package io.github.guillem96.mlciwebservice
 
-import io.github.guillem96.mlciwebservice.domain.Model
+import io.github.guillem96.mlciwebservice.domain.Approach
 import io.github.guillem96.mlciwebservice.domain.TrackedRepository
 import io.github.guillem96.mlciwebservice.domain.User
 import org.springframework.data.repository.CrudRepository
 import org.springframework.data.rest.core.annotation.RepositoryRestResource
 
-@RepositoryRestResource
+ @RepositoryRestResource
 interface TrackedRepositoryRepository: CrudRepository<TrackedRepository, Long>
 
 @RepositoryRestResource
@@ -16,7 +16,7 @@ interface UserRepository: CrudRepository<User, Long> {
 }
 
 @RepositoryRestResource
-interface ModelRepository: CrudRepository<Model, Long>
+interface ApproachRepository: CrudRepository<Approach, Long>
 
 
 // CrudRepository extension to use kotlin null safe advantage

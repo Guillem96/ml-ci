@@ -8,16 +8,16 @@ import optapp as opt
 class ProjectGenerator(object):
     PROJECTS_PATH = Path('optapp-projects')
 
-    def __init__(self, cfg, src_files=None):
+    def __init__(self, cfg, src_files=None, webservice=None):
         self.cfg = cfg
         self.src_files = Path(src_files)
+        self.webservice = webservice
         self.PROJECTS_PATH.mkdir(exist_ok=True, parents=True)
     
     def _add_custom_datasource(self, project, d):
         sys.path.append(str(self.src_files))
 
         split_module = d['dtype'].split('.')
-        print('.'.join(split_module[:-1]))
         datasource_module = opt.utils.import_from('.'.join(split_module[:-1]), 
                                                  split_module[-1])
 
@@ -59,6 +59,8 @@ class ProjectGenerator(object):
             approach = a['factory'](subdataset=subdataset, project=project)
             approach.save()
 
+            self.webservice and self.webservice.create_approach(a)
+
             src_approach = self.src_files.joinpath(a['path'], a['name'] + '.py')
             shutil.copy(src_approach, approach.script_path)
         
@@ -87,9 +89,10 @@ class ProjectRunner(object):
         results_path.mkdir(exist_ok=True, parents=True)
         results_path = results_path.joinpath(approach['name'] + "_evaluation.csv")
         
-        r.as_dataframe().to_csv(results_path, index=False) 
+        df = r.as_dataframe()
+        df.to_csv(results_path, index=False) 
 
-        return results_path
+        return df
 
     def run_and_evaluate(self):
         opt.set_project_path(self.project.path)
@@ -97,10 +100,16 @@ class ProjectRunner(object):
         sys.path.append(self.project.path)
 
         for a in self.cfg.approaches:
-            # TODO: Communicate web service that an approach is running
+            self.webservice and self.webservice.update_approach_status(a, "TRAINING")
+
+            # Run and evaluate the approach
             self._run_approach(a)
-            self._evaluate_approach(a)
-            # TODO: Upload evaluations
-            # TODO: Communicate web service that an approach has finished
+            evaluations_df = self._evaluate_approach(a)
+            
+            # Upload the results
+            self.webservice and self.webservice.upload_evaluations(evaluations_df, a)
+
+            # Set approach done
+            self.webservice and self.webservice.update_approach_status(a, "TRAINED")
 
         sys.path.remove(self.project.path)

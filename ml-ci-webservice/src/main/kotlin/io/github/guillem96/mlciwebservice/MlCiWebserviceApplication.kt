@@ -1,9 +1,9 @@
 package io.github.guillem96.mlciwebservice
 
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.runApplication
 import io.github.guillem96.mlciwebservice.service.StorageService
 import org.springframework.boot.CommandLineRunner
+import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
 
 

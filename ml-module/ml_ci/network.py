@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
 import os
-from git import Repo
 import requests
-import json
-import pickle
+from pathlib import Path
+
+from git import Repo
 
 from ml_ci.utils import delete_dir
 
@@ -12,7 +12,7 @@ class Network(object):
     """Class responisble of sending http requests to coordinator module
     """
 
-    # _WEBSERVICE = os.environ["COORDINATOR_URL"]
+    _WEBSERVICE = os.environ["COORDINATOR_URL"]
 
     def __init__(self, tracked_repository):
         """Force clone a github repository
@@ -34,13 +34,13 @@ class Network(object):
             string -- Directory where repo has been cloned
         """
         name = url.split('/')[-1]
-        directory = os.path.join('cloned', name)
+        directory = str(Path('cloned', name))
 
         # In case repository has already been downloaded, remove it
         delete_dir(directory)
         
         # Clone
-        Repo.clone_from(url, directory)
+        Repo.clone_from(url,directory)
         return directory
 
     def _post(self, path, body={}):
@@ -68,76 +68,77 @@ class Network(object):
         res = requests.post(Network._WEBSERVICE + path, 
                                 json=body,
                                 headers=headers)
+        if res.status_code > 300:
+            print(res.json())
+
         return res
 
 
     def authenticate(self):
         """Authenticate as ROLE_MODULE
         """
-        credentials = dict(username=os.environ["ML_MODULE_USER"], password=os.environ["ML_MODULE_PASSWORD"])
+        credentials = dict(username=os.environ["ML_MODULE_USER"], 
+                           password=os.environ["ML_MODULE_PASSWORD"])
         res = self._post("/auth/signIn", credentials)
         self.token = res.json()["token"]
 
 
-    def create_model(self, model):
-        """Creates a model
+    def create_approach(self, approach):
+        """Creates a new approach
 
         Arguments:
-            model {ModelCfg} -- Model configuration
+            approach {dict} -- Approach configuration
         """
-        model_json = {
-            "algorithm": model.name,
-            "hyperParameters": model.params,
+        approach_json = {
+            "name": approach['name'],
             "status": "PENDENT",
             "trackedRepository": self.tracked_repository
         }
-        res = self._post("/models/withTrackedRepository", model_json)
-        model.id = int(res.json())
+        res = self._post("/models/withTrackedRepository", approach_json)
+        approach['id'] = int(res.json())
 
-    def update_model_status(self, model, new_status):
-        """Update model status
+    def update_approach_status(self, approach, new_status):
+        """Update approach status
         
         Arguments:
-            model {ModelCfg} -- Model configuration
+            approach {dict} -- Approach configuration
             status { PENDENT | TRAINING | ERROR | TRAINED } -- New status
         """
-        self._post("/models/{}/status/{}".format(model.id, new_status))
+        self._post("/models/{}/status/{}".format(approach['id'], new_status))
     
-    def add_evaluations(self, model, evaluations):
-        """Add evaluations to model
+    # def add_evaluations(self, model, evaluations):
+    #     """Add evaluations to model
         
-        Arguments:
-            model {ModelCfg} -- Model configuration
-            evaluations {dict} -- Evaluations dictionary
-        """
-        self._post("/models/{}/evaluations".format(model.id), evaluations)
+    #     Arguments:
+    #         model {ModelCfg} -- Model configuration
+    #         evaluations {dict} -- Evaluations dictionary
+    #     """
+    #     self._post("/models/{}/evaluations".format(model.id), evaluations)
 
     def increment_build(self):
         """Increment training batch
         """
         self._post("/trackedRepositories/{}/incrementBuild".format(self.tracked_repository))
 
-    def upload_model(self, model, model_id):
-        """Upload serialized trained model to webservice
+    def upload_evaluations(self, evaluations_df, approach):
+        """Upload csv file containing the evaluations results
 
         Arguments:
-            model {Sklearn model} -- Trained model
-            model_id {integer} -- Model ID referencing webservice instance
+            evaluations_path {pd.DataFrame} -- Evaluations dataframe
+            approach_id {int} -- Model ID referencing webservice instance
         """
-        dst_dir = "trained_models"
-        
-        if not os.path.exists(dst_dir):
-            os.makedirs(dst_dir)
-            
-        name = "{}_{}_{}" \
-          .format(model.__class__.__name__, model_id, self.tracked_repository)
-        
-        with open(os.path.join(dst_dir, name), "wb") as f:
-            pickle.dump(model, f)
 
-        with open(os.path.join(dst_dir, name), "rb") as f:
-            requests.post(Network._WEBSERVICE + "/static/models", 
-                                headers={ "Authorization": "Bearer " + self.token },
-                                files={'file': f })
-        os.remove(os.path.join(dst_dir, name))
+        dst_dir = Path("evaluations")
+        dst_dir.mkdir(exist_ok=True)
         
+        name = "{}_{}_{}.csv" \
+          .format(approach['name'], approach['id'], self.tracked_repository)
+        
+        evaluations_df.to_csv(dst_dir.joinpath(name), index=False)
+
+        with dst_dir.joinpath(name).open() as f:
+            requests.post(Network._WEBSERVICE + "/static/evaluations", 
+                          headers={ "Authorization": "Bearer " + self.token },
+                          files={'file': f })
+        
+        dst_dir.joinpath(name).unlink()

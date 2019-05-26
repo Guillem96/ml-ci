@@ -1,16 +1,18 @@
 package io.github.guillem96.mlciwebservice.controller
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import io.github.guillem96.mlciwebservice.domain.User
 import io.github.guillem96.mlciwebservice.UserRepository
 import io.github.guillem96.mlciwebservice.config.auth.JwtTokenProvider
+import io.github.guillem96.mlciwebservice.domain.User
 import org.springframework.data.rest.webmvc.RepositoryRestController
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.http.ResponseEntity.ok
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
 
 @RepositoryRestController
 @RequestMapping("/auth")

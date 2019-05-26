@@ -3,8 +3,8 @@ import os
 import json
 import pika
 
-from entrypoint import train
-from network import Network
+from ml_ci.entrypoint import train
+from ml_ci.network import Network
 
 def train_callback(ch, method, properties, body):
     """Callback to handle queue message
