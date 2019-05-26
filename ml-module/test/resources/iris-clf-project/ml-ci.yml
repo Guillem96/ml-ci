@@ -1,0 +1,21 @@
+project: iris-clf-project
+
+datasets:
+  - id: Iris
+    path: /home/guillem/data/Iris.csv
+    label: Species
+    first-line-heading: true
+
+subdatasets:
+  - from: Iris
+    method: k_fold
+    k: 3
+    id: iris-sbds
+
+approaches:
+  - name: logistic_regression
+    subdataset: iris-sbds
+    metrics:
+      - recall
+      - precision
+      - f1

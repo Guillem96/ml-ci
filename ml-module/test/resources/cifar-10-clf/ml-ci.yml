@@ -1,0 +1,21 @@
+project: cifar-10-project
+
+datasets:
+  - id: CIFAR-10
+    custom: true
+    path: /home/guillem/data/CIFAR-10
+    dtype: datasources.image_tensor_ds.ImageTensorDatasource
+
+subdatasets:
+  - from: CIFAR-10
+    method: train_test
+    train_size: 0.8
+    id: CIFAR-10-sbds
+
+approaches:
+  - name: cnn
+    subdataset: CIFAR-10-sbds
+    metrics:
+      - recall
+      - precision
+      - f1

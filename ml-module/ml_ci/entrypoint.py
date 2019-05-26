@@ -16,7 +16,7 @@ def parse_cfg(cfg_file_path):
     """
     cfg = None
     with open(cfg_file_path, 'r') as f:
-        cfg = YamlCfgParser(f).parsed_cfg
+        cfg = YamlCfgParser(f).parse()
     return cfg
 
 def train(repo_id, url):

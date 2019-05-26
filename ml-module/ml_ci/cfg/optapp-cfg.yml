@@ -1,0 +1,30 @@
+project: whole-cfg
+
+datasets:
+  - dtype: img
+    parsing-pattern: "{}_{class}.png"
+    path: /home/guillem/data/CIFAR-10
+    id: CIFAR-10
+
+  - path: /home/guillem/data/Iris.csv
+    id: Iris
+    label: Species
+    first-line-heading: true
+
+subdatasets:
+  - from: CIFAR-10
+    method: train_test
+    train_size: 0.8
+    id: CIFAR-10_train_test_0.8
+
+  - from: Iris
+    method: k_fold
+    k: 3
+    id: Iris_k_fold_3 
+
+approaches:
+  - name: cnn
+    subdataset: CIFAR-10-train-test
+
+  - name: logistic_regression
+    subdataset: Iris_k_fold_3  
