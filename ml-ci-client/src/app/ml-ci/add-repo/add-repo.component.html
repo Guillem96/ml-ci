@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container mb-4 pb-4">
   <div class="banner">
     <ul class="list-inline">
       <li class="list-inline-item">    
@@ -10,10 +10,10 @@
     </ul>
   </div>
   <div class="integrate display-4">Integrate MlCi - GitHub App Integration</div>
-  <app-empty *ngIf="!githubRepos || githubRepos.length === 0"></app-empty>
-  <table mdbTable hover="true">
+  <app-empty *ngIf="!githubRepos.current || githubRepos.current.length === 0"></app-empty>
+  <table class="w-100" mdbTable hover="true">
     <tbody>
-      <tr mdbTableCol *ngFor="let el of githubRepos; let i = index" (click)="confirmModal(i, basicModal)">
+      <tr mdbTableCol *ngFor="let el of githubRepos.current; let i = index" (click)="confirmModal(i, basicModal)">
         <td><a href="https://github.com/{{ el.full_name }}"><i class="fa fa-github fa-lg"></i></a></td>
         <td>
           <i *ngIf="el.private" class="fas fa-unlock-alt fa-lg"></i>
@@ -25,6 +25,17 @@
       </tr>
     </tbody>
   </table>
+  <div class="text-right w-100">
+    <div class="btn-group ">
+      <label size="sm" *ngIf="repoPage > 1" mdbBtn color="elegant" (click)="prevPage()" mdbWavesEffect>
+        <i class="fas text-white fa-chevron-left mr-1"></i> Prev
+      </label>
+      <label size="sm" *ngIf="githubRepos.next?.length > 0" mdbBtn color="elegant" (click)="nextPage()" mdbWavesEffect>
+        Next <i class="fas text-white fa-chevron-right ml-1"></i>
+      </label>
+    </div>
+  </div>
+  
 </div>
 
 
@@ -34,8 +45,8 @@
       <div class="modal-header">
         <h4 class="modal-title w-100" id="myModalLabel"><i class="fas fa-brain"></i> MlCi Integration</h4>
       </div>
-      <div class="modal-body" *ngIf="githubRepos.length > 0">
-        Do you wish to integrate MlCi to <b>{{ githubRepos[selectedIndex].name }}</b>?
+      <div class="modal-body" *ngIf="githubRepos.current && githubRepos.current.length > 0">
+        Do you wish to integrate MlCi to <b>{{ githubRepos.current[selectedIndex].name }}</b>?
       </div>
       <div class="modal-footer">
         <button type="button" size="sm" mdbBtn color="light" class="waves-light" aria-label="Close" (click)="basicModal.hide()" mdbWavesEffect>Close</button>

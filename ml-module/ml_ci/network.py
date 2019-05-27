@@ -69,7 +69,7 @@ class Network(object):
                                 json=body,
                                 headers=headers)
         if res.status_code > 300:
-            print(res.json())
+            print(res)
 
         return res
 
@@ -94,7 +94,7 @@ class Network(object):
             "status": "PENDENT",
             "trackedRepository": self.tracked_repository
         }
-        res = self._post("/models/withTrackedRepository", approach_json)
+        res = self._post("/approaches/withTrackedRepository", approach_json)
         approach['id'] = int(res.json())
 
     def update_approach_status(self, approach, new_status):
@@ -104,7 +104,7 @@ class Network(object):
             approach {dict} -- Approach configuration
             status { PENDENT | TRAINING | ERROR | TRAINED } -- New status
         """
-        self._post("/models/{}/status/{}".format(approach['id'], new_status))
+        self._post("/approaches/{}/status/{}".format(approach['id'], new_status))
     
     # def add_evaluations(self, model, evaluations):
     #     """Add evaluations to model

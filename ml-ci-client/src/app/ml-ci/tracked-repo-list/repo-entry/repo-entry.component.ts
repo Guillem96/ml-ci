@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { TrackedRepository } from 'src/app/shared/models/tracked-repository';
-import { UserService } from 'src/app/shared/services/user.service';
-import { Model } from 'src/app/shared/models/model';
+import { UserService } from './../../../shared/services/user.service';
+import { Approach } from './../../../shared/models/approach';
 import { interval, Subscription } from 'rxjs';
 
 @Component({
@@ -41,7 +41,7 @@ export class RepoEntryComponent implements OnInit, OnDestroy {
   }
 
   private fetchModels(repo: TrackedRepository) {
-    repo.getRelationArray(Model, 'models').subscribe(res => {
+    repo.getRelationArray(Approach, 'approaches').subscribe(res => {
       repo.models = res;
     });
   }

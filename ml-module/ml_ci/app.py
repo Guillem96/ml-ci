@@ -24,6 +24,7 @@ def train_callback(ch, method, properties, body):
         # Send an ack in case message cannot be handled properly
         ch.basic_ack(delivery_tag = method.delivery_tag)
     else:
+
         # Process the message (Means train all models in config file) 
         train(repo_id, repo_url)
         # Send the ack to notify that the message has been processed correctly

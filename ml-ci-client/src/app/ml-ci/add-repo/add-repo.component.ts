@@ -5,6 +5,7 @@ import { UserService } from 'src/app/shared/services/user.service';
 import { TrackedRepository } from 'src/app/shared/models/tracked-repository';
 import { TrackedRepositoryService } from 'src/app/shared/services/tracked-repository.service';
 import { Router } from '@angular/router';
+import { Observable, forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-add-repo',
@@ -13,8 +14,13 @@ import { Router } from '@angular/router';
 })
 export class AddRepoComponent implements OnInit {
 
-  public githubRepos: GitHubRepository[] = [];
+  public githubRepos: { 
+    prev?: GitHubRepository[], 
+    current?: GitHubRepository[], 
+    next?: GitHubRepository[]} = {};
+
   public selectedIndex: number = 0;
+  public repoPage: number = 1;
 
   constructor(public userService: UserService, 
               private gitHubService: GithubService,
@@ -22,11 +28,13 @@ export class AddRepoComponent implements OnInit {
               private trackedRepositoryService: TrackedRepositoryService) { }
 
   ngOnInit() {
-    this.gitHubService.getRepos().subscribe(res => { this.githubRepos = res; console.log(res)});
+    this.fetchRepositories();
   }
 
   public confirmModal(index: number, basicModal: any) {
     this.selectedIndex = index;
+    console.log(this.githubRepos.current[index].name);
+    
     basicModal.show();
   }
 
@@ -36,9 +44,21 @@ export class AddRepoComponent implements OnInit {
     );
   }
 
+  private fetchRepositories() {
+    forkJoin(
+      this.gitHubService.getRepos(this.repoPage - 1),
+      this.gitHubService.getRepos(this.repoPage),
+      this.gitHubService.getRepos(this.repoPage + 1)
+    ).subscribe(res => {
+      this.githubRepos.prev = res[0];
+      this.githubRepos.current = res[1];
+      this.githubRepos.next = res[2];
+    });
+  }
+
   private async addTrackedRepoAsync(): Promise<void> {
     try {
-      const repo = await this.gitHubService.getRepoInfo(this.githubRepos[this.selectedIndex].full_name).toPromise();
+      const repo = await this.gitHubService.getRepoInfo(this.githubRepos.current[this.selectedIndex].full_name).toPromise();
       
       let trackedRepository = new TrackedRepository();
       trackedRepository.lastCommit = repo.commits[0].sha;
@@ -48,6 +68,18 @@ export class AddRepoComponent implements OnInit {
       await createdTrackedRepo.addRelation('user', this.userService.authUser).toPromise();
     } catch (err) {
       console.log(err);
+    }
+  }
+
+  public nextPage(): void {
+    this.repoPage++;
+    this.fetchRepositories();
+  }
+
+  public prevPage(): void {
+    if (this.repoPage > 0) {
+      this.repoPage--;
+      this.fetchRepositories();
     }
   }
 }

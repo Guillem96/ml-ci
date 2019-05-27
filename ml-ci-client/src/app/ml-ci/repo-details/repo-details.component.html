@@ -12,7 +12,7 @@
       <app-empty *ngIf="!repo.lastTrain || repo.lastTrain.length === 0"></app-empty>  
       <div class="row">
         <div *ngFor="let model of repo.lastTrain" class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
-          <app-model-details (download)="afterDownloadModal.show()" [trackedRepo]="repo" [model]="model"></app-model-details>
+          <app-model-details (download)="afterDownloadModal.show()" [trackedRepo]="repo" [approach]="model"></app-model-details>
         </div>
       </div>
     </app-tab>
@@ -23,27 +23,38 @@
         <h3 class="training-title">Training #{{ modelTrain.key }}</h3>
         <div class="row">
           <div *ngFor="let model of modelTrain.value" class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
-            <app-model-details (download)="afterDownloadModal.show()" [trackedRepo]="repo" [model]="model"></app-model-details>
+            <app-model-details (download)="afterDownloadModal.show()" [trackedRepo]="repo" [approach]="model"></app-model-details>
           </div>
         </div>
       </div>
     </app-tab>
-  </app-tabs>
+  </app-tabs> 
 </div>
 
 <div mdbModal #afterDownloadModal="mdbModal" [config]="{ignoreBackdropClick: true}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myBasicModalLabel" aria-hidden="true">
     <div class="modal-lg modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title w-100" id="myModalLabel"><i class="fas fa-brain"></i> Use model</h4>
+          <h4 class="modal-title w-100" id="myModalLabel"><i class="fas fa-brain"></i> Get best hyperparameter configuration</h4>
         </div>
         <div class="modal-body">
           <div class="code">
-            <b>import</b> pickle<br>
+            <b>import</b> pandas <b>as</b> pd<br>
             <br>
 
-            <span class="var">model</span> = pickle.<span class="method">load</span>(<span class="method">open</span>(<span class="str">"path_to_model"</span>, <span class="str">"rb"</span>))
-            <span class="var">model</span>.<span class="method">predict</span>(instance_to_predict)
+            <span class="comment"># Load evaluations as a pandas DataFrame</span><br>
+            <span class="var">df</span> = pd.<span class="method">read_csv</span>(<span class="str">"path_to_evaluation"</span>) <br>
+            <br>
+            
+            <span class="comment"># If subdataset uses k_fold method is convinient to group the parameters</span><br>
+            <span class="var">hyperparameters</span> =  [<span class="str">"param1"</span>, <span class="str">"param2"</span>, ...]<br>
+            <span class="var">metrics_summary</span> = <span class="var">df</span>.<span class="method">groupby</span>(<span class="var">hyperparameters</span>, as_index=False).<span class="method">mean</span>()<br>
+            <br>
+            
+            <span class="comment"># Get the position corresponding to max f1 score</span><br>
+            <span class="var">max_f1_metric</span> = <span class="var">metrics_summary</span>.f1.<span class="method">idxmax</span>()<br>
+            <span class="var">max_f1_metric</span>.<span class="method">iloc</span>[max_f1_metric][<span class="var">hyperparameters</span>]
+            
           </div>
         </div>
         <div class="modal-footer">

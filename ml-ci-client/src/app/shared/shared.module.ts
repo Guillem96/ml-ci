@@ -7,7 +7,7 @@ import { TabComponent } from './tabs/tab/tab.component';
 import { AuthService } from './services/auth.service';
 import { AuthGuard } from './guards/auth.guard';
 import { TrackedRepositoryService } from './services/tracked-repository.service';
-import { ModelService } from './services/model.service';
+import { ApproachService } from './services/approach.service';
 import { EmptyComponent } from './empty/empty.component';
 
 @NgModule({
@@ -31,7 +31,7 @@ import { EmptyComponent } from './empty/empty.component';
     AuthService,
     AuthGuard,
     TrackedRepositoryService,
-    ModelService
+    ApproachService
   ]
 })
 export class SharedModule { }

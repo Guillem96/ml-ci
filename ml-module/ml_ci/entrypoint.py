@@ -33,7 +33,10 @@ def clean_up_dirs(*dirs):
 def train(repo_id, url):
     webservice = Network(tracked_repository=repo_id)
     webservice.authenticate()
-
+    
+    # Update the batch count for this repository
+    webservice and webservice.increment_build()
+        
     # Clone the repository
     output_path = Network.clone_github_repository(url)
     
@@ -45,9 +48,6 @@ def train(repo_id, url):
         proj = ProjectGenerator(cfg, output_path, webservice).generate()
         ProjectRunner(proj, cfg, webservice).run_and_evaluate()
 
-        # Update the batch count for this repository
-        webservice and webservice.increment_build()
-        
         # Remove the project and the cloned repo
         clean_up_dirs(proj.path, output_path)
     else:

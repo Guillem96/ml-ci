@@ -1,19 +1,19 @@
-<mdb-card class="model-wrapper ml-1 mb-2 mt-3" [ngClass]="model.status.toLowerCase()">
+<mdb-card class="model-wrapper ml-1 mb-2 mt-3" [ngClass]="approach.status.toLowerCase()">
   <mdb-card-body class="model-body">
     <mdb-card-title>
-      <h4 class="ml-4 mt-3 title status-desc"><i class="mr-2" [ngClass]="statusIcon[model.status]"></i>{{ model.algorithm }}</h4>
+      <h4 class="ml-4 mt-3 title status-desc"><i class="mr-2" [ngClass]="statusIcon[approach.status]"></i>{{ approach.name }}</h4>
     </mdb-card-title>
     <mdb-card-text>
       <ul class="ml-4 mt-3 info">
-        <li *ngIf="model.trainDate"><i class="far fa-calendar-alt"></i> Trained: {{ model.trainDate | date:'yyyy/MM/dd HH:mm' }}</li>
-        <li *ngIf="!model.trainDate"><i class="far fa-calendar-alt"></i> Trained: -</li>
+        <li *ngIf="approach.trainDate"><i class="far fa-calendar-alt"></i> Trained: {{ approach.trainDate | date:'yyyy/MM/dd HH:mm' }}</li>
+        <li *ngIf="!approach.trainDate"><i class="far fa-calendar-alt"></i> Trained: -</li>
       </ul>
     </mdb-card-text>
   </mdb-card-body>
   <mdb-card-footer class="text-right card-footer">
     <ul class="list-inline">
       <li class="list-inline-item mr-3"><a><i class="far fa-sticky-note"></i> View logs</a></li>
-      <li *ngIf="!downloading" class="list-inline-item"><button type="button" mdbBtn color="link"(click)="downloadModel()" [disabled]="model.status !== 'TRAINED'" ><i class="fas fa-download"></i> Download</button></li>
+      <li *ngIf="!downloading" class="list-inline-item"><button type="button" mdbBtn color="link" (click)="downloadModel()" [disabled]="approach.status !== 'TRAINED'" ><i class="fas fa-download"></i> Download</button></li>
       <li *ngIf="downloading" class="list-inline-item"><a><i class="fas fa-spin fa-clock"></i> Downloading...</a></li>
     </ul>
   </mdb-card-footer>

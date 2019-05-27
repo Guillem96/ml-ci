@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 
 @RepositoryRestController
-@RequestMapping("/models")
+@RequestMapping("/approaches")
 class ModelController(
         private val approachRepository: ApproachRepository,
         private val trackedRepositoryRepo: TrackedRepositoryRepository

@@ -5,8 +5,7 @@ import { UserService } from './../../shared/services/user.service';
 import { TrackedRepository } from 'src/app/shared/models/tracked-repository';
 import { Component, OnInit, Input, OnDestroy, OnChanges } from '@angular/core';
 import { interval, Subscription, Observable, forkJoin } from 'rxjs';
-import { Model } from 'src/app/shared/models/model';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { Approach } from './../../shared/models/approach';
 
 @Component({
   selector: 'app-repo-details',
@@ -20,7 +19,7 @@ export class RepoDetailsComponent implements OnInit, OnDestroy, OnChanges {
   public loading = true;
   public loadingMetadata = true;
 
-  public modelsByTraining: Map<number, Model[]> = new Map();
+  public modelsByTraining: Map<number, Approach[]> = new Map();
 
   private subscription: Subscription;
 
@@ -29,7 +28,7 @@ export class RepoDetailsComponent implements OnInit, OnDestroy, OnChanges {
               private githubService: GithubService) { }
 
   ngOnInit() {
-    this.subscription = interval(5000).subscribe(
+    this.subscription = interval(3000).subscribe(
       () => {
         this.fetchRepoData();
       }
@@ -52,10 +51,12 @@ export class RepoDetailsComponent implements OnInit, OnDestroy, OnChanges {
     const urlSplit = this.repo.url.split('/');
     forkJoin(
       this.trackedRepositoryService.get(this.repo.id),
-      this.repo.getRelationArray(Model, 'models'),
+      this.repo.getRelationArray(Approach, 'approaches'),
       this.githubService.getRepoInfo(urlSplit[urlSplit.length - 2] + '/' + urlSplit[urlSplit.length - 1])
     ).subscribe(
-      (res: any[]) => {        
+      (res: any[]) => {    
+        console.log(res);
+            
         this.repo = res[0];
         this.repo.models = res[1];
         this.githubRepo = res[2];

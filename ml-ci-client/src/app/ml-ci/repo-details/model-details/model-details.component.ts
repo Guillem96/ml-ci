@@ -1,7 +1,7 @@
-import { ModelService } from './../../../shared/services/model.service';
+import { ApproachService } from '../../../shared/services/approach.service';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Model } from 'src/app/shared/models/model';
-import { TrackedRepository } from 'src/app/shared/models/tracked-repository';
+import { Approach } from './../../../shared/models/approach';
+import { TrackedRepository } from './../../../shared/models/tracked-repository';
 
 @Component({
   selector: 'app-model-details',
@@ -10,7 +10,7 @@ import { TrackedRepository } from 'src/app/shared/models/tracked-repository';
 })
 export class ModelDetailsComponent implements OnInit {
 
-  @Input() model: Model;
+  @Input() approach: Approach;
   @Input() trackedRepo: TrackedRepository;
 
   @Output() download = new EventEmitter<void>();
@@ -25,7 +25,7 @@ export class ModelDetailsComponent implements OnInit {
     TRAINING: 'far fa-clock fa-spin'
   };
 
-  constructor(private modelService: ModelService) { }
+  constructor(private approachService: ApproachService) { }
 
   ngOnInit() {
   }
@@ -34,7 +34,7 @@ export class ModelDetailsComponent implements OnInit {
     this.downloading = true;
     this.download.emit();
 
-    this.modelService.downloadModel(this.model, this.trackedRepo.id).subscribe(
+    this.approachService.downloadEvaluation(this.approach, this.trackedRepo.id).subscribe(
       (res: any) => {
         this.downloadFile(res, 'octet/stream');
       }
@@ -55,7 +55,7 @@ export class ModelDetailsComponent implements OnInit {
     const url = window.URL.createObjectURL(blob);
 
     a.href = url;
-    a.download = `${this.model.algorithm}_${this.model.id}_${this.trackedRepo.id}`;
+    a.download = `${this.approach.name}_${this.approach.id}_${this.trackedRepo.id}.csv`;
     a.click();
 
     window.URL.revokeObjectURL(url);

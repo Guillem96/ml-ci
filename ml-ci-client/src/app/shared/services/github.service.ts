@@ -37,7 +37,8 @@ export class GithubService {
     );
   }
 
-  public getRepos(): Observable<GitHubRepository[]> {
-    return this.http.get<GitHubRepository[]>(`${this.GITHUB_API}/user/repos`);
+  public getRepos(page: number = 0, perPage: number = 20): Observable<GitHubRepository[]> {    
+    return this.http.get<GitHubRepository[]>(
+          `${this.GITHUB_API}/user/repos?page=${page}&per_page=${perPage}`);
   }
 }

@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { TrackedRepository } from 'src/app/shared/models/tracked-repository';
-import { Model } from 'src/app/shared/models/model';
+import { TrackedRepository } from './../../shared/models/tracked-repository';
 
 @Component({
   selector: 'app-tracked-repo-list',
