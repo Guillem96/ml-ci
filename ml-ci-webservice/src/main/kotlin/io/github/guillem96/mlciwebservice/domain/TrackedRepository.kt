@@ -30,22 +30,10 @@ data class TrackedRepository(
     val lastTrain: List<Approach>
         get() = approaches.filter { it.buildNum == buildNum }           // Models of current `buildNum`
 
-    @get:JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @get:Enumerated(EnumType.STRING)
-    val status: ApproachStatus                                         // Repository status based on its models
-        get() {
-            val modelStatuses =  lastTrain.map { it.status }
-            return when {
-                modelStatuses.isEmpty() -> ApproachStatus.NONE
-                modelStatuses.contains(ApproachStatus.ERROR) -> ApproachStatus.ERROR
-                modelStatuses.contains(ApproachStatus.TRAINING) -> ApproachStatus.TRAINING
-                modelStatuses.all { it == ApproachStatus.TRAINED } -> ApproachStatus.TRAINED
-                modelStatuses.all { it == ApproachStatus.PENDENT} -> ApproachStatus.PENDENT
-                else -> ApproachStatus.NONE
-            }
-        }
+    @Enumerated(EnumType.STRING)
+    var status: ApproachStatus = ApproachStatus.PENDENT                 // Repository status based on its models
 
     @get:JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    val trainDate: LocalDateTime?                                   // Largest train date from trained models
+    val trainDate: LocalDateTime?                                       // Largest train date from trained models
         get() = lastTrain.map { it.trainDate }.max()
 }

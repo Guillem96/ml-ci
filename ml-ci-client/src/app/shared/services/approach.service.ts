@@ -13,7 +13,7 @@ export class ApproachService {
 
   public downloadEvaluation(approach: Approach, trackedRepositoryId: number): Observable<any> {
     return this.http.get(
-      `${environment.API}/static/evaluations/${approach.name}_${approach.id}_${trackedRepositoryId}.csv`,
+      `${environment.API}/static/evaluations/${approach.name}_${approach.id}_${trackedRepositoryId}_${approach.buildNum}.csv`,
       { responseType: 'arraybuffer' });
   }
 }

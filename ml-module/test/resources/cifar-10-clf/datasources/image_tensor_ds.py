@@ -1,10 +1,10 @@
 import numpy as np
 from PIL import Image
 
-import optapp as opt
+import driftai as dai
 
 
-class ImageTensorDatasource(opt.data.DirectoryDatasource):
+class ImageTensorDatasource(dai.data.DirectoryDatasource):
     def __init__(self, path, parsing_pattern="{}_{class}.png"):
         super(ImageTensorDatasource, self).__init__(path=path, 
                                                     parsing_pattern=parsing_pattern)

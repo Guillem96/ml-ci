@@ -3,7 +3,7 @@ from functools import partial
 
 import yaml
 
-import optapp as opt
+import driftai as dai
 
 class ModelCfg(object):
 
@@ -20,6 +20,7 @@ class ModelCfg(object):
 class MlCiCfg(object):
 
     def __init__(self, **kwargs):
+        self.before = kwargs.get('before_cmd')
         self.project_name = kwargs.get('project_name')
         self.datasets = kwargs.get('datasets')
         self.subdatasets = kwargs.get('subdatasets')
@@ -33,6 +34,7 @@ class YamlCfgParser(object):
 
     def parse(self):
         config = dict()
+        config['before_cmd'] = self._file_content.get('before', [])
         config['project_name'] = self._file_content['project']
         config['datasets'] = self._parse_datasets(self._file_content['datasets'])
         config['subdatasets'] = self._parse_subdatasets(self._file_content['subdatasets'])
@@ -55,7 +57,7 @@ class YamlCfgParser(object):
                 current_dataset['label'] = d.get('label')
                 current_dataset['first-line-heading'] = d.get('first-line-heading', True)
                 current_dataset['id'] = d['id']
-                current_dataset['factory'] = partial(opt.data.Dataset.read_file,
+                current_dataset['factory'] = partial(dai.data.Dataset.read_file,
                                                      label=d.get('label'), 
                                                      first_line_heading=current_dataset['first-line-heading'])
             else:
@@ -63,7 +65,7 @@ class YamlCfgParser(object):
                 current_dataset['parsing-pattern'] = d.get('parsing-pattern')
                 current_dataset['dtype'] = d['dtype']
                 current_dataset['id'] = d['id']
-                current_dataset['factory'] = partial(opt.data.Dataset.from_dir, 
+                current_dataset['factory'] = partial(dai.data.Dataset.from_dir, 
                                                      path_pattern=d.get('parsing-pattern'), 
                                                      datatype=d['dtype'])
             result.append(current_dataset)
@@ -89,9 +91,9 @@ class YamlCfgParser(object):
                 current_sbds['by'] = float(sbds['train_size'])
             else:
                 raise Exception('Method {} not supported'.format(sbds['method']))
-            current_sbds['dataset_factory'] = partial(opt.data.Dataset.load, 
+            current_sbds['dataset_factory'] = partial(dai.data.Dataset.load, 
                                                       current_sbds['from'])
-            current_sbds['factory'] = partial(opt.data.SubDataset, 
+            current_sbds['factory'] = partial(dai.data.SubDataset, 
                                               id=current_sbds['id'],
                                               method=current_sbds['method'], 
                                               by=current_sbds['by'])
@@ -105,9 +107,9 @@ class YamlCfgParser(object):
             self._check_required_fields(required_fields, a, 'Approach')
             current_approach = dict(**a)
             current_approach['path'] = a.get('path', '.')
-            current_approach['sbds_factory'] = partial(opt.data.SubDataset.load,
+            current_approach['sbds_factory'] = partial(dai.data.SubDataset.load,
                                                        a['subdataset'])
-            current_approach['factory'] = partial(opt.Approach, 
+            current_approach['factory'] = partial(dai.Approach, 
                                                   name=a['name'])
             result.append(current_approach)
         return result

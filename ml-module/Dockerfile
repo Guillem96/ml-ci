@@ -8,10 +8,8 @@ COPY ./requirements.txt /app/requirements.txt
 WORKDIR /app
 
 RUN pip install -r requirements.txt --ignore-installed
+RUN pip install git+https://github.com/Appverse/DriftAI@development
 
 COPY ml_ci ml_ci
 
-# ENV FLASK_APP=ml_ci/app.py
-# ENV FLASK_ENV=development
-
-ENTRYPOINT ["python", "-u", "ml_ci/app.py"]
+ENTRYPOINT ["python", "-m", "ml_ci.app"]

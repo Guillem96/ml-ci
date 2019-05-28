@@ -1,12 +1,13 @@
 import sys
+import time
 import shutil
 from pathlib import Path
 from inspect import getabsfile
 
-import optapp as opt
+import driftai as dai
 
 class ProjectGenerator(object):
-    PROJECTS_PATH = Path('optapp-projects')
+    PROJECTS_PATH = Path('driftai-projects')
 
     def __init__(self, cfg, src_files=None, webservice=None):
         self.cfg = cfg
@@ -18,7 +19,7 @@ class ProjectGenerator(object):
         sys.path.append(str(self.src_files))
 
         split_module = d['dtype'].split('.')
-        datasource_module = opt.utils.import_from('.'.join(split_module[:-1]), 
+        datasource_module = dai.utils.import_from('.'.join(split_module[:-1]), 
                                                  split_module[-1])
 
         src_datasource = Path(getabsfile(datasource_module))
@@ -31,9 +32,9 @@ class ProjectGenerator(object):
 
     def generate(self):
         # Generate the project
-        project = opt.Project(name=self.cfg.project_name, 
+        project = dai.Project(name=self.cfg.project_name, 
                               path=str(self.PROJECTS_PATH))
-        opt.set_project_path(project.path)
+        dai.set_project_path(project.path)
 
         # Add the datasets to project
         for d in self.cfg.datasets:
@@ -76,13 +77,13 @@ class ProjectRunner(object):
 
     def _run_approach(self, approach):
         namespace = 'approaches.' + approach['name']
-        cls_name = opt.utils.to_camel_case(approach['name']) + "Approach"
-        approach_cls = opt.utils.import_from(namespace, cls_name)
+        cls_name = dai.utils.to_camel_case(approach['name']) + "Approach"
+        approach_cls = dai.utils.import_from(namespace, cls_name)
         approach_cls().run()
 
     def _evaluate_approach(self, approach):
-        metrics_fns = [opt.result_report.str_to_metric_fn[m] for m in approach['metrics']]
-        r = opt.result_report.ResultReport(approach=opt.Approach.load(approach['name']), 
+        metrics_fns = [dai.result_report.str_to_metric_fn[m] for m in approach['metrics']]
+        r = dai.result_report.ResultReport(approach=dai.Approach.load(approach['name']), 
                                             metrics=metrics_fns)
 
         results_path = Path(self.project.path, 'reports')
@@ -95,7 +96,7 @@ class ProjectRunner(object):
         return df
 
     def run_and_evaluate(self):
-        opt.set_project_path(self.project.path)
+        dai.set_project_path(self.project.path)
         
         sys.path.append(self.project.path)
 

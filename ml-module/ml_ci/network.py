@@ -106,19 +106,19 @@ class Network(object):
         """
         self._post("/approaches/{}/status/{}".format(approach['id'], new_status))
     
-    # def add_evaluations(self, model, evaluations):
-    #     """Add evaluations to model
+    def update_repository_status(self, new_status):
+        """Update tracked repository status
         
-    #     Arguments:
-    #         model {ModelCfg} -- Model configuration
-    #         evaluations {dict} -- Evaluations dictionary
-    #     """
-    #     self._post("/models/{}/evaluations".format(model.id), evaluations)
-
+        Arguments:
+            status { PENDENT | TRAINING | ERROR | TRAINED } -- New status
+        """
+        self._post("/trackedRepositories/{}/status/{}".format(self.tracked_repository, new_status))
+    
     def increment_build(self):
         """Increment training batch
         """
-        self._post("/trackedRepositories/{}/incrementBuild".format(self.tracked_repository))
+        res = self._post("/trackedRepositories/{}/incrementBuild".format(self.tracked_repository))
+        self.build_num = int(res.json())
 
     def upload_evaluations(self, evaluations_df, approach):
         """Upload csv file containing the evaluations results
@@ -131,8 +131,11 @@ class Network(object):
         dst_dir = Path("evaluations")
         dst_dir.mkdir(exist_ok=True)
         
-        name = "{}_{}_{}.csv" \
-          .format(approach['name'], approach['id'], self.tracked_repository)
+        name = "{}_{}_{}_{}.csv" \
+          .format(approach['name'], 
+                  approach['id'], 
+                  self.tracked_repository,
+                  self.build_num)
         
         evaluations_df.to_csv(dst_dir.joinpath(name), index=False)
 

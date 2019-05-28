@@ -56,21 +56,6 @@ class ModelController(
         return notFound().build()
     }
 
-    /**
-     * Add evaluations to a model after its training
-     * */
-    /*@PostMapping("{id}/evaluations/")
-    fun updateEvaluations(@PathVariable("id") modelId: Long,
-                          @RequestBody evaluations: Map<String, Double>): ResponseEntity<Any> {
-        approachRepository.findOne(modelId)?.let {
-            it.evaluations.clear()
-            it.evaluations.putAll(evaluations)
-            approachRepository.save(it)
-            return ok(it.evaluations)
-        }
-
-        return notFound().build()
-    }*/
 }
 
 data class ApproachWithRepo(

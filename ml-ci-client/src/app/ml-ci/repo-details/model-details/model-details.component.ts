@@ -55,7 +55,7 @@ export class ModelDetailsComponent implements OnInit {
     const url = window.URL.createObjectURL(blob);
 
     a.href = url;
-    a.download = `${this.approach.name}_${this.approach.id}_${this.trackedRepo.id}.csv`;
+    a.download = `${this.approach.name}_${this.approach.id}_${this.trackedRepo.id}_${this.trackedRepo.buildNum}.csv`;
     a.click();
 
     window.URL.revokeObjectURL(url);

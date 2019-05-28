@@ -2,6 +2,8 @@ package io.github.guillem96.mlciwebservice.controller
 
 import io.github.guillem96.mlciwebservice.TrackedRepositoryRepository
 import io.github.guillem96.mlciwebservice.findOne
+import io.github.guillem96.mlciwebservice.domain.ApproachStatus
+
 import org.springframework.amqp.core.Queue
 import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.data.rest.webmvc.RepositoryRestController
@@ -19,6 +21,18 @@ class TrackedRepositoryController(
         private val trackedRepositoryRepository: TrackedRepositoryRepository,
         private val rabbitTemplate: RabbitTemplate,
         private val queue: Queue){
+    
+    @PostMapping("{id}/status/{status}")
+    fun updateTrackedRepoStatus(@PathVariable("id") id: Long,
+                                @PathVariable("status") status: ApproachStatus): ResponseEntity<ApproachStatus> {
+        trackedRepositoryRepository.findOne(id)?.let {
+            it.status = status
+            trackedRepositoryRepository.save(it)
+            return ok(status)
+        }
+
+        return notFound().build()
+    }
 
     /**
      * Increment number of trainings

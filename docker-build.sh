@@ -9,7 +9,7 @@ if [ $? -eq 0 ]; then
     echo Done
 else
     echo Error building MlCi Client
-    exit 1
+    return 1
 fi
 
 cd ..
@@ -24,7 +24,7 @@ if [ $? -eq 0 ]; then
     echo Done
 else
     echo Error building MlCi Webservice
-    exit 1
+    return 1
 fi
 
 cd ..

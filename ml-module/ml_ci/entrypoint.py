@@ -10,6 +10,8 @@ from ml_ci.project_manage import ProjectRunner
 from ml_ci.network import Network
 
 from ml_ci.utils import delete_dir
+from ml_ci.utils import execute
+
 
 def parse_cfg(cfg_file_path):
     """Parse the given ml-ci.yml
@@ -25,18 +27,26 @@ def parse_cfg(cfg_file_path):
         cfg = YamlCfgParser(f).parse()
     return cfg
 
+
 def clean_up_dirs(*dirs):
     for d in dirs:
         delete_dir(str(d))
         Path(d).rmdir()
-    
+
+
+def run_before_commands(commands, out_path):
+    for cmd in commands:
+        print(execute(cmd, out_path))
+
+
 def train(repo_id, url):
-    webservice = Network(tracked_repository=repo_id)
-    webservice.authenticate()
+    webservice = None #Network(tracked_repository=repo_id)
+    webservice and webservice.authenticate()
     
     # Update the batch count for this repository
     webservice and webservice.increment_build()
-        
+    webservice and webservice.update_repository_status("TRAINING")
+
     # Clone the repository
     output_path = Network.clone_github_repository(url)
     
@@ -44,13 +54,23 @@ def train(repo_id, url):
     cfg = parse_cfg(Path(output_path, 'ml-ci.yml'))
 
     if cfg:
-        # Start training stage
+        # Run before scripts
+        run_before_commands(cfg.before, output_path)
+
+        # Generate DriftAI project
+        cfg.project_name += '-{}'.format(webservice.build_num)
         proj = ProjectGenerator(cfg, output_path, webservice).generate()
+
+        # Run the project lifecycle
         ProjectRunner(proj, cfg, webservice).run_and_evaluate()
 
         # Remove the project and the cloned repo
-        clean_up_dirs(proj.path, output_path)
+        # clean_up_dirs(proj.path, output_path)
+
+        webservice and webservice.update_repository_status("TRAINED")
     else:
+        webservice.update_repository_status("ERROR")
+
         # TODO: Communicate the error to the webservice
         print("No config file provided")
     
