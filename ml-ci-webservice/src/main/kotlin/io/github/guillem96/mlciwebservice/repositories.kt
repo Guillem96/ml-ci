@@ -1,10 +1,12 @@
  package io.github.guillem96.mlciwebservice
 
 import io.github.guillem96.mlciwebservice.domain.Approach
+import io.github.guillem96.mlciwebservice.domain.MlCiLog
 import io.github.guillem96.mlciwebservice.domain.TrackedRepository
 import io.github.guillem96.mlciwebservice.domain.User
 import org.springframework.data.repository.CrudRepository
 import org.springframework.data.rest.core.annotation.RepositoryRestResource
+
 
  @RepositoryRestResource
 interface TrackedRepositoryRepository: CrudRepository<TrackedRepository, Long>
@@ -18,6 +20,11 @@ interface UserRepository: CrudRepository<User, Long> {
 @RepositoryRestResource
 interface ApproachRepository: CrudRepository<Approach, Long>
 
+@RepositoryRestResource
+interface LogsRepository: CrudRepository<MlCiLog, Long> {
+    fun findByTrackedRepository(trackedRepository: TrackedRepository): List<MlCiLog>
+}
 
-// CrudRepository extension to use kotlin null safe advantage
+
+ // CrudRepository extension to use kotlin null safe advantage
 fun <T, ID> CrudRepository<T, ID>.findOne(id: ID): T? = findById(id).orElse(null)

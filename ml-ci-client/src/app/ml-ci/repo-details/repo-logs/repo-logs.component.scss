@@ -1,0 +1,23 @@
+.logs-container {
+  background: #2b2b2b; 
+  color: whitesmoke;
+  font-family: 'Courier New', Courier, monospace;
+  border-radius: .5em;
+  line-height: 1.5em;
+}
+
+.log-INFO {
+  color: rgb(195, 195, 255);
+}
+
+.log-DEBUG {
+  color: rgb(167, 251, 167);
+}
+
+.log-WARNING {
+  color: rgb(245, 208, 139);
+}
+
+.log-ERROR {
+  color: rgb(255, 136, 136);  
+}

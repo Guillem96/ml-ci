@@ -9,6 +9,7 @@ import { ModelDetailsComponent } from './repo-details/model-details/model-detail
 import { RepoMetadataComponent } from './repo-details/repo-metadata/repo-metadata.component';
 import { AddRepoComponent } from './add-repo/add-repo.component';
 import { AppRoutingModule } from '../app-routing.module';
+import { RepoLogsComponent } from './repo-details/repo-logs/repo-logs.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { AppRoutingModule } from '../app-routing.module';
     ModelDetailsComponent,
     RepoMetadataComponent,
     AddRepoComponent,
+    RepoLogsComponent,
   ],
   imports: [
     CommonModule,

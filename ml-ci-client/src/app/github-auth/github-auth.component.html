@@ -1,8 +1,8 @@
 
 <div class="all">
-  <app-loading *ngIf="loading; else content"></app-loading>
+  <app-loading *ngIf="loading"></app-loading>
 
-  <div #content class="container">
+  <div *ngIf="!loading" class="container">
     <div class="row align-items-end justify-content-center">
       <div class="col-4 left-container text-right"><i class="icon fa fa-github"></i></div>
       <div class="col-4 center-container"><i class="fa fa-heart"></i></div>

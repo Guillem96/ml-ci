@@ -18,6 +18,9 @@ data class TrackedRepository(
         val user: User? = null,                                         // User owning the repository
 
         @OneToMany(cascade = [(CascadeType.ALL)], mappedBy = "trackedRepository")
+        val logs: List<MlCiLog> = emptyList(),
+
+        @OneToMany(cascade = [(CascadeType.ALL)], mappedBy = "trackedRepository")
         val approaches: List<Approach> = emptyList(),                   // All trained models related to repository
 
         @get:JsonProperty(access = JsonProperty.Access.READ_ONLY)

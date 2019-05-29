@@ -1,6 +1,7 @@
 import sys
 import time
 import shutil
+import logging
 from pathlib import Path
 from inspect import getabsfile
 
@@ -13,6 +14,7 @@ class ProjectGenerator(object):
         self.cfg = cfg
         self.src_files = Path(src_files)
         self.webservice = webservice
+        self.logger = logging.getLogger('MlCi')
         self.PROJECTS_PATH.mkdir(exist_ok=True, parents=True)
     
     def _add_custom_datasource(self, project, d):
@@ -32,13 +34,19 @@ class ProjectGenerator(object):
 
     def generate(self):
         # Generate the project
+        self.logger.info('Creating DriftAI project {}'\
+                            .format(self.cfg.project_name))
+
         project = dai.Project(name=self.cfg.project_name, 
                               path=str(self.PROJECTS_PATH))
         dai.set_project_path(project.path)
 
         # Add the datasets to project
+        self.logger.info('Adding datasets...')
         for d in self.cfg.datasets:
+            self.logger.info('Creating dataset ' + str(d['id']))
             if d['custom']:
+                self.logger.debug('Copying custom {} files'.format(d['id']))
                 self._add_custom_datasource(project, d)
                 sys.path.append(project.path)
 
@@ -50,12 +58,17 @@ class ProjectGenerator(object):
 
         # Generate the subdatasets
         for sbds in self.cfg.subdatasets:
+            self.logger.info('Creating SubDataset' + sbds['id'])
+            self.logger.debug('With method ' + sbds['method'])
+
             dataset = sbds['dataset_factory']()
             subdataset = sbds['factory'](dataset=dataset)
             subdataset.save()
         
         # Generate approaches
         for a in self.cfg.approaches:
+            self.logger.info('Creating Approach ' + a['name'])
+
             subdataset = a['sbds_factory']()
             approach = a['factory'](subdataset=subdataset, project=project)
             approach.save()
@@ -74,6 +87,7 @@ class ProjectRunner(object):
         self.project = project
         self.cfg = cfg
         self.webservice = webservice
+        self.logger = logging.getLogger('MlCi')
 
     def _run_approach(self, approach):
         namespace = 'approaches.' + approach['name']
@@ -101,16 +115,22 @@ class ProjectRunner(object):
         sys.path.append(self.project.path)
 
         for a in self.cfg.approaches:
+            self.logger.info('Running Approach ' + a['name'])
+
             self.webservice and self.webservice.update_approach_status(a, "TRAINING")
 
             # Run and evaluate the approach
             self._run_approach(a)
+
+            self.logger.info('Generating evaluations file for ' + a['name'])
             evaluations_df = self._evaluate_approach(a)
             
             # Upload the results
+            self.logger.debug('Uploading evaluation file to coordinator')
             self.webservice and self.webservice.upload_evaluations(evaluations_df, a)
 
             # Set approach done
+            self.logger.debug('Done')
             self.webservice and self.webservice.update_approach_status(a, "TRAINED")
 
         sys.path.remove(self.project.path)

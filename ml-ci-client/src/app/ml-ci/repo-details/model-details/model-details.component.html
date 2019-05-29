@@ -12,7 +12,6 @@
   </mdb-card-body>
   <mdb-card-footer class="text-right card-footer">
     <ul class="list-inline">
-      <li class="list-inline-item mr-3"><a><i class="far fa-sticky-note"></i> View logs</a></li>
       <li *ngIf="!downloading" class="list-inline-item"><button type="button" mdbBtn color="link" (click)="downloadModel()" [disabled]="approach.status !== 'TRAINED'" ><i class="fas fa-download"></i> Download</button></li>
       <li *ngIf="downloading" class="list-inline-item"><a><i class="fas fa-spin fa-clock"></i> Downloading...</a></li>
     </ul>

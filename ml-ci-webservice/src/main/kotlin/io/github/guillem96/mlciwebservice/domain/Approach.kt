@@ -25,9 +25,6 @@ data class Approach(
         @JsonProperty(access = JsonProperty.Access.READ_ONLY)
         val trainDate: LocalDateTime = LocalDateTime.now(),             // Last train date
 
-        @ElementCollection(targetClass=Pair::class)
-        val evaluations: MutableMap<String, Double> = HashMap(),        // Results of training
-
         @Id
         @GeneratedValue
         val id: Long? = null)

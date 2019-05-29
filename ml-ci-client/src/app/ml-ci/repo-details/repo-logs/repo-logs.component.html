@@ -1,0 +1,10 @@
+<div class="container logs-container mt-4 p-4">
+  <table>
+    <tbody>
+      <tr *ngFor="let log of logs; let i = index">
+        <td class="log-line pr-2">{{ i }}</td>
+        <td class="log-message" ngClass="log-{{ log.level }}">[{{ log.level }}] {{ log.message }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -120,6 +120,19 @@ class Network(object):
         res = self._post("/trackedRepositories/{}/incrementBuild".format(self.tracked_repository))
         self.build_num = int(res.json())
 
+    def log(self, level, message):
+        """
+        Log information to the server
+
+        Arguments:
+            level: str
+            message: str
+        """
+        res = self._post("/trackedRepositories/{}/log"
+                            .format(self.tracked_repository),
+                         body=dict(level=level, message=message))
+        return res.status_code
+
     def upload_evaluations(self, evaluations_df, approach):
         """Upload csv file containing the evaluations results
 

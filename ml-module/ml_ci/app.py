@@ -1,10 +1,13 @@
 #!/usr/bin/env python
 import os
 import json
+import logging
+
 import pika
 
 from ml_ci.entrypoint import train
 from ml_ci.network import Network
+
 
 def train_callback(ch, method, properties, body):
     """Callback to handle queue message

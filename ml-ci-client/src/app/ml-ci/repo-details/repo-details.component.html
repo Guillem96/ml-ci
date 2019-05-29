@@ -18,6 +18,10 @@
   <h3 class="models-title display-4 mt-4 mb-4"><i class="fas fa-brain mr-3"></i>Models</h3>
 
   <app-tabs class="mt-4">
+    <app-tab title="Job Logs">
+      <app-empty *ngIf="repo.buildNum === 0"></app-empty>  
+      <app-repo-logs [trackedRepository]="repo" *ngIf="repo.buildNum > 0"></app-repo-logs>
+    </app-tab>
     <app-tab title="Last train">
       <app-empty *ngIf="!repo.lastTrain || repo.lastTrain.length === 0"></app-empty>  
       <div class="row">

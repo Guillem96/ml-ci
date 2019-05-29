@@ -3,6 +3,7 @@
 import os
 import subprocess
 
+
 def delete_dir(path):
     """Remove the specified directory
     """
@@ -27,12 +28,13 @@ def execute(command, at):
     
     Returns
     -------
-    tuple
+    tuple (str, str)
         stdout, stderr
     """
     p = subprocess.Popen(command.split(), 
                          cwd=at,
                          stdout=subprocess.PIPE, 
                          stderr=subprocess.PIPE)
-    p.wait()
-    return p.communicate()
+
+    stdout, stderr = p.communicate()
+    return stdout.decode(), stderr.decode()
