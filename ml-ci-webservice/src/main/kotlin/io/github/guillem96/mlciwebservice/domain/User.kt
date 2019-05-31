@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityReference
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import org.hibernate.validator.constraints.Length
+import org.springframework.data.domain.Persistable
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import javax.persistence.*
 import javax.validation.constraints.NotBlank
@@ -15,7 +16,7 @@ data class User(
         @NotBlank
         val username: String,                                           // Username
 
-        @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+        //@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
         @NotBlank @Length(min=8, max=256)
         var password: String = "",                                      // Encrypted user's password
 

@@ -15,7 +15,13 @@ rabbit-mq-url: amqp://wkkreopq:2Jtl4DVl9KRixiYFLS3C2Gu9kOcBts-H@gopher.rmq.cloud
 # MlModule config
 ml-module:
   user: MlModule
-  pass: MlModule
+  pass: $2a$10$H9LSl1g2bVk7EbV/hXXbEeXjSqbHTEbbf94PZ3jVuV7SYZRXpl9Yq
+
+# Observer Module
+observer-module:
+  user: ObserverModule
+  pass: $2a$10$4vrlWL30POvdblMLryUJ0uQo8z7scDdybOf12VLG6wsNLFQS4YBH6
+
 
 # File upload config
 spring:

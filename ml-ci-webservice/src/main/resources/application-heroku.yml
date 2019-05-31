@@ -1,0 +1,30 @@
+# Token configuration
+security.jwt.token:
+  secret-key: production
+  expire-length: 7200000
+
+# CORS
+allowed-origins: http://127.0.0.1
+
+# Directory to store static files
+models-path: /home/app/trained-models
+
+spring:
+  datasource:
+    driverClassName: org.postgresql.Driver
+    initialSize: 5
+    maxActive: 10
+    maxIdle: 5
+    minIdle: 2
+    removeAbandoned: true
+  jpa:
+    properties:
+      hibernate:
+        temp:
+          use_jdbc_metadata_defaults: false
+
+    hibernate:
+      ddl-auto: update
+
+      database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+ddl-auto: update

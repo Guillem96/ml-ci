@@ -25,21 +25,4 @@ class RepositoryRestConfig(private val environment: Environment,
         config.exposeIdsFor(User::class.java)
     }
 
-    @PostConstruct
-    fun init() {
-        if(!environment.activeProfiles.contains("Test")) {
-            if (!userRepository.existsByUsername("test")) {
-                val user = User(username = "test",
-                        password = User.passwordEncoder.encode("password"),
-                        email = "test@gmail.com")
-                userRepository.save(user)
-
-                val trackedRepository = TrackedRepository(
-                        url = "https://github.com/Guillem96/ml-ci-test-clf",
-                        lastCommit = "5f792244a94136c418644ca60f7359475b7db831",
-                        user = user)
-                trackedRepositoryRepository.save(trackedRepository)
-            }
-        }
-    }
 }
