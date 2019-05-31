@@ -1,0 +1,20 @@
+{
+  "name": "ml-ci-observer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "tsc index.ts && node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Guillem96",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "@types/request-promise-native": "^1.0.16",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.7"
+  },
+  "devDependencies": {
+    "@types/request-promise-native": "^1.0.16"
+  }
+}

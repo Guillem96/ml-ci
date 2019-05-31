@@ -1,0 +1,4 @@
+*.js
+environment.*ts
+
+node_modules/
