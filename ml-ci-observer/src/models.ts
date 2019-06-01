@@ -3,4 +3,5 @@ export interface TrackedRepository {
   url: string;
   buildNum: number;
   lastCommit: string;
+  _links: { user: any };
 }

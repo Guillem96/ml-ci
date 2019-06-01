@@ -1,4 +1,4 @@
-*.js
-environment.*ts
+build/
+environment.ts
 
 node_modules/

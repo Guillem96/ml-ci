@@ -1,4 +1,4 @@
-import { COORDINATOR_URL, COORDINATOR_CREDENTIALS } from './environment.prod';
+import { COORDINATOR_URL, COORDINATOR_CREDENTIALS } from './environment';
 import * as request from 'request-promise-native';
 import { TrackedRepository } from './models';
 
@@ -29,6 +29,20 @@ export class Network {
 
   public async train(trackedRepository: TrackedRepository): Promise<void> {
     const url = `${COORDINATOR_URL}/trackedRepositories/${trackedRepository.id}/train`;
-    const res = await request.post(url);
+    await request.post(url, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  public async getUserGitHubToken(repository: TrackedRepository): Promise<string> {
+    const res = await request.get(repository._links.user.href);    
+    return JSON.parse(res).githubToken;
+  }
+
+  public async updateRepository(repository: TrackedRepository): Promise<void> {
+    const res = await request.patch(`${COORDINATOR_URL}/trackedRepositories/${repository.id}`, {
+      headers: this.getAuthHeaders(),
+      json: repository
+    });
   }
 }
