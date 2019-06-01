@@ -12,7 +12,7 @@ import java.net.URISyntaxException
  * Created by http://rhizomik.net/~roberto/
  */
 @Configuration
-@Profile("heroku")
+@Profile("heroku | production")
 class DatabaseConfig {
     @Bean
     @Throws(URISyntaxException::class)

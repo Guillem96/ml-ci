@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  API: 'http://localhost:8080',
+  API: 'https://ml-ci-message-broker.herokuapp.com',
   firebase: {
     apiKey: 'AIzaSyAs2SfcwwHLHWqiXqPO0JfbdF-ZY0FCj00',
     authDomain: 'ci-ml-66452.firebaseapp.com',

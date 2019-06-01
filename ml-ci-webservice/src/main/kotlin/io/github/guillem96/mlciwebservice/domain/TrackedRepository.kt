@@ -11,7 +11,7 @@ data class TrackedRepository(
         @NotBlank
         val url: String,                                                // Access URI to repository
 
-        val lastCommit: String,
+        var lastCommit: String,
 
         @ManyToOne(fetch = FetchType.LAZY)
         @JsonIdentityReference(alwaysAsId = true)

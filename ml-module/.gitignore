@@ -38,6 +38,4 @@ driftai-projects/
 # Secret environment variables
 environment.sh
 docker.env
-
-# Testing purposes
-producer.py
+heroku-env.sh

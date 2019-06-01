@@ -4,8 +4,10 @@ security.jwt.token:
   expire-length: 7200000
 
 # CORS
-allowed-origins: http://127.0.0.1
-
+allowed-origins: 
+  - http://127.0.0.1
+  - "*"
+  
 # Directory to store static files
 models-path: /home/app/trained-models
 
