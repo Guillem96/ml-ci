@@ -5,8 +5,8 @@ security.jwt.token:
 
 # CORS
 allowed-origins:
-  # - http://127.0.0.1
-  - "*"
+  - http://127.0.0.1
+  - http://ml-ci.herokuapp.com
 
 # Directory to store static files
 models-path: /home/app/trained-models

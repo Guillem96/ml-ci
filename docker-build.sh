@@ -41,4 +41,6 @@ else
     return 1
 fi
 
+cd ..
+
 docker-compose build

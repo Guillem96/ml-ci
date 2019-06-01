@@ -1,12 +1,14 @@
 import * as request from 'request-promise-native';
 
+
 export class GitHub {
+
   private GITHUB_API = 'https://api.github.com';
   public token : string; 
 
   private getAuthHeaders() {
     return {
-      "User-Agent": 'Ml-Ci Observer',
+      'User-Agent': 'Ml-Ci Observer',
       Authorization: `token ${this.token}`
     }
   }

@@ -1,2 +1,4 @@
-evaluations/
+evaluations/docker.env
+
 .vscode/
+docker.env

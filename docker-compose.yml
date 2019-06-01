@@ -4,7 +4,7 @@ services:
     build: ./ml-ci-webservice/
     container_name: ml-ci-webservice
     env_file:
-     - ./ml-module/docker.env
+     - ./ml-ci-webservice/docker.env
     ports:
       - "8080:8080"
     restart: on-failure
@@ -14,18 +14,23 @@ services:
     container_name: ml-ci-client
     environment:
      - PORT=80
-     - PROFILE=production
     ports:
       - "80:80"
     restart: on-failure
+    depends_on:
+      - ml-ci-webservice
 
   ml-ci-observer:
     build: ./ml-ci-observer
-    container_name: ml-ci-client
+    container_name: ml-ci-observer
     environment:
      - PROFILE=prod
+    depends_on:
+      - ml-ci-webservice
+    links:
+      - ml-ci-webservice
     restart: on-failure
-
+    
   ml-module:
     build: ./ml-module
     container_name: ml-module

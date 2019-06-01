@@ -2,6 +2,7 @@ import { Network } from './network';
 import { TrackedRepository } from './models';
 import { GitHub } from './github';
 
+
 class Observer {
 
   constructor (private network: Network,
@@ -39,7 +40,10 @@ class Observer {
   }
 }
 
-const observer = new Observer(new Network(), new GitHub());
-// setInterval(() => {
+
+const observer = new Observer(new Network(), 
+                              new GitHub());
+
+setInterval(() => {
   observer.run();
-// }, 10000);
+}, 20000);
