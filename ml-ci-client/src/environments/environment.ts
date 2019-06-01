@@ -1,3 +1,5 @@
+import { FIREBASE_KEY } from "./firebase.api.key";
+
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
@@ -5,14 +7,7 @@
 export const environment = {
   production: false,
   API: 'http://localhost:8080',
-  firebase: {
-    apiKey: 'AIzaSyAs2SfcwwHLHWqiXqPO0JfbdF-ZY0FCj00',
-    authDomain: 'ci-ml-66452.firebaseapp.com',
-    databaseURL: 'https://ci-ml-66452.firebaseio.com',
-    projectId: 'ci-ml-66452',
-    storageBucket: 'ci-ml-66452.appspot.com',
-    messagingSenderId: '239574808601'
-  }
+  firebase: FIREBASE_KEY
 };
 
 /*
