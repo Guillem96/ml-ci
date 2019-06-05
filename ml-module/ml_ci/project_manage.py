@@ -93,7 +93,7 @@ class ProjectRunner(object):
         namespace = 'approaches.' + approach['name']
         cls_name = dai.utils.to_camel_case(approach['name']) + "Approach"
         approach_cls = dai.utils.import_from(namespace, cls_name)
-        approach_cls().run()
+        approach_cls(dai.run.SingleRunner()).run()
 
     def _evaluate_approach(self, approach):
         metrics_fns = [dai.result_report.str_to_metric_fn[m] for m in approach['metrics']]
