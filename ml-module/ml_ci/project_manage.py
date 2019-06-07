@@ -76,7 +76,7 @@ class ProjectGenerator(object):
             self.webservice and self.webservice.create_approach(a)
 
             src_approach = self.src_files.joinpath(a['path'], a['name'] + '.py')
-            shutil.copy(src_approach, approach.script_path)
+            shutil.copy(str(src_approach), str(approach.script_path))
         
         return project
 
@@ -93,7 +93,7 @@ class ProjectRunner(object):
         namespace = 'approaches.' + approach['name']
         cls_name = dai.utils.to_camel_case(approach['name']) + "Approach"
         approach_cls = dai.utils.import_from(namespace, cls_name)
-        approach_cls(dai.run.SingleRunner()).run()
+        approach_cls(runner=dai.run.SingleRunner()).run()
 
     def _evaluate_approach(self, approach):
         metrics_fns = [dai.result_report.str_to_metric_fn[m] for m in approach['metrics']]
