@@ -1,0 +1,11 @@
+src/
+.idea/
+heroku-*
+.gitignore
+*.iml
+pom.xml
+README.md
+target/classes/
+target/maven-*/
+target/test-classes/
+target/surefire-reports/

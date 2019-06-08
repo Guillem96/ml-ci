@@ -2,6 +2,6 @@ import { FIREBASE_KEY } from "./firebase.api.key";
 
 export const environment = {
   production: true,
-  API: 'https://ml-ci-message-broker.herokuapp.com',
+  API: 'http://35.222.89.216',
   firebase: FIREBASE_KEY
 };

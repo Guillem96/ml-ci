@@ -37,4 +37,4 @@ driftai-projects/
 
 # Secret environment variables
 environment.sh
-heroku-env.sh
+cloud-env.sh

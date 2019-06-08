@@ -62,11 +62,11 @@
                 }
               ]
             },
-            "heroku": {
+            "cloud": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.heroku.ts"
+                  "with": "src/environments/environment.cloud.ts"
                 }
               ],
               "optimization": true,
@@ -97,8 +97,8 @@
             "production": {
               "browserTarget": "machine-learning-ci:build:production"
             },
-            "heroku": {
-              "browserTarget": "machine-learning-ci:build:heroku"
+            "cloud": {
+              "browserTarget": "machine-learning-ci:build:cloud"
             }
           }
         },

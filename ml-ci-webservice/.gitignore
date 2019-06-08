@@ -27,3 +27,5 @@ mvnw.cmd
 /dist/
 /nbdist/
 /.nb-gradle/
+
+gcloud-docker.env

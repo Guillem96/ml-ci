@@ -1,0 +1,1 @@
+gcloud compute instances delete ml-ci-webservice-vm --zone us-central1-a --quiet
