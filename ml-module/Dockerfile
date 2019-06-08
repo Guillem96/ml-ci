@@ -1,6 +1,7 @@
-FROM python:3.6
+FROM tensorflow/tensorflow:2.0.0b0-gpu-py3
 
 RUN apt-get install -y git-core 
+RUN apt-get install -y wget
 
 # We copy just the requirements.txt first to leverage Docker cache
 COPY ./requirements.txt /app/requirements.txt
@@ -12,4 +13,4 @@ RUN pip install git+https://github.com/Appverse/DriftAI@development
 
 COPY ml_ci ml_ci
 
-ENTRYPOINT ["python", "-m", "ml_ci.app"]
+ENTRYPOINT ["python", "-u", "-m", "ml_ci.app"]

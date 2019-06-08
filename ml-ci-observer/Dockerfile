@@ -5,7 +5,9 @@ WORKDIR /app/observer
 COPY package*.json ./
 
 RUN npm install
+RUN npm install -g typescript
 
-COPY build/* ./
+COPY src/ src/
+RUN npm run build
 
-CMD [ "node", "index.js" ]
+CMD [ "node", "build/index.js" ]

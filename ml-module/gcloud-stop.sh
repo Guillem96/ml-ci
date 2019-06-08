@@ -1,0 +1,1 @@
+gcloud compute instances delete ml-module-vm --zone us-central1-a --quiet

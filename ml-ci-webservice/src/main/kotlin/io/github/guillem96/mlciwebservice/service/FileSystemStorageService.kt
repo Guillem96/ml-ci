@@ -68,10 +68,11 @@ class FileSystemStorageService(val environment: Environment) : StorageService {
     }
 
     override fun init() {
-        try {
+        // try {
             Files.createDirectories(rootLocation)
-        } catch (e: IOException) {
-            throw StorageException("Could not initialize storage")
-        }
+        // } catch (e: IOException) {
+        //     print(e)
+        //     throw StorageException("Could not initialize storage")
+        // }
     }
 }

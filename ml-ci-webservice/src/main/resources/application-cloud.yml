@@ -1,7 +1,10 @@
 # Token configuration
-security.jwt.token:
-  secret-key: production
-  expire-length: 7200000
+security:
+  require-ssl: true
+  jwt.token:
+    secret-key: production
+    expire-length: 7200000
+  
 
 # CORS
 allowed-origins:
@@ -27,5 +30,13 @@ spring:
 
     hibernate:
       ddl-auto: update
-
       database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+
+server:
+  ssl:
+    enabled: true 
+    key-store-type: PKCS12
+    key-store: "classpath:keystore/ml-ci.p12"
+    key-store-password: guillem
+    key-alias: ml-ci
+  

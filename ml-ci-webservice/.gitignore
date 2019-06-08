@@ -28,4 +28,6 @@ mvnw.cmd
 /nbdist/
 /.nb-gradle/
 
-gcloud-docker.env
+# Secret
+*.env
+generate-keys.sh

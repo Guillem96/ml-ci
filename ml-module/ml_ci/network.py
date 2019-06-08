@@ -67,7 +67,8 @@ class Network(object):
         # Perform the post
         res = requests.post(Network._WEBSERVICE + path, 
                                 json=body,
-                                headers=headers)
+                                headers=headers,
+                                verify=False)
         if res.status_code > 300:
             print(res)
 
@@ -155,6 +156,6 @@ class Network(object):
         with dst_dir.joinpath(name).open() as f:
             requests.post(Network._WEBSERVICE + "/static/evaluations", 
                           headers={ "Authorization": "Bearer " + self.token },
-                          files={'file': f })
+                          files={'file': f }, verify=False)
         
         dst_dir.joinpath(name).unlink()

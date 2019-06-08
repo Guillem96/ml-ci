@@ -1,12 +1,12 @@
-mvn package -DskipTests
-
-gcloud config set project ci-ml-66452
-gcloud builds submit --tag gcr.io/ci-ml-66452/ml-ci-webservice
+if [[ $1 != "skip-build" ]]; then
+     mvn package -DskipTests
+     gcloud builds submit --tag gcr.io/neon-rampart-243108/ml-ci-webservice
+fi
 
 gcloud compute instances create-with-container ml-ci-webservice-vm \
-     --container-image gcr.io/ci-ml-66452/ml-ci-webservice \
+     --container-image gcr.io/neon-rampart-243108/ml-ci-webservice \
      --address=ml-ci-webservice-ip \
      --container-env-file=gcloud-docker.env \
      --machine-type=n1-standard-4 \
-     --tags=http-server \
+     --tags=http-server,https-server \
      --zone=us-central1-a

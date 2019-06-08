@@ -1,3 +1,3 @@
 curl -d '{ "username": "ObserverModule", "password": "ObserverModule"}' \
         -X POST -H "Content-Type: application/json" \
-        http://localhost:8080/auth/signIn
+        https://104.197.121.66/auth/signIn

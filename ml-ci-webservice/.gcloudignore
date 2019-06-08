@@ -1,6 +1,5 @@
 src/
 .idea/
-heroku-*
 .gitignore
 *.iml
 pom.xml
@@ -9,3 +8,4 @@ target/classes/
 target/maven-*/
 target/test-classes/
 target/surefire-reports/
+!keystore
