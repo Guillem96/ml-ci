@@ -102,7 +102,7 @@ class ProjectRunner(object):
 
         results_path = Path(self.project.path, 'reports')
         results_path.mkdir(exist_ok=True, parents=True)
-        results_path = results_path.joinpath(approach['name'] + "_evaluation.csv")
+        results_path = str(results_path.joinpath(approach['name'] + "_evaluation.csv"))
         
         df = r.as_dataframe()
         df.to_csv(results_path, index=False) 

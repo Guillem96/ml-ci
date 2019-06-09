@@ -17,6 +17,9 @@ def train_callback(ch, method, properties, body):
     access_token = None
     try:
         # Parse the message
+        if not isinstance(body, str):
+            body = body.decode('utf-8')
+            
         repo_data = json.loads(body)
         repo_url = repo_data["githubUrl"]
         repo_id = repo_data["trackedRepositoryId"]
