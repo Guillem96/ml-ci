@@ -38,3 +38,4 @@ driftai-projects/
 # Secret environment variables
 environment.sh
 cloud-env.sh
+gcloud-docker.env

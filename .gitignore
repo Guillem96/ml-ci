@@ -2,3 +2,5 @@ evaluations/docker.env
 
 .vscode/
 docker.env
+
+curl_testing/
