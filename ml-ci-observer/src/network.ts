@@ -8,6 +8,7 @@ export class Network {
   public async authencticate(): Promise<void> {
     const options = {
       json: COORDINATOR_CREDENTIALS,
+      insecure: true
     }
     
     const res = await request.post(COORDINATOR_URL + '/auth/signIn', options);
