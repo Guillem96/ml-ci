@@ -151,7 +151,7 @@ class Network(object):
                   self.tracked_repository,
                   self.build_num)
         
-        evaluations_df.to_csv(dst_dir.joinpath(name), index=False)
+        evaluations_df.to_csv(str(dst_dir.joinpath(name)), index=False)
 
         with dst_dir.joinpath(name).open() as f:
             requests.post(Network._WEBSERVICE + "/static/evaluations", 
