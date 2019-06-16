@@ -3,6 +3,8 @@
 import logging
 from pathlib import Path
 
+import driftai as dai
+
 from ml_ci.cfg.cfg_parser import YamlCfgParser
 
 from ml_ci.project_manage import ProjectGenerator
@@ -58,8 +60,10 @@ def init(repo_id):
     
     logger = logging.getLogger('MlCi')
     logger.setLevel(logging.DEBUG)
-    logger.handlers = []
-    logger.addHandler(RequestsHandler(webservice))
+    logger.handlers = [RequestsHandler(webservice)]
+
+    dai_logger = dai.logger.DriftAILogger()
+    dai_logger.level = logging.DEBUG
 
     return webservice, logger
 
@@ -82,6 +86,8 @@ def train_step(webservice, output_path, cfg, logger):
         logger.info('Cleaning up environment...')
 
         webservice and webservice.update_repository_status("TRAINED")
+        
+        return proj
 
     except Exception as e:
         logger.error('Unexpected error occured while training.\n' + str(e))
@@ -110,16 +116,16 @@ def train(repo_id, url):
         cfg = parse_cfg(Path(output_path, 'ml-ci.yml'))
     except Exception as e:
         logger.error('Error parsing file\n' + str(e))
-        webservice.update_repository_status("ERROR")
+        webservice and webservice.update_repository_status("ERROR")
         return
 
     if cfg:
         logger.debug('File correctly parsed. Go on with the execution')
-        train_step(webservice, 
-                   output_path, 
-                   cfg, 
-                   logger)
-        clean_up_dirs(output_path)
+        project = train_step(webservice, 
+                             output_path, 
+                             cfg, 
+                             logger)
+        clean_up_dirs(output_path, project.path)
     else:
         logger.error('Config file not found. Pleas check your repository content')
-        webservice.update_repository_status("ERROR")
+        webservice and webservice.update_repository_status("ERROR")

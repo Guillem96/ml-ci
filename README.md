@@ -20,9 +20,41 @@ In this section we describe how to use MlCi and run approaches on the cloud.
 
 ## Architecture
 
+![Architecture](img/arch.png)
+
 ## Build 
 
+### Ml Ci WebSercice
+
+```
+$ mvn package -DskipTests 
+```
+
+### Ml Ci Client
+
+```
+$ ng build -c <configuration>
+```
+
+Configurations:
+
+- *prod*: Simulate production on local
+- *cloud* Redy to run in production mode in Google Cloud 
+
+
+### Ml Ci Observer
+
+```
+$ tsc --outDIR build
+```
+
 ## Deploy to Google Cloud 
+
+Being at the root of the project run:
+
+```
+$ ./gcloud-deploy.sh
+```
 
 ## Modules
 
