@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import logging
+import shutil
 from pathlib import Path
 
 import driftai as dai
@@ -38,8 +39,8 @@ def parse_cfg(cfg_file_path):
 
 def clean_up_dirs(*dirs):
     for d in dirs:
-        delete_dir(str(d))
-        Path(d).rmdir()
+        if d:
+            shutil.rmtree(str(d), ignore_errors=True)
 
 
 def run_before_commands(commands, out_path, logger):
@@ -55,7 +56,7 @@ def run_before_commands(commands, out_path, logger):
 def init(repo_id):
     logging.basicConfig(format='[%(levelname)s] %(name)s - %(message)s')
                     
-    webservice = Network(tracked_repository=repo_id)
+    webservice = None #Network(tracked_repository=repo_id)
     webservice and webservice.authenticate()
     
     logger = logging.getLogger('MlCi')
@@ -87,13 +88,11 @@ def train_step(webservice, output_path, cfg, logger):
         logger.info('Cleaning up environment...')
         
         webservice and webservice.update_repository_status("TRAINED")
-        
         return proj
 
     except Exception as e:
         logger.error('Unexpected error occured while training.\n' + str(e))
         webservice and webservice.update_repository_status("ERROR")
-
 
 def train(repo_id, url):
 
@@ -126,7 +125,8 @@ def train(repo_id, url):
                              output_path, 
                              cfg, 
                              logger)
-        clean_up_dirs(output_path, project.path)
+        
+        clean_up_dirs(output_path, project and project.path)
     else:
-        logger.error('Config file not found. Pleas check your repository content')
+        logger.error('Config file not found. Please check your repository content')
         webservice and webservice.update_repository_status("ERROR")

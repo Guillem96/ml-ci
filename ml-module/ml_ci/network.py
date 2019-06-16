@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 
 import os
+import shutil
 import requests
 from pathlib import Path
 
 from git import Repo
-
-from ml_ci.utils import delete_dir
 
 class Network(object):
     """Class responisble of sending http requests to coordinator module
@@ -37,7 +36,7 @@ class Network(object):
         directory = str(Path('cloned', name))
 
         # In case repository has already been downloaded, remove it
-        delete_dir(directory)
+        shutil.rmtree(directory, ignore_errors=True)
         
         # Clone
         Repo.clone_from(url,directory)

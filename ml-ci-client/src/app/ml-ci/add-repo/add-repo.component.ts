@@ -32,9 +32,7 @@ export class AddRepoComponent implements OnInit {
   }
 
   public confirmModal(index: number, basicModal: any) {
-    this.selectedIndex = index;
-    console.log(this.githubRepos.current[index].name);
-    
+    this.selectedIndex = index;    
     basicModal.show();
   }
 

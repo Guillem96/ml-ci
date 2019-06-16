@@ -54,9 +54,7 @@ export class RepoDetailsComponent implements OnInit, OnDestroy, OnChanges {
       this.repo.getRelationArray(Approach, 'approaches'),
       this.githubService.getRepoInfo(urlSplit[urlSplit.length - 2] + '/' + urlSplit[urlSplit.length - 1])
     ).subscribe(
-      (res: any[]) => {    
-        console.log(res);
-            
+      (res: any[]) => {                
         this.repo = res[0];
         this.repo.models = res[1];
         this.githubRepo = res[2];
