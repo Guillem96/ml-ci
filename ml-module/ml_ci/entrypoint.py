@@ -64,7 +64,7 @@ def init(repo_id):
 
     dai_logger = dai.logger.DriftAILogger()
     dai_logger.level = logging.DEBUG
-    dai_logger.handlers = [RequestsHandler(webservice)]
+    dai_logger.logger.handlers = [RequestsHandler(webservice)]
 
     return webservice, logger
 
@@ -85,7 +85,7 @@ def train_step(webservice, output_path, cfg, logger):
 
         # Remove the project and the cloned repo
         logger.info('Cleaning up environment...')
-
+        
         webservice and webservice.update_repository_status("TRAINED")
         
         return proj
