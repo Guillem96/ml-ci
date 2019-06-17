@@ -7,6 +7,10 @@ from pathlib import Path
 
 from git import Repo
 
+# Silence warning
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
 class Network(object):
     """Class responisble of sending http requests to coordinator module
     """
