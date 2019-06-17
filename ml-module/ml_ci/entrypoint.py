@@ -91,7 +91,7 @@ def train_step(webservice, output_path, cfg, logger):
         return proj
 
     except Exception as e:
-        logger.error('Unexpected error occured while training.\n' + str(e))
+        logger.error(str(e))
         webservice and webservice.update_repository_status("ERROR")
 
 def train(repo_id, url):
