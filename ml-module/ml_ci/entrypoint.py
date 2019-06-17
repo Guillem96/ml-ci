@@ -115,7 +115,7 @@ def train(repo_id, url):
     try:
         cfg = parse_cfg(Path(output_path, 'ml-ci.yml'))
     except Exception as e:
-        logger.error('Error parsing file\n' + str(e))
+        logger.error('Error parsing file: ' + str(e))
         webservice and webservice.update_repository_status("ERROR")
         return
 
