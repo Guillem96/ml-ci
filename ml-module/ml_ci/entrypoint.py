@@ -56,7 +56,7 @@ def run_before_commands(commands, out_path, logger):
 def init(repo_id):
     logging.basicConfig(format='[%(levelname)s] %(name)s - %(message)s')
                     
-    webservice = None #Network(tracked_repository=repo_id)
+    webservice = Network(tracked_repository=repo_id)
     webservice and webservice.authenticate()
     
     logger = logging.getLogger('MlCi')
