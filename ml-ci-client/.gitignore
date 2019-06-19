@@ -42,3 +42,4 @@ Thumbs.db
 
 # Api key
 firebase.api.key.ts
+.firebase/
