@@ -8,14 +8,13 @@ import org.springframework.amqp.rabbit.core.RabbitAdmin
 import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.core.env.Environment
 import java.net.URI
 
 @Configuration
-class RabbitMqConfig(private val environment: Environment) {
+class RabbitMqConfig() {
     @Bean
     fun connectionFactory(): ConnectionFactory =
-            CachingConnectionFactory(URI(environment.getRequiredProperty("rabbit-mq-url")))
+            CachingConnectionFactory(URI(System.getenv("RABBIT_MQ_URL")))
 
     @Bean
     fun amqpAdmin(): AmqpAdmin = RabbitAdmin(connectionFactory())

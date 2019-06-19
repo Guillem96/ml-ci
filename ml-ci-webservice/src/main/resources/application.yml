@@ -9,9 +9,6 @@ allowed-origins: http://localhost:4200
 # Directory to store static files
 models-path: /home/guillem/Desktop/ml-ci/evaluations
 
-# RabbitMQ connection URL
-rabbit-mq-url: amqp://wkkreopq:2Jtl4DVl9KRixiYFLS3C2Gu9kOcBts-H@gopher.rmq.cloudamqp.com/wkkreopq
-
 # MlModule config
 ml-module:
   user: MlModule
